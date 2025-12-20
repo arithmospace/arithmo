@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arithmo - Levels</title>
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Arithmo" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
+
+    <!-- Balls Background CSS -->
+    <link rel="stylesheet" href="assets/moving-balls-bg.css" />
+    <link rel="stylesheet" href="assets/common_style.css" />
+    <link rel="stylesheet" href="assets/style.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ea2a33",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211111",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "brand": ["Bungee", "cursive"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .roadmap-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .roadmap-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* CIRCLE */
+        .level-node {
+            width: 72px;
+            height: 72px;
+            border-radius: 9999px;
+            border: 6px solid #d1d5db;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            transition: all 0.25s ease;
+        }
+
+        /* STATES */
+        .level-node.completed {
+            background: #ea2a33;
+            border-color: #ea2a33;
+            color: white;
+        }
+
+        .level-node.active {
+            background: #ea2a33;
+            border-color: #ea2a33;
+            color: white;
+            box-shadow: 0 0 0 12px rgba(234, 42, 51, 0.3);
+            animation: pulse 1.6s infinite;
+        }
+
+        .level-node.locked {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* LABEL */
+        .level-name {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+        }
+
+        /* ARROW */
+        .arrow {
+            margin-top: 6px;
+            font-size: 1.6rem;
+            color: #d1d5db;
+        }
+
+        .arrow.active {
+            color: #ea2a33;
+        }
+
+        /* MODAL */
+        .level-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        .level-modal.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* ANIMATION */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(234, 42, 51, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 16px rgba(234, 42, 51, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(234, 42, 51, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="font-display moving-balls-bg">
+
+    <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
+
+        <!-- NAV BAR -->
+        <div class="nav_container" id="nav_container_id">
+
+            <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
+
+        </div>
+
+
+        <!-- MAIN SECTION (EMPTY FOR FUTURE PAGES) -->
+        <main class="flex flex-1 items-center justify-center">
+            <section class="w-full max-w-4xl mx-auto py-16">
+
+                <div class="backdrop-blur-xl bg-white/20 dark:bg-black/30 border border-white/30
+              shadow-2xl rounded-3xl p-6 sm:p-10">
+
+                    <div class="text-center mb-12">
+                        <h1 class="font-brand text-4xl sm:text-5xl text-zinc-900 dark:text-white">
+                            Your Math Journey
+                        </h1>
+                        <p class="mt-4 text-lg text-zinc-700 dark:text-zinc-300">
+                            One level at a time 🌱
+                        </p>
+                    </div>
+
+                    <div class="roadmap-container">
+
+                        <!-- LEVEL 1 -->
+                        <div class="roadmap-item">
+                            <button class="level-node" data-level="1" onclick="openLevel(1)">
+                                <span>1</span>
+                            </button>
+                            <p class="level-name">Counting Friends</p>
+                            <div class="arrow">↓</div>
+                        </div>
+
+                        <!-- LEVEL 2 -->
+                        <div class="roadmap-item">
+                            <button class="level-node" data-level="2" onclick="openLevel(2)">
+                                <span>2</span>
+                            </button>
+                            <p class="level-name">Adding Magic</p>
+                            <div class="arrow">↓</div>
+                        </div>
+
+                        <!-- LEVEL 3 -->
+                        <div class="roadmap-item">
+                            <button class="level-node" data-level="3" onclick="openLevel(3)">
+                                <span>3</span>
+                            </button>
+                            <p class="level-name">Taking Away</p>
+                            <div class="arrow">↓</div>
+                        </div>
+
+                        <!-- LEVEL 4 -->
+                        <div class="roadmap-item">
+                            <button class="level-node" data-level="4" onclick="openLevel(4)">
+                                <span>4</span>
+                            </button>
+                            <p class="level-name">Sharing Fairly</p>
+                            <div class="arrow">↓</div>
+                        </div>
+
+                        <!-- LEVEL 5 -->
+                        <div class="roadmap-item">
+                            <button class="level-node" data-level="5" onclick="openLevel(5)">
+                                <span>5</span>
+                            </button>
+                            <p class="level-name">Math Master Trail</p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODAL -->
+            <div id="levelModal" class="level-modal">
+                <div class="modal-card">
+                    <h2 id="modalTitle" class="font-brand text-3xl mb-4"></h2>
+                    <p id="modalDesc" class="mb-6"></p>
+
+                    <button onclick="startLevel()" class="bg-primary text-white px-6 py-3 rounded-full font-bold">
+                        Start Level
+                    </button>
+
+                    <button onclick="closeModal()" class="block mt-4 text-sm opacity-70">
+                        Maybe later
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Balls Background JS -->
+    <script src="assets/moving-balls-bg.js"></script>
+    <script src="assets/assets_common_script.js"></script>
+
+    <!-- Navbar scroll effect -->
+    <script>
+        const navbar = document.getElementById("navbar");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 2) {
+                navbar.classList.add("nav-scrolled");
+            } else {
+                navbar.classList.remove("nav-scrolled");
+            }
+        });
+    </script>
+    <script>
+        /* ================== ROADMAP LOGIC ================== */
+
+        const TOTAL_LEVELS = 5;
+
+        /* ---------- ONE-TIME INITIALIZATION ---------- */
+        if (!localStorage.getItem("arithmoInitialized")) {
+            localStorage.setItem("arithmoLevel", "1");
+            localStorage.setItem("arithmoInitialized", "true");
+        }
+
+        /* ---------- CURRENT LEVEL (SINGLE SOURCE OF TRUTH) ---------- */
+        let currentLevel = Number(localStorage.getItem("arithmoLevel"));
+
+        if (isNaN(currentLevel) || currentLevel < 1 || currentLevel > TOTAL_LEVELS) {
+            currentLevel = 1;
+            localStorage.setItem("arithmoLevel", "1");
+        }
+
+        /* ---------- LEVEL META ---------- */
+        const levelData = {
+            1: { title: "Counting Friends", desc: "Let’s count together 😊" },
+            2: { title: "Adding Magic", desc: "Numbers come together ✨" },
+            3: { title: "Taking Away", desc: "Numbers gently say goodbye 👋" },
+            4: { title: "Sharing Fairly", desc: "Learning to share 🤝" },
+            5: { title: "Math Master Trail", desc: "You did it! 🎉" }
+        };
+
+        /* ---------- LEVEL ROUTES ---------- */
+        const levelRoutes = {
+            1: "levels/level-1.html",
+            2: "levels/level-2.html",
+            3: "levels/level-3.html",
+            4: "levels/level-4.html",
+            5: "levels/level-5.html"
+        };
+
+        /* ---------- RENDER ROADMAP ---------- */
+        function renderRoadmap() {
+            document.querySelectorAll(".level-node").forEach(node => {
+                const lvl = Number(node.dataset.level);
+                node.className = "level-node";
+
+                if (lvl < currentLevel) node.classList.add("completed");
+                else if (lvl === currentLevel) node.classList.add("active");
+                else node.classList.add("locked");
+            });
+
+            document.querySelectorAll(".arrow").forEach((arrow, i) => {
+                arrow.classList.toggle("active", i + 1 < currentLevel);
+            });
+        }
+
+        /* ---------- OPEN LEVEL MODAL ---------- */
+        function openLevel(level) {
+            if (level !== currentLevel) return;
+
+            document.getElementById("modalTitle").innerText = levelData[level].title;
+            document.getElementById("modalDesc").innerText = levelData[level].desc;
+            document.getElementById("levelModal").classList.add("active");
+        }
+
+        /* ---------- CLOSE MODAL ---------- */
+        function closeModal() {
+            document.getElementById("levelModal").classList.remove("active");
+        }
+
+        /* ---------- START LEVEL ---------- */
+        function startLevel() {
+            const route = levelRoutes[currentLevel];
+            if (!route) return;
+            window.location.href = route;
+        }
+
+        /* ---------- INIT ---------- */
+        document.addEventListener("DOMContentLoaded", renderRoadmap);
+
+    </script>
+
+</body>
+
+</html>

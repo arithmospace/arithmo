@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arithmo- Home</title>
+  <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Arithmo" />
+  <link rel="manifest" href="assets/favicon/site.webmanifest" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
+
+  <!-- Balls Background CSS -->
+  <link rel="stylesheet" href="assets/moving-balls-bg.css" />
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/common_style.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ea2a33",
+            "background-light": "#f8f6f6",
+            "background-dark": "#211111",
+          },
+          fontFamily: {
+            "display": ["Lexend", "sans-serif"],
+            "brand": ["Bungee", "cursive"],
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+
+</head>
+
+<body class="font-display moving-balls-bg">
+
+  <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
+
+    <!-- NAV BAR -->
+    <div class="nav_container">
+
+      <!-- Nav Bar for smaller screen -->
+
+      <div class="small-screen-nav-bar-btn">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+
+      <div class="small-screen-nav-bar-links-container">
+        <ul>
+          <a href="index.html">
+            <li class="small-screen-nav-links">HOME</li>
+          </a>
+          <a href="arithmo-about.html">
+            <li class="small-screen-nav-links">ABOUT</li>
+          </a>
+          <a href="arithmo-contact.html">
+            <li class="small-screen-nav-links">CONTACT</li>
+          </a>
+          <a href="arithmo-login.html">
+            <li class="small-screen-nav-links">LOGIN</li>
+          </a>
+        </ul>
+      </div>
+
+
+      <header id="navbar" class="flex w-full items-center justify-between px-10 py-5 transition-all duration-300">
+
+        <!-- LEFT: LOGO + BRAND NAME -->
+        <div class="flex items-center gap-3">
+          <img src="assets/images/arithmo-logo.png" alt="Arithmo Logo" class="h-10 w-auto object-contain" />
+          <h2 class="font-brand text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            arithmo
+          </h2>
+        </div>
+
+        <!-- RIGHT: NAV LINKS + YOU BUTTON -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="text-sm font-bold uppercase text-zinc-900 dark:text-white">HOME</a>
+          <a href="arithmo-about.html"
+            class="text-sm font-bold uppercase text-zinc-900 dark:text-white">ABOUT</a>
+          <a href="arithmo-contact.html"
+            class="text-sm font-bold uppercase text-zinc-900 dark:text-white">CONTACT</a>
+
+          <!-- YOU BUTTON -->
+          <a href="arithmo-login.html">
+            <button
+              class="flex items-center gap-2 rounded-full border border-zinc-300/70 bg-white/70 px-3 py-1.5 text-xs font-semibold uppercase text-zinc-800 shadow-sm backdrop-blur-sm hover:bg-white/90 hover:border-zinc-400 transition">
+              <span>You</span>
+              <span
+                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#4A90E2] text-[10px] font-bold text-white">
+                U
+              </span>
+          </a>
+          </button>
+        </nav>
+      </header>
+    </div>
+
+    <!-- MAIN SECTION -->
+    <main class="flex flex-1 items-center justify-center">
+
+      <div class="home">
+
+        <div class="home_grid">
+          <div class="home_grid_col home_textbox_1">
+            <h1>Start Your Math Adventure</h1>
+            <h3>Learn, Play and Level Up!</h3>
+            <div class="home_grid_img">
+              <img src="assets/images/arithmo-home-img.png" alt="">
+            </div>
+            <div class="mt-6">
+              <form action="roadmap.html">
+                <button class="
+                            flex items-center justify-center gap-2
+                            h-12 sm:h-14 lg:h-16
+                            px-5 sm:px-8 lg:px-10
+                            rounded-full
+                            bg-primary text-white
+                            text-sm sm:text-lg lg:text-xl
+                            font-bold
+                            shadow-[0_6px_0px_0px_#B22027] sm:shadow-[0_7px_0px_0px_#B22027] lg:shadow-[0_8px_0px_0px_#B22027]
+                            transition-all
+                            hover:translate-y-1 hover:shadow-[0_4px_0px_0px_#B22027]
+                            active:translate-y-2 active:shadow-none
+                            learn_button">
+                  LET'S LEARN
+                  <span class="text-base sm:text-xl lg:text-2xl">🔓</span>
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="home_grid_col">
+            <div class="rounded-2xl bg-white/80 p-5 shadow-lg flex gap-4 items-center">
+              <div class="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-3xl">
+                😊
+              </div>
+              <div class="space-y-1">
+                <h2 class="text-base font-bold text-zinc-900">Your math friend</h2>
+                <p class="text-sm text-zinc-700">
+                  “Let’s take one tiny step together. If it feels hard, we slow down.”
+                </p>
+              </div>
+            </div>
+            <br>
+
+            <div class="rounded-2xl bg-white/80 p-5 shadow-lg">
+              <h2 class="text-lg font-bold text-zinc-900 mb-3">What you can unlock</h2>
+              <div class="flex flex-wrap gap-3 text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">⭐</span>
+                  <span>Calm Star for trying again</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🏅</span>
+                  <span>Brave Badge for new puzzles</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🎨</span>
+                  <span>Color tokens to decorate</span>
+                </div>
+              </div>
+            </div>
+            <br>
+
+            <div class="rounded-2xl bg-white/80 p-5 shadow-lg space-y-2">
+              <h2 class="text-sm font-bold uppercase text-zinc-800">Built with care</h2>
+              <p class="text-sm text-zinc-700">
+                Arithmo is a small, first-time project focused on gentle practice for children with mild intellectual
+                disabilities.
+              </p>
+              <p class="text-xs text-zinc-500">
+                Screens are simple, actions are clear, and children are never rushed or compared.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+
+  <footer class="arithmo-footer">
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        <h3>ARITHMO</h3>
+        <p class="footer-tagline">Precision meets play.</p>
+      </div>
+
+      <div class="footer-contact">
+        <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">
+          📺 YouTube
+        </a>
+        <a href="mailto:arithmospace@gmail.com">
+          ✉️ arithmospace@gmail.com
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 Arithmo. All rights reserved.
+    </div>
+  </footer>
+
+
+  <!-- Balls Background JS -->
+  <script src="assets/moving-balls-bg.js"></script>
+  <script src="assets/script.js"></script>
+
+  <!-- NAVBAR GLASSMORPHISM -->
+  <script>
+    const navbar = document.getElementById("navbar");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 2) {
+        navbar.classList.add("nav-scrolled");
+      } else {
+        navbar.classList.remove("nav-scrolled");
+      }
+    });
+  </script>
+
+</body>
+
+</html>
