@@ -8,26 +8,6 @@ require('dotenv').config();
 
 const app = express();
 
-app.get('/api/storage-details', async (req, res) => {
-    try {
-        const db = mongoose.connection.db;
-        const stats = await db.collection('users').stats();
-
-        res.json({
-            success: true,
-            documents: stats.count,
-            averageSizeBytes: stats.avgObjSize,
-            totalDataSizeKB: (stats.size / 1024).toFixed(2),
-            totalDataSizeMB: (stats.size / 1024 / 1024).toFixed(4),
-            indexSizeKB: (stats.totalIndexSize / 1024).toFixed(2),
-            storageUsedPercent: ((stats.size / 1024 / 1024) / 512 * 100).toFixed(6) + '%',
-            explanation: `You have ${stats.count} users using ${(stats.size / 1024).toFixed(2)}KB of 512MB (${((stats.size / 1024 / 1024) / 512 * 100).toFixed(6)}%)`
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
 // ========== MIDDLEWARE ==========
 app.use(express.json());
 app.use(cors({
