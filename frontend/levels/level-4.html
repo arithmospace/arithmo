@@ -413,6 +413,78 @@
         padding: 1rem;
       }
     }
+
+    /* ==================== PROGRESS SYNC STYLES ==================== */
+    .sync-status {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      transition: all 0.3s;
+    }
+
+    .sync-status.online {
+      background: rgba(76, 175, 80, 0.9);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .sync-status.syncing {
+      background: rgba(33, 150, 243, 0.9);
+      color: white;
+      animation: pulse 1s infinite;
+    }
+
+    .sync-status.offline {
+      background: rgba(255, 152, 0, 0.9);
+      color: white;
+    }
+
+    .sync-status.error {
+      background: rgba(244, 67, 54, 0.9);
+      color: white;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Progress restore notification */
+    .progress-restored {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(76, 175, 80, 0.95);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      z-index: 1000;
+      animation: slideDown 0.5s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   </style>
 </head>
 
@@ -432,20 +504,211 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // ==================== PROGRESS WRAPPER COMPONENT ====================
+    function ProgressWrapper({ children, activityNum, onComplete, onRetry, onNext, isCompleted }) {
+      // Get current level from URL
+      const getCurrentLevel = () => {
+        const match = window.location.pathname.match(/level-(\d+)/);
+        return match ? parseInt(match[1]) : 1;
+      };
+
+      // Enhanced onComplete that saves progress
+      const handleCompleteWithSave = async () => {
+        const currentLevel = getCurrentLevel();
+
+        // Calculate rewards for this activity
+        const rewards = { tokens: 1 };
+        if (activityNum === 1 || activityNum === 6) {
+          rewards.badges = 1;
+        }
+
+        // Check if this completes the level (activity 10)
+        const isLevelCompleted = activityNum === 10;
+
+        // Save progress
+        if (window.saveActivityProgress) {
+          try {
+            await window.saveActivityProgress(
+              currentLevel,
+              activityNum,
+              rewards,
+              isLevelCompleted
+            );
+            console.log(`✅ Progress saved: Level ${currentLevel}, Activity ${activityNum}`);
+          } catch (error) {
+            console.error('❌ Failed to save progress:', error);
+          }
+        }
+
+        // Call original onComplete
+        if (onComplete) {
+          onComplete(activityNum);
+        }
+      };
+
+      // Enhanced onRetry that saves stars
+      const handleRetryWithSave = () => {
+        // Save star reward
+        if (window.saveActivityProgress) {
+          try {
+            const currentLevel = getCurrentLevel();
+            window.saveActivityProgress(
+              currentLevel,
+              activityNum,
+              { stars: 1 },
+              false
+            );
+          } catch (error) {
+            console.error('Failed to save retry progress:', error);
+          }
+        }
+
+        // Call original onRetry
+        if (onRetry) {
+          onRetry();
+        }
+      };
+
+      // Clone the child component with enhanced handlers
+      return React.cloneElement(children, {
+        onComplete: handleCompleteWithSave,
+        onRetry: handleRetryWithSave,
+        onNext,
+        isCompleted,
+        activityNum
+      });
+    }
+
+    // ==================== SYNC STATUS COMPONENT ====================
+    function SyncStatus() {
+      const [status, setStatus] = useState('online');
+      const [message, setMessage] = useState('Synced');
+
+      useEffect(() => {
+        const updateStatus = () => {
+          if (!window.ArithmoProgress) return;
+
+          const syncStatus = window.ArithmoProgress.getSyncStatus();
+
+          if (!syncStatus.isOnline) {
+            setStatus('offline');
+            setMessage('Offline');
+          } else if (syncStatus.isSyncing) {
+            setStatus('syncing');
+            setMessage('Syncing...');
+          } else if (syncStatus.queueLength > 0) {
+            setStatus('syncing');
+            setMessage(`${syncStatus.queueLength} pending`);
+          } else {
+            setStatus('online');
+            setMessage('Synced');
+          }
+        };
+
+        const interval = setInterval(updateStatus, 3000);
+        updateStatus();
+
+        return () => clearInterval(interval);
+      }, []);
+
+      if (!window.ArithmoProgress) return null;
+
+      return (
+        <div className={`sync-status ${status}`}>
+          <span>{status === 'online' ? '✅' : status === 'syncing' ? '🔄' : '📴'}</span>
+          <span>{message}</span>
+        </div>
+      );
+    }
+
+    // ==================== PROGRESS RESTORE NOTIFICATION ====================
+    function ProgressRestoreNotification({ restoredCount }) {
+      if (!restoredCount || restoredCount === 0) return null;
+
+      const [visible, setVisible] = useState(true);
+
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          setVisible(false);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+      }, []);
+
+      if (!visible) return null;
+
+      return (
+        <div className="progress-restored">
+          <span>✅</span>
+          <span>Restored {restoredCount} completed activities</span>
+        </div>
+      );
+    }
+
     // ==================== MAIN APP COMPONENT ====================
     function SharingFairlyLevel() {
       const [currentActivity, setCurrentActivity] = useState(1);
       const [completedActivities, setCompletedActivities] = useState([]);
       const [rewards, setRewards] = useState({ stars: 0, badges: 0, tokens: 0 });
       const [showCompletion, setShowCompletion] = useState(false);
+      const [restoredCount, setRestoredCount] = useState(0);
+      const [progressLoaded, setProgressLoaded] = useState(false);
 
-      // Check for level completion
+      // Load progress on mount
       useEffect(() => {
-        if (completedActivities.length === 10 && !showCompletion) {
-          setShowCompletion(true);
-        }
-      }, [completedActivities]);
+        const loadProgress = async () => {
+          if (window.ArithmoProgress) {
+            try {
+              const progress = await window.ArithmoProgress.getProgress();
+              const currentLevel = getCurrentLevel();
+              const levelProgress = progress?.levels?.[currentLevel];
 
+              if (levelProgress) {
+                // Restore completed activities
+                if (levelProgress.completedActivities?.length > 0) {
+                  setCompletedActivities(levelProgress.completedActivities);
+                  setRestoredCount(levelProgress.completedActivities.length);
+
+                  // Find next incomplete activity
+                  const allActivities = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                  const nextActivity = allActivities.find(a => !levelProgress.completedActivities.includes(a));
+                  if (nextActivity) {
+                    setCurrentActivity(nextActivity);
+                  } else {
+                    setCurrentActivity(10);
+                  }
+                }
+
+                // Restore rewards
+                if (levelProgress.rewards) {
+                  setRewards(levelProgress.rewards);
+                }
+
+                // Check if level completed
+                if (levelProgress.status === "completed") {
+                  setShowCompletion(true);
+                }
+              }
+            } catch (error) {
+              console.error('Failed to load progress:', error);
+            } finally {
+              setProgressLoaded(true);
+            }
+          } else {
+            setProgressLoaded(true);
+          }
+        };
+
+        loadProgress();
+      }, []);
+
+      // Helper function to get current level
+      const getCurrentLevel = () => {
+        const match = window.location.pathname.match(/level-(\d+)/);
+        return match ? parseInt(match[1]) : 1;
+      };
+
+      // Original onComplete handler
       const handleActivityComplete = (activityNum) => {
         if (!completedActivities.includes(activityNum)) {
           setCompletedActivities([...completedActivities, activityNum]);
@@ -453,9 +716,15 @@
           if (activityNum === 1 || activityNum === 6) {
             setRewards(prev => ({ ...prev, badges: prev.badges + 1 }));
           }
+
+          // Check if level completed
+          if (activityNum === 10) {
+            setTimeout(() => setShowCompletion(true), 1000);
+          }
         }
       };
 
+      // Original onRetry handler
       const handleRetry = () => {
         setRewards(prev => ({ ...prev, stars: prev.stars + 1 }));
       };
@@ -472,27 +741,41 @@
         }
       };
 
+      useEffect(() => {
+        if (completedActivities.length === 10 && !showCompletion) {
+          setShowCompletion(true);
+        }
+      }, [completedActivities]);
+
       if (showCompletion) {
-        return (
-          <CompletionScreen rewards={rewards} onFinish={finishLevel} />
-        );
+        return <CompletionScreen rewards={rewards} onFinish={finishLevel} />;
       }
 
       return (
         <div>
+          <SyncStatus />
+          <ProgressRestoreNotification restoredCount={restoredCount} />
           <ProgressBar
             current={completedActivities.length}
             total={10}
             rewards={rewards}
           />
-
-          <ActivityRenderer
-            activityNum={currentActivity}
-            onComplete={handleActivityComplete}
-            onRetry={handleRetry}
-            onNext={nextActivity}
-            isCompleted={completedActivities.includes(currentActivity)}
-          />
+          {progressLoaded ? (
+            <ActivityRenderer
+              activityNum={currentActivity}
+              onComplete={handleActivityComplete}
+              onRetry={handleRetry}
+              onNext={nextActivity}
+              isCompleted={completedActivities.includes(currentActivity)}
+            />
+          ) : (
+            <div className="activity-card">
+              <div className="text-center py-10">
+                <div className="text-4xl mb-4">⏳</div>
+                <p className="text-lg">Loading your progress...</p>
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -544,21 +827,21 @@
         7: Activity07_SharingEqually,
         8: Activity08_HowManyEach,
         9: Activity09_EqualJumps,
-        10: Activity10_FairFeast
+        10: Activity10_FairFeast,
       };
 
       const ActivityComponent = activities[activityNum];
 
       return (
-        <div className="activity-card">
-          <ActivityComponent
-            onComplete={onComplete}
-            onRetry={onRetry}
-            onNext={onNext}
-            isCompleted={isCompleted}
-            activityNum={activityNum}
-          />
-        </div>
+        <ProgressWrapper
+          activityNum={activityNum}
+          onComplete={onComplete}
+          onRetry={onRetry}
+          onNext={onNext}
+          isCompleted={isCompleted}
+        >
+          <ActivityComponent />
+        </ProgressWrapper>
       );
     }
 
@@ -2035,6 +2318,24 @@
         localStorage.setItem("arithmoLevel", storedLevel + 1);
       }
       window.location.href = "../roadmap.html";
+    }
+  </script>
+
+  <script src="../assets/script.js"></script>
+
+  <!-- Progress Manager -->
+  <script src="../assets/progress-manager.js"></script>
+
+  <!-- Add global helper -->
+  <script>
+    // Make saveActivityProgress available globally
+    if (!window.saveActivityProgress) {
+      window.saveActivityProgress = async function (level, activity, rewards = {}, isCompleted = false) {
+        if (window.ArithmoProgress) {
+          return await window.ArithmoProgress.saveActivityProgress(level, activity, rewards, isCompleted);
+        }
+        return null;
+      };
     }
   </script>
 

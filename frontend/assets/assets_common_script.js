@@ -76,3 +76,33 @@ small_screen_nav_bar_btn.addEventListener('click', function toogleSmallScreenNav
     small_screen_nav_bar_btn.style.border = "none";
   }
 });
+
+// ========== PROGRESS HELPER FUNCTIONS ==========
+window.saveActivityProgress = async function (level, activity, rewards = {}, isCompleted = false) {
+  if (window.ArithmoProgress) {
+    return await window.ArithmoProgress.saveActivityProgress(level, activity, rewards, isCompleted);
+  }
+  console.error('Progress Manager not loaded');
+  return null;
+};
+
+window.getUserProgress = async function () {
+  if (window.ArithmoProgress) {
+    return await window.ArithmoProgress.getProgress();
+  }
+  return null;
+};
+
+window.isUserLoggedIn = function () {
+  const token = localStorage.getItem('arithmo_jwt');
+  const user = localStorage.getItem('arithmo_user');
+  return !!(token && user);
+};
+
+// Auto-load progress manager on all pages
+if (!window.ArithmoProgress && typeof window !== 'undefined') {
+  const script = document.createElement('script');
+  script.src = 'assets/progress-manager.js';
+  script.async = true;
+  document.head.appendChild(script);
+}

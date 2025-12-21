@@ -7,6 +7,8 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const Progress = require('./models/Progress');
+const progressRoutes = require('./routes/progress');
 
 const app = express();
 
@@ -17,24 +19,53 @@ app.use(cors({
     credentials: true
 }));
 
-// Add this BEFORE your other routes:
+app.get('/api/test', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Server is working!',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.get('/api', (req, res) => {
     res.json({
-        message: '🚀 Arithmo API is running!',
+        message: 'Arithmo API is running!',
         version: '1.0.0',
         endpoints: {
             health: '/api/health',
+            test: '/api/test',
             auth: {
                 register: '/api/auth/register',
                 login: '/api/auth/login'
             },
+            progress: {
+                save: '/api/progress/save-progress',
+                load: '/api/progress/load-progress',
+                update: '/api/progress/update-activity'
+            },
             users: '/api/users',
-            // Add more endpoints you have
         },
-        documentation: 'Add your docs link here',
+        documentation: 'Server Running Successfully!!',
         timestamp: new Date().toISOString()
     });
 });
+
+// Simple health check
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'OK',
+        message: 'Arithmo Backend is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
+// Also add this - sometimes the frontend might call without /api
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', message: 'Backend root health check' });
+});
+
+app.use('/api/progress', progressRoutes);
 
 // JWT Secret (SET THIS IN RENDER.COM ENVIRONMENT VARIABLES!)
 const JWT_SECRET = process.env.JWT_SECRET;
