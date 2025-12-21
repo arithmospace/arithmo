@@ -794,6 +794,49 @@
       );
     }
 
+    // ==================== PROGRESS BAR COMPONENT ====================
+    function ProgressBar({ current, total, rewards }) {
+      const percent = Math.round((current / total) * 100);
+
+      return (
+        <div className="progress-bar-container">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-lg">Your Progress</span>
+            <span className="font-bold text-primary">{current}/{total} activities</span>
+          </div>
+
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${percent}%` }}
+            >
+              {percent}%
+            </div>
+          </div>
+
+          {rewards && (
+            <div className="flex justify-between mt-4">
+              <div className="text-center">
+                <div className="text-2xl">⭐</div>
+                <div className="text-sm font-bold">{rewards.stars || 0}</div>
+                <div className="text-xs text-gray-500">Stars</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl">🏅</div>
+                <div className="text-sm font-bold">{rewards.badges || 0}</div>
+                <div className="text-xs text-gray-500">Badges</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl">🎨</div>
+                <div className="text-sm font-bold">{rewards.tokens || 0}</div>
+                <div className="text-xs text-gray-500">Tokens</div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     // ==================== MAIN APP COMPONENT ====================
     function TakingAwayLevel() {
       const [currentActivity, setCurrentActivity] = useState(1);
@@ -925,38 +968,6 @@
               </div>
             </div>
           )}
-        </div>
-      );
-    }
-
-    // ==================== PROGRESS BAR ====================
-    function ProgressBar({ current, total, rewards }) {
-      const percentage = (current / total) * 100;
-      return (
-        <div className="progress-bar-container">
-          <div className="flex justify-between items-center mb-3">
-            <span className="font-bold text-lg">Your Progress</span>
-            <span className="text-sm text-gray-600">{current} of {total} activities</span>
-          </div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${percentage}%` }}>
-              {current > 0 && `${current}/${total}`}
-            </div>
-          </div>
-          <div className="rewards-container mt-4">
-            <div className="reward-badge">
-              <span className="reward-icon">⭐</span>
-              <span>{rewards.stars} Stars</span>
-            </div>
-            <div className="reward-badge">
-              <span className="reward-icon">🏅</span>
-              <span>{rewards.badges} Badges</span>
-            </div>
-            <div className="reward-badge">
-              <span className="reward-icon">🎨</span>
-              <span>{rewards.tokens} Tokens</span>
-            </div>
-          </div>
         </div>
       );
     }

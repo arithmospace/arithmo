@@ -57,63 +57,10 @@
   <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
 
     <!-- NAV BAR -->
-    <div class="nav_container">
+    <div class="nav_container" id="nav_container_id">
 
-      <!-- Nav Bar for smaller screen -->
+      <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
 
-      <div class="small-screen-nav-bar-btn">
-        <i class="fa-solid fa-bars"></i>
-      </div>
-
-      <div class="small-screen-nav-bar-links-container">
-        <ul>
-          <a href="index.html">
-            <li class="small-screen-nav-links">HOME</li>
-          </a>
-          <a href="arithmo-about.html">
-            <li class="small-screen-nav-links">ABOUT</li>
-          </a>
-          <a href="arithmo-contact.html">
-            <li class="small-screen-nav-links">CONTACT</li>
-          </a>
-          <a href="arithmo-login.html">
-            <li class="small-screen-nav-links">LOGIN</li>
-          </a>
-        </ul>
-      </div>
-
-
-      <header id="navbar" class="flex w-full items-center justify-between px-10 py-5 transition-all duration-300">
-
-        <!-- LEFT: LOGO + BRAND NAME -->
-        <div class="flex items-center gap-3">
-          <img src="assets/images/arithmo-logo.png" alt="Arithmo Logo" class="h-10 w-auto object-contain" />
-          <h2 class="font-brand text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            arithmo
-          </h2>
-        </div>
-
-        <!-- RIGHT: NAV LINKS + YOU BUTTON -->
-        <nav class="hidden md:flex items-center gap-8">
-          <a href="index.html" class="text-sm font-bold uppercase text-zinc-900 dark:text-white">HOME</a>
-          <a href="arithmo-about.html"
-            class="text-sm font-bold uppercase text-zinc-900 dark:text-white">ABOUT</a>
-          <a href="arithmo-contact.html"
-            class="text-sm font-bold uppercase text-zinc-900 dark:text-white">CONTACT</a>
-
-          <!-- YOU BUTTON -->
-          <a href="arithmo-login.html">
-            <button
-              class="flex items-center gap-2 rounded-full border border-zinc-300/70 bg-white/70 px-3 py-1.5 text-xs font-semibold uppercase text-zinc-800 shadow-sm backdrop-blur-sm hover:bg-white/90 hover:border-zinc-400 transition">
-              <span>You</span>
-              <span
-                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#4A90E2] text-[10px] font-bold text-white">
-                U
-              </span>
-          </a>
-          </button>
-        </nav>
-      </header>
     </div>
 
     <!-- MAIN SECTION -->
@@ -229,7 +176,9 @@
 
   <!-- Balls Background JS -->
   <script src="assets/moving-balls-bg.js"></script>
+  <script src="assets/check-navbar.js"></script>
   <script src="assets/script.js"></script>
+  <script src="assets/assets_common_script.js"></script>
 
   <!-- NAVBAR GLASSMORPHISM -->
   <script>

@@ -1,27 +1,35 @@
+body{
+  padding-top: 2rem;
+}
+
 /* ----- Glass navbar style when scrolled ----- */
 
-.nav-scrolled {
-  background: rgba(255, 255, 255, 0.281);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
-  border-radius: 18px;
-  margin-top: 12px;
-  margin-bottom: 8px;
-}
-
-.nav_container {
-  max-width: 100%;
-  margin: 45px 10px 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 #navbar {
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
   position: fixed;
-  z-index: 1000000;
+  z-index: 9999999;
+  top: 0;
+  left: 0;
+  margin-top: 5px;
+}
+
+#navbar.nav-scrolled {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(234, 42, 51, 0.1);
+}
+
+@media (min-width: 768px) {
+  .small-screen-nav-bar-btn {
+    display: none;
+  }
 }
 
 /* ---------- Small Screen Nav Bar ---------- */

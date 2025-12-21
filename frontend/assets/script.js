@@ -1,42 +1,64 @@
-let small_screen_nav_bar_btn = document.querySelector('.small-screen-nav-bar-btn');
-let small_screen_nav_bar_links_container = document.querySelector('.small-screen-nav-bar-links-container');
+// script.js - Simplified version (no mobile menu handling here)
+(function () {
+    console.log('📜 SCRIPT.JS: Loading...');
 
-// ---------- Small Screen Nav Bar ---------- //
+    // ========== SYNC INDICATOR (ONLY FOR ROADMAP) ==========
+    function setupGlobalSyncIndicator() {
+        // Check if we're on roadmap.html
+        const isRoadmapPage = window.location.pathname.includes('roadmap.html') ||
+            document.title.includes('Math Journey');
 
-small_screen_nav_bar_btn.addEventListener('click', function toogleSmallScreenNavBtn() {
-    if (small_screen_nav_bar_links_container.style.right != "0px") {
-        small_screen_nav_bar_links_container.style.right = "0px";
-        small_screen_nav_bar_btn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-        small_screen_nav_bar_btn.style.border = "1px solid #fff";
-    } else {
-        small_screen_nav_bar_links_container.style.right = "-210px";
-        small_screen_nav_bar_btn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
-        small_screen_nav_bar_btn.style.border = "none";
+        if (!isRoadmapPage) {
+            // Remove any existing indicator if we're not on roadmap
+            const existingIndicator = document.getElementById('global-sync-status');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+            return;
+        }
+
+        // Check if progress manager is available
+        if (!window.ArithmoProgress) {
+            // Try to load it
+            const script = document.createElement('script');
+            script.src = 'assets/progress-manager.js';
+            script.onload = function () {
+                if (window.ArithmoProgress) {
+                    createSyncIndicator();
+                }
+            };
+            document.head.appendChild(script);
+            return;
+        }
+
+        // Create indicator if progress manager is already loaded
+        createSyncIndicator();
     }
-});
 
-// ========== PROGRESS MANAGER INTEGRATION ==========
-document.addEventListener('DOMContentLoaded', function () {
-    // Create global sync status indicator
-    if (window.ArithmoProgress) {
+    function createSyncIndicator() {
+        // Check if indicator already exists
+        if (document.getElementById('global-sync-status')) {
+            return;
+        }
+
         const indicator = document.createElement('div');
         indicator.id = 'global-sync-status';
         indicator.style.cssText = `
-      position: fixed;
-      bottom: 70px;
-      right: 20px;
-      z-index: 1000;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      pointer-events: none;
-      transition: all 0.3s;
-    `;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            z-index: 1000;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+            transition: all 0.3s;
+        `;
         document.body.appendChild(indicator);
 
         function updateGlobalSyncStatus() {
@@ -68,4 +90,32 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(updateGlobalSyncStatus, 5000);
         updateGlobalSyncStatus();
     }
-});
+
+    // ========== NAVBAR SCROLL EFFECT ==========
+    function setupNavbarScroll() {
+        const navbar = document.getElementById("navbar");
+
+        if (navbar) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 2) {
+                    navbar.classList.add("nav-scrolled");
+                } else {
+                    navbar.classList.remove("nav-scrolled");
+                }
+            });
+            console.log('✅ SCRIPT.JS: Navbar scroll effect setup');
+        }
+    }
+
+    // ========== MAIN INITIALIZATION ==========
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log('📜 SCRIPT.JS: DOM loaded');
+
+        // Setup navbar scroll effect
+        setupNavbarScroll();
+
+        // Setup sync indicator (only for roadmap page)
+        setupGlobalSyncIndicator();
+    });
+
+})();

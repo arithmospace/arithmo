@@ -268,6 +268,27 @@
             opacity: 0.9;
         }
 
+        /* Badge animations */
+        @keyframes badge-pop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .badge-earned {
+            animation: badge-pop 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         /* ANIMATIONS */
         @keyframes pulse-active {
 
@@ -390,22 +411,52 @@
 
                         <!-- Overall Stats -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                            <div class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100">
-                                <div class="text-3xl text-primary font-bold mb-2">0/5</div>
+                            <div
+                                class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="text-3xl text-primary font-bold mb-2" id="levels-completed">0/5</div>
                                 <div class="text-sm text-gray-500 font-medium">Levels Completed</div>
                             </div>
-                            <div class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100">
-                                <div class="text-3xl text-primary font-bold mb-2">0/50</div>
+                            <div
+                                class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="text-3xl text-primary font-bold mb-2" id="total-activities">0/50</div>
                                 <div class="text-sm text-gray-500 font-medium">Activities</div>
                             </div>
-                            <div class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100">
-                                <div class="text-3xl text-yellow-500 font-bold mb-2">0</div>
+                            <div
+                                class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="text-3xl text-yellow-500 font-bold mb-2" id="total-stars">0</div>
                                 <div class="text-sm text-gray-500 font-medium">⭐ Stars</div>
                             </div>
-                            <div class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100">
-                                <div class="text-3xl text-purple-500 font-bold mb-2">0</div>
+                            <div
+                                class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100 hover:shadow-md transition-shadow">
+                                <div class="text-3xl text-purple-500 font-bold mb-2" id="total-tokens">0</div>
                                 <div class="text-sm text-gray-500 font-medium">🎨 Tokens</div>
                             </div>
+                        </div>
+
+                        <!-- Badges Display -->
+                        <div class="mt-8">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">🏆 Your Badges</h3>
+                            <div class="flex flex-wrap justify-center gap-4" id="badges-container">
+                                <!-- Badges will be dynamically added here -->
+                                <div
+                                    class="bg-gradient-to-br from-amber-200 to-yellow-400 p-4 rounded-full shadow-md hover:scale-110 transition-transform duration-300 opacity-50">
+                                    <i class="fas fa-trophy text-2xl text-gray-600"></i>
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-blue-200 to-cyan-400 p-4 rounded-full shadow-md hover:scale-110 transition-transform duration-300 opacity-50">
+                                    <i class="fas fa-star text-2xl text-gray-600"></i>
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-red-200 to-pink-400 p-4 rounded-full shadow-md hover:scale-110 transition-transform duration-300 opacity-50">
+                                    <i class="fas fa-bolt text-2xl text-gray-600"></i>
+                                </div>
+                                <div
+                                    class="bg-gradient-to-br from-green-200 to-emerald-400 p-4 rounded-full shadow-md hover:scale-110 transition-transform duration-300 opacity-50">
+                                    <i class="fas fa-crown text-2xl text-gray-600"></i>
+                                </div>
+                            </div>
+                            <p class="text-center text-gray-500 text-sm mt-4" id="badges-count">Earn badges by
+                                completing achievements!</p>
                         </div>
                     </div>
                 </div>
@@ -547,6 +598,10 @@
                                 <div class="text-2xl mb-1">🎨</div>
                                 <div class="text-sm">Tokens</div>
                             </div>
+                            <div class="text-center">
+                                <div class="text-2xl mb-1">🔥</div>
+                                <div class="text-sm">Streaks</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -564,16 +619,16 @@
                 <div class="mb-6 p-4 bg-gray-50 rounded-xl">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm text-gray-500">Level Progress</span>
-                        <span class="text-sm font-bold text-primary">0/10 activities</span>
+                        <span class="text-sm font-bold text-primary" id="modalProgressText">0/10 activities</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-primary h-2 rounded-full" style="width: 0%"></div>
+                        <div class="bg-primary h-2 rounded-full" id="modalProgressBar" style="width: 0%"></div>
                     </div>
                 </div>
 
                 <button onclick="startLevel()" class="w-full bg-gradient-to-r from-primary to-primary-light text-white 
-                               px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl 
-                               transform hover:-translate-y-1 transition-all duration-300">
+                       px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl 
+                       transform hover:-translate-y-1 transition-all duration-300">
                     <i class="fas fa-play mr-2"></i> Start Level
                 </button>
 
@@ -590,63 +645,42 @@
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
 
-    <!-- Navbar scroll effect -->
-    <script>
-        const navbar = document.getElementById("navbar");
-
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 2) {
-                navbar.classList.add("nav-scrolled");
-            } else {
-                navbar.classList.remove("nav-scrolled");
-            }
-        });
-    </script>
     <script>
         /* ================== ROADMAP LOGIC ================== */
 
         const TOTAL_LEVELS = 5;
-
-        /* ---------- ONE-TIME INITIALIZATION ---------- */
-        if (!localStorage.getItem("arithmoInitialized")) {
-            localStorage.setItem("arithmoLevel", "1");
-            localStorage.setItem("arithmoInitialized", "true");
-        }
-
-        /* ---------- CURRENT LEVEL (SINGLE SOURCE OF TRUTH) ---------- */
-        let currentLevel = Number(localStorage.getItem("arithmoLevel"));
-
-        if (isNaN(currentLevel) || currentLevel < 1 || currentLevel > TOTAL_LEVELS) {
-            currentLevel = 1;
-            localStorage.setItem("arithmoLevel", "1");
-        }
 
         /* ---------- LEVEL META ---------- */
         const levelData = {
             1: {
                 title: "Counting Friends",
                 desc: "Let's count together! Learn numbers 1-100 with fun games and interactive activities. Perfect for beginners! 😊",
-                icon: "👫"
+                icon: "👫",
+                totalActivities: 10
             },
             2: {
                 title: "Adding Magic",
                 desc: "Discover the magic of addition! Solve puzzles and help characters by adding numbers together. ✨",
-                icon: "🔮"
+                icon: "🔮",
+                totalActivities: 10
             },
             3: {
                 title: "Taking Away",
                 desc: "Numbers gently say goodbye. Master subtraction with engaging stories and real-life scenarios. 👋",
-                icon: "🎈"
+                icon: "🎈",
+                totalActivities: 10
             },
             4: {
                 title: "Sharing Fairly",
                 desc: "Learning to share equally! Understand division through fun sharing stories with friends. 🤝",
-                icon: "🍕"
+                icon: "🍕",
+                totalActivities: 10
             },
             5: {
                 title: "Math Master Trail",
                 desc: "The ultimate challenge! Combine all your skills to become a true Math Master. Are you ready? 🎉",
-                icon: "🏆"
+                icon: "🏆",
+                totalActivities: 10
             }
         };
 
@@ -659,61 +693,216 @@
             5: "levels/level-5.html"
         };
 
-        /* ---------- RENDER ROADMAP ---------- */
-        function renderRoadmap() {
-            document.querySelectorAll(".level-node").forEach(node => {
-                const lvl = Number(node.dataset.level);
-                node.className = "level-node";
+        /* ---------- GET USER PROGRESS ---------- */
+        async function getUserProgress() {
+            try {
+                if (!window.ArithmoProgress) {
+                    console.log('⏳ Progress manager not loaded yet');
+                    return null;
+                }
 
-                // Update button content
-                if (lvl < currentLevel) {
-                    node.innerHTML = '<i class="fas fa-check"></i>';
-                    node.classList.add("completed");
-                } else if (lvl === currentLevel) {
-                    node.innerHTML = `<span>${lvl}</span>`;
-                    node.classList.add("active");
+                const progress = await window.ArithmoProgress.getProgress();
+                console.log('📊 User progress:', progress);
+                return progress;
+            } catch (error) {
+                console.error('Error getting progress:', error);
+                return null;
+            }
+        }
+
+        /* ---------- GET CURRENT LEVEL ---------- */
+        function getCurrentLevel(progress) {
+            if (!progress || !progress.levels) return 1;
+
+            // Find the first level that's not completed
+            for (let i = 1; i <= TOTAL_LEVELS; i++) {
+                if (progress.levels[i] && progress.levels[i].status !== "completed") {
+                    return i;
+                }
+            }
+
+            // If all completed, return last level
+            return TOTAL_LEVELS;
+        }
+
+        /* ---------- RENDER ROADMAP WITH REAL DATA ---------- */
+        async function renderRoadmap() {
+            console.log('🔄 Rendering roadmap with real data...');
+
+            // Get user progress
+            const progress = await getUserProgress();
+
+            // Get current level
+            const currentLevel = getCurrentLevel(progress);
+            console.log('🎯 Current level:', currentLevel);
+
+            // Update ALL roadmap items
+            for (let i = 1; i <= TOTAL_LEVELS; i++) {
+                const levelNode = document.querySelector(`.level-node[data-level="${i}"]`);
+                const statusBadge = document.querySelectorAll('.status-badge')[i - 1];
+
+                if (!levelNode || !statusBadge) continue;
+
+                // Reset classes
+                levelNode.className = "level-node";
+                statusBadge.className = "status-badge";
+
+                // Get level progress
+                const levelProgress = progress?.levels?.[i];
+                const completedCount = levelProgress?.completedActivities?.length || 0;
+                const totalActivities = levelData[i].totalActivities;
+                const isCompleted = levelProgress?.status === "completed";
+
+                // Update node based on status
+                if (i < currentLevel || isCompleted) {
+                    // Level is completed
+                    levelNode.innerHTML = '<i class="fas fa-check"></i>';
+                    levelNode.classList.add("completed");
+                    statusBadge.classList.add("status-completed");
+                    statusBadge.textContent = "Completed";
+                } else if (i === currentLevel) {
+                    // Current active level
+                    levelNode.innerHTML = `<span>${i}</span>`;
+                    levelNode.classList.add("active");
+                    statusBadge.classList.add("status-active");
+                    statusBadge.textContent = "Current Level";
                 } else {
-                    node.innerHTML = `<span>${lvl}</span>`;
-                    node.classList.add("locked");
+                    // Future locked level
+                    levelNode.innerHTML = `<span>${i}</span>`;
+                    levelNode.classList.add("locked");
+                    statusBadge.classList.add("status-locked");
+                    statusBadge.textContent = "Locked";
                 }
-            });
 
-            // Update status badges
-            document.querySelectorAll(".status-badge").forEach((badge, i) => {
-                const level = i + 1;
-                badge.className = "status-badge ";
+                // Add progress info to each roadmap item
+                const itemContent = levelNode.closest('.roadmap-item').querySelector('.roadmap-item-content');
+                if (itemContent) {
+                    // Remove existing progress info
+                    const existingProgress = itemContent.querySelector('.level-progress-info');
+                    if (existingProgress) {
+                        existingProgress.remove();
+                    }
 
-                if (level < currentLevel) {
-                    badge.classList.add("status-completed");
-                    badge.textContent = "Completed";
-                } else if (level === currentLevel) {
-                    badge.classList.add("status-active");
-                    badge.textContent = "Current Level";
-                } else {
-                    badge.classList.add("status-locked");
-                    badge.textContent = "Locked";
+                    // Add new progress info
+                    const percent = Math.round((completedCount / totalActivities) * 100);
+                    const progressHTML = `
+                <div class="level-progress-info mt-3">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs text-gray-500">Progress</span>
+                        <span class="text-xs font-bold text-primary">${completedCount}/${totalActivities} activities</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-primary h-1.5 rounded-full" style="width: ${percent}%"></div>
+                    </div>
+                </div>
+            `;
+
+                    const description = itemContent.querySelector('.level-description');
+                    if (description) {
+                        description.insertAdjacentHTML('afterend', progressHTML);
+                    }
                 }
-            });
+            }
 
-            // Update content descriptions
-            document.querySelectorAll(".roadmap-item-content").forEach((content, i) => {
-                const level = i + 1;
-                const levelInfo = levelData[level];
-                if (levelInfo) {
-                    content.querySelector(".level-description").textContent = levelInfo.desc;
-                }
-            });
+            // Update overall stats
+            updateOverallStats(progress);
+        }
+
+        /* ---------- UPDATE OVERALL STATS ---------- */
+        function updateOverallStats(progress) {
+            if (!progress) {
+                console.log('No progress data for stats');
+                return;
+            }
+
+            const totals = progress.totals || {};
+            const levels = progress.levels || {};
+
+            // Calculate completed levels
+            const completedLevels = Object.values(levels).filter(l => l.status === "completed").length;
+
+            // Calculate total activities completed
+            const totalActivities = Object.values(levels).reduce((sum, level) => {
+                return sum + (level.completedActivities?.length || 0);
+            }, 0);
+
+            // Update stats display
+            document.getElementById('levels-completed').textContent = `${completedLevels}/${TOTAL_LEVELS}`;
+            document.getElementById('total-activities').textContent = `${totalActivities}/${TOTAL_LEVELS * 10}`;
+            document.getElementById('total-stars').textContent = totals.totalStars || '0';
+            document.getElementById('total-tokens').textContent = totals.totalTokens || '0';
+
+            // Update badges
+            updateBadgesDisplay(totals.totalBadges || 0);
+        }
+
+        /* ---------- UPDATE BADGES DISPLAY ---------- */
+        function updateBadgesDisplay(badgesCount) {
+            const badgesContainer = document.getElementById('badges-container');
+            const badgesCountElement = document.getElementById('badges-count');
+
+            if (!badgesContainer || !badgesCountElement) return;
+
+            if (badgesCount > 0) {
+                badgesContainer.querySelectorAll('.opacity-50').forEach(badge => {
+                    badge.classList.remove('opacity-50');
+                    badge.classList.add('opacity-100', 'badge-earned');
+                });
+
+                badgesCountElement.textContent = `You've earned ${badgesCount} badges!`;
+            } else {
+                badgesCountElement.textContent = 'Complete levels to earn badges!';
+            }
         }
 
         /* ---------- OPEN LEVEL MODAL ---------- */
-        function openLevel(level) {
-            if (level !== currentLevel) return;
+        async function openLevel(level) {
+            // Get current progress
+            const progress = await getUserProgress();
+            const currentLevel = getCurrentLevel(progress);
+
+            // Only allow opening current level
+            if (level !== currentLevel) {
+                console.log(`Level ${level} is not the current level (${currentLevel})`);
+                return;
+            }
 
             const data = levelData[level];
             document.getElementById("modalTitle").innerText = data.title;
             document.getElementById("modalDesc").innerText = data.desc;
             document.getElementById("modalIcon").textContent = data.icon;
+
+            // Update modal with actual progress data
+            await updateModalProgress(level, progress);
+
             document.getElementById("levelModal").classList.add("active");
+        }
+
+        /* ---------- UPDATE MODAL PROGRESS ---------- */
+        async function updateModalProgress(level, progress) {
+            try {
+                const modalProgressText = document.getElementById('modalProgressText');
+                const modalProgressBar = document.getElementById('modalProgressBar');
+
+                if (progress && progress.levels && progress.levels[level]) {
+                    const levelProgress = progress.levels[level];
+                    const completed = levelProgress.completedActivities ? levelProgress.completedActivities.length : 0;
+                    const total = levelData[level].totalActivities;
+                    const percent = Math.round((completed / total) * 100);
+
+                    modalProgressText.textContent = `${completed}/${total} activities`;
+                    modalProgressBar.style.width = `${percent}%`;
+                } else {
+                    // Fallback to default
+                    modalProgressText.textContent = `0/${levelData[level].totalActivities} activities`;
+                    modalProgressBar.style.width = "0%";
+                }
+            } catch (error) {
+                console.error('Error updating modal progress:', error);
+                const total = levelData[level]?.totalActivities || 10;
+                document.getElementById('modalProgressText').textContent = `0/${total} activities`;
+                document.getElementById('modalProgressBar').style.width = "0%";
+            }
         }
 
         /* ---------- CLOSE MODAL ---------- */
@@ -722,133 +911,58 @@
         }
 
         /* ---------- START LEVEL ---------- */
-        function startLevel() {
+        async function startLevel() {
+            // Get current level
+            const progress = await getUserProgress();
+            const currentLevel = getCurrentLevel(progress);
+
             const route = levelRoutes[currentLevel];
-            if (!route) return;
+            if (!route) {
+                console.error('No route found for level', currentLevel);
+                return;
+            }
+
+            console.log('🚀 Starting level', currentLevel);
             window.location.href = route;
         }
 
-        /* ---------- INIT ---------- */
-        document.addEventListener("DOMContentLoaded", function () {
-            renderRoadmap();
+        /* ---------- INITIALIZE ---------- */
+        document.addEventListener("DOMContentLoaded", async function () {
+            console.log('🎮 Roadmap page loaded');
 
-            // Add click animations
-            document.querySelectorAll('.level-node').forEach(node => {
-                node.addEventListener('click', function (e) {
-                    if (this.classList.contains('locked')) {
-                        e.preventDefault();
-                        this.style.transform = 'scale(0.95)';
-                        setTimeout(() => {
-                            this.style.transform = '';
-                        }, 200);
-                    }
+            // Wait a bit for progress manager to load
+            setTimeout(async () => {
+                await renderRoadmap();
+
+                // Add click animations
+                document.querySelectorAll('.level-node').forEach(node => {
+                    node.addEventListener('click', async function (e) {
+                        const level = Number(this.dataset.level);
+
+                        if (this.classList.contains('locked')) {
+                            e.preventDefault();
+                            this.style.transform = 'scale(0.95)';
+                            setTimeout(() => {
+                                this.style.transform = '';
+                            }, 200);
+                        } else {
+                            // Open modal with updated progress
+                            await openLevel(level);
+                        }
+                    });
                 });
-            });
+            }, 500);
+
+            // Refresh roadmap every 5 seconds (in case progress updates)
+            setInterval(renderRoadmap, 5000);
         });
 
     </script>
+
+    <script src="assets/check-navbar.js"></script>
 
     <!-- Progress Manager -->
     <script src="assets/progress-manager.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Wait for progress manager to load
-            if (!window.ArithmoProgress) {
-                // Try to load it
-                const script = document.createElement('script');
-                script.src = 'assets/progress-manager.js';
-                script.onload = initProgressDisplay;
-                document.head.appendChild(script);
-            } else {
-                initProgressDisplay();
-            }
-
-            async function initProgressDisplay() {
-                // Wait for progress manager to initialize
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                if (!window.ArithmoProgress) {
-                    console.log('Progress manager not loaded');
-                    return;
-                }
-
-                // Load progress
-                const progress = await window.ArithmoProgress.getProgress();
-                if (!progress) return;
-
-                // Update overall progress display
-                updateOverallProgress(progress);
-
-                // Add sync status
-                addSyncStatus();
-            }
-
-            function updateOverallProgress(progress) {
-                const rewards = progress.totals;
-                const completedLevels = Object.values(progress.levels).filter(l => l.status === "completed").length;
-                const totalActivities = Object.values(progress.levels).reduce((sum, l) => sum + (l.completedActivities?.length || 0), 0);
-
-                // Update the stats cards
-                const statsContainer = document.querySelector('#overall-progress-display .grid');
-                if (statsContainer) {
-                    const stats = statsContainer.querySelectorAll('div > div:first-child');
-                    if (stats[0]) stats[0].textContent = `${completedLevels}/5`;
-                    if (stats[1]) stats[1].textContent = `${totalActivities}/50`;
-                    if (stats[2]) stats[2].textContent = rewards.totalStars || '0';
-                    if (stats[3]) stats[3].textContent = rewards.totalTokens || '0';
-                }
-
-                // Update progress in roadmap items
-                document.querySelectorAll('.roadmap-item').forEach((item, index) => {
-                    const level = index + 1;
-                    const levelProgress = progress.levels[level];
-                    if (!levelProgress) return;
-
-                    // Update progress bar in modal if exists
-                    const progressBar = item.querySelector('.w-full.bg-gray-200');
-                    if (progressBar && levelProgress.completedActivities) {
-                        const completed = levelProgress.completedActivities.length;
-                        const total = 10;
-                        const percent = Math.round((completed / total) * 100);
-                        progressBar.querySelector('.bg-primary').style.width = `${percent}%`;
-                        progressBar.nextElementSibling.textContent = `${completed}/${total} activities`;
-                    }
-                });
-            }
-
-            function addSyncStatus() {
-                if (!window.ArithmoProgress) return;
-
-                const indicator = document.createElement('div');
-                indicator.id = 'roadmap-sync-status';
-                indicator.className = 'fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2 text-sm font-semibold transition-all duration-300';
-
-                function updateSyncStatus() {
-                    if (!window.ArithmoProgress) return;
-
-                    const status = window.ArithmoProgress.getSyncStatus();
-
-                    if (!status.isOnline) {
-                        indicator.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline';
-                        indicator.className = indicator.className.replace(/bg-\[.*?\]/, '') + ' bg-orange-500/90 text-white';
-                    } else if (status.isSyncing || status.queueLength > 0) {
-                        indicator.innerHTML = status.queueLength > 0
-                            ? `<i class="fas fa-sync-alt animate-spin"></i> ${status.queueLength} pending`
-                            : '<i class="fas fa-sync-alt animate-spin"></i> Syncing...';
-                        indicator.className = indicator.className.replace(/bg-\[.*?\]/, '') + ' bg-blue-500/90 text-white';
-                    } else {
-                        indicator.innerHTML = '<i class="fas fa-check-circle"></i> Synced';
-                        indicator.className = indicator.className.replace(/bg-\[.*?\]/, '') + ' bg-green-500/90 text-white';
-                    }
-                }
-
-                updateSyncStatus();
-                setInterval(updateSyncStatus, 5000);
-                document.body.appendChild(indicator);
-            }
-        });
-    </script>
 
 </body>
 

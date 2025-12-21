@@ -274,6 +274,18 @@
                 const API_URL = 'https://arithmobackend.onrender.com/api';
                 const $ = id => document.getElementById(id);
 
+                // Function to refresh navbar after login/signup
+                function refreshNavbarAfterAuth() {
+                    // Check if refreshNavbar function exists
+                    if (typeof window.refreshNavbar === 'function') {
+                        window.refreshNavbar();
+                    } else {
+                        // If not, reload the page to get fresh navbar
+                        console.log('refreshNavbar not found, reloading page...');
+                        location.reload();
+                    }
+                }
+
                 // ========== PANEL SWITCHING (FIXED!) ==========
                 function showPanel(panelId) {
                     // Hide all panels
@@ -363,25 +375,28 @@
                                 userId: data.userId
                             }));
 
+                            // Refresh navbar IMMEDIATELY
+                            refreshNavbarAfterAuth();
+
                             // Show recovery code
                             $('panel-signup-contact').innerHTML = `
-                    <div class="text-center p-4">
-                        <h2 class="text-2xl font-bold text-primary mb-4">✅ Account Created!</h2>
-                        <p class="text-zinc-700 dark:text-zinc-300 mb-4">Save your recovery code:</p>
-                        <div class="bg-yellow-100 dark:bg-yellow-900/30 border-2 border-yellow-300 dark:border-yellow-700 rounded-xl p-4 mb-6">
-                            <div class="text-2xl font-mono font-bold text-center">
-                                ${data.recoveryCode}
-                            </div>
-                        </div>
-                        <p class="text-sm text-red-600 dark:text-red-400 mb-4">
-                            ⚠️ Save this code! You'll need it if you forget your password.
-                        </p>
-                        <button onclick="window.location.href='index.html'" 
-                                class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90">
-                            Go to Home
-                        </button>
-                    </div>
-                `;
+                                <div class="text-center p-4">
+                                    <h2 class="text-2xl font-bold text-primary mb-4">✅ Account Created!</h2>
+                                    <p class="text-zinc-700 dark:text-zinc-300 mb-4">Save your recovery code:</p>
+                                    <div class="bg-yellow-100 dark:bg-yellow-900/30 border-2 border-yellow-300 dark:border-yellow-700 rounded-xl p-4 mb-6">
+                                        <div class="text-2xl font-mono font-bold text-center">
+                                            ${data.recoveryCode}
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-red-600 dark:text-red-400 mb-4">
+                                        ⚠️ Save this code! You'll need it if you forget your password.
+                                    </p>
+                                    <button onclick="window.location.href='index.html'" 
+                                            class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90">
+                                        Go to Home
+                                    </button>
+                                </div>
+                            `;
                         } else {
                             showMessage('Signup failed: ' + data.error, true);
                         }
@@ -429,6 +444,9 @@
                             }));
 
                             showMessage(`Welcome ${username}!`, false);
+
+                            // Refresh navbar IMMEDIATELY
+                            refreshNavbarAfterAuth();
 
                             // Redirect to Home
                             setTimeout(() => {
@@ -575,6 +593,15 @@
                         // window.location.href = 'index.html';
                     }
 
+                    // 6. Check if user is already logged in and update navbar
+                    const user = localStorage.getItem('arithmo_user');
+                    if (token && user) {
+                        console.log('User already logged in, refreshing navbar...');
+                        setTimeout(() => {
+                            refreshNavbarAfterAuth();
+                        }, 500);
+                    }
+
                     console.log('Initialization complete!');
                 });
 
@@ -667,7 +694,30 @@
                 navbar.classList.remove("nav-scrolled");
             }
         });
+
+        // Debug: Check navbar status every 2 seconds
+        setInterval(() => {
+            const userInitial = localStorage.getItem('arithmo_user')
+                ? JSON.parse(localStorage.getItem('arithmo_user')).username?.charAt(0).toUpperCase()
+                : null;
+            console.log('Navbar Debug - User Initial:', userInitial,
+                'Has JWT:', !!localStorage.getItem('arithmo_jwt'),
+                'Has User:', !!localStorage.getItem('arithmo_user'));
+
+            // Check if navbar shows correct initial
+            const userButton = document.querySelector('.small-screen-nav-bar-links-container a[href="arithmo-login.html"]');
+            if (userButton) {
+                console.log('Mobile nav shows:', userButton.textContent.trim());
+            }
+
+            const desktopButton = document.querySelector('nav a[href="arithmo-login.html"] button span');
+            if (desktopButton) {
+                console.log('Desktop nav shows:', desktopButton.textContent);
+            }
+        }, 2000);
     </script>
+
+    <script src="assets/check-navbar.js"></script>
 
 </body>
 
