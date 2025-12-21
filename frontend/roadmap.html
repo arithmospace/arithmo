@@ -638,6 +638,51 @@
             </div>
         </div>
 
+
+        <!-- Add this in roadmap.html after the main content -->
+        <div class="fixed bottom-4 right-4 z-50">
+            <button onclick="testProgressSystem()"
+                class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700">
+                🔧 Test Progress
+            </button>
+        </div>
+
+        <script>
+            async function testProgressSystem() {
+                console.log('🧪 Running progress system test...');
+
+                // Test 1: Check token
+                const token = localStorage.getItem('token');
+                console.log('Token:', token ? '✓ Present' : '✗ Missing');
+
+                // Test 2: Test save
+                const testData = {
+                    version: "1.0",
+                    currentLevel: 1,
+                    lastSync: new Date().toISOString(),
+                    totals: { totalStars: 100, totalTokens: 50 }
+                };
+
+                const saveResult = await window.ArithmoProgress.saveProgress(testData);
+                console.log('Save test:', saveResult.success ? '✓ PASS' : '✗ FAIL', saveResult);
+
+                // Test 3: Test load
+                const loadResult = await window.ArithmoProgress.getProgress();
+                console.log('Load test:', loadResult ? '✓ PASS' : '✗ FAIL');
+
+                // Test 4: Test activity update
+                const activityResult = await window.ArithmoProgress.updateActivity(1, 1, { stars: 10 });
+                console.log('Activity test:', activityResult.success ? '✓ PASS' : '✗ FAIL');
+
+                alert(`Test Results:\nSave: ${saveResult.success ? '✅' : '❌'}\nLoad: ${loadResult ? '✅' : '❌'}\nActivity: ${activityResult.success ? '✅' : '❌'}`);
+
+                // Refresh display
+                renderRoadmap();
+            }
+        </script>
+
+
+
     </div>
 
     <!-- Balls Background JS -->

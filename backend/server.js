@@ -6,7 +6,6 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 const Progress = require('./models/Progress');
 const progressRoutes = require('./routes/progress');
 
@@ -84,25 +83,6 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 const User = mongoose.model('User', userSchema);
-
-// ========== JWT AUTH MIDDLEWARE ==========
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ success: false, error: 'Authentication token required' });
-    }
-
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) {
-            console.error('JWT verification failed:', err.message);
-            return res.status(403).json({ success: false, error: 'Invalid or expired token' });
-        }
-        req.user = user;
-        next();
-    });
-};
 
 // ========== HELPER FUNCTIONS ==========
 function generateRecoveryCode() {
