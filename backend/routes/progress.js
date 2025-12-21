@@ -67,7 +67,19 @@ const createDefaultProgress = () => {
 };
 
 // 1. SAVE COMPLETE PROGRESS
-router.post('/save-progress', authenticateToken, async (req, res) => {
+router.post('/save-progress', (req, res, next) => {
+    // Call server's authenticateToken logic directly
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) return res.status(401).json({ success: false, error: 'Access token required' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ success: false, error: 'Invalid token' });
+        req.user = user;
+        next();
+    });
+}, async (req, res) => {
     try {
         const { progressData } = req.body;
         const username = req.user.username;
