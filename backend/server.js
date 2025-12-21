@@ -69,6 +69,25 @@ app.use('/api/progress', progressRoutes);
 // JWT Secret (SET THIS IN RENDER.COM ENVIRONMENT VARIABLES!)
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// ========== JWT AUTH MIDDLEWARE ==========
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ success: false, error: 'Authentication token required' });
+    }
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            console.error('JWT verification failed:', err.message);
+            return res.status(403).json({ success: false, error: 'Invalid or expired token' });
+        }
+        req.user = user;
+        next();
+    });
+};
+
 // ========== MONGODB CONNECTION ==========
 const MONGO_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGO_URI)
