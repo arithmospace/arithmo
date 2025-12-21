@@ -376,9 +376,9 @@
                         <p class="text-sm text-red-600 dark:text-red-400 mb-4">
                             ⚠️ Save this code! You'll need it if you forget your password.
                         </p>
-                        <button onclick="window.location.href='dashboard.html'" 
+                        <button onclick="window.location.href='index.html'" 
                                 class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90">
-                            Go to Dashboard
+                            Go to Home
                         </button>
                     </div>
                 `;
@@ -430,9 +430,9 @@
 
                             showMessage(`Welcome ${username}!`, false);
 
-                            // Redirect to dashboard
+                            // Redirect to Home
                             setTimeout(() => {
-                                window.location.href = 'dashboard.html';
+                                window.location.href = 'index.html';
                             }, 1000);
                         } else {
                             showMessage('Login failed: ' + data.error, true);
@@ -571,8 +571,8 @@
                     const token = localStorage.getItem('arithmo_jwt');
                     if (token) {
                         console.log('User already has JWT token');
-                        // Optional: auto-redirect to dashboard
-                        // window.location.href = 'dashboard.html';
+                        // Optional: auto-redirect to Home
+                        // window.location.href = 'index.html';
                     }
 
                     console.log('Initialization complete!');
