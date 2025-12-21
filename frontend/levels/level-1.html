@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -2125,4 +2126,2133 @@
 
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arithmo – Level 1: Counting Friends</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Arithmo" />
+  <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#ea2a33" },
+          fontFamily: {
+            display: ["Lexend", "sans-serif"],
+            brand: ["Bungee", "cursive"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ==================== COUNTING FRIENDS LEVEL STYLES ==================== */
+
+    .counting-friends-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .progress-bar-container {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 24px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ea2a33 0%, #ff6b6b 100%);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .activity-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .activity-title {
+      font-family: 'Bungee', cursive;
+      font-size: 2rem;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-subtitle {
+      font-size: 1.125rem;
+      color: #6b7280;
+    }
+
+    .teaching-module {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e6 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 3px solid #fecaca;
+    }
+
+    .wizard-character {
+      width: 80px;
+      height: 80px;
+      background: #ea2a33;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(234, 42, 51, 0.3);
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+    }
+
+    .clickable-object {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
+      margin: 0.5rem;
+    }
+
+    .clickable-object:hover {
+      transform: scale(1.1);
+    }
+
+    .clickable-object.counted {
+      opacity: 0.3;
+      transform: scale(0.9);
+    }
+
+    .number-choice-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 1rem;
+      border: 4px solid #d1d5db;
+      background: white;
+      font-size: 3rem;
+      font-weight: bold;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bungee', cursive;
+    }
+
+    .number-choice-btn:hover {
+      background: #ea2a33;
+      border-color: #ea2a33;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .number-choice-btn.selected {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .objects-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border-radius: 1rem;
+      min-height: 150px;
+    }
+
+    .comparison-group {
+      background: white;
+      border: 3px solid #d1d5db;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .comparison-group:hover {
+      border-color: #ea2a33;
+      transform: scale(1.02);
+    }
+
+    .comparison-group.selected {
+      border-color: #10b981;
+      background: #d1fae5;
+    }
+
+    .number-order-slots {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .number-slot {
+      width: 80px;
+      height: 80px;
+      border: 3px dashed #d1d5db;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-family: 'Bungee', cursive;
+      background: white;
+    }
+
+    .number-slot.filled {
+      border-style: solid;
+      border-color: #10b981;
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .draggable-number {
+      width: 80px;
+      height: 80px;
+      border-radius: 1rem;
+      background: #ea2a33;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-family: 'Bungee', cursive;
+      cursor: move;
+      user-select: none;
+      transition: transform 0.2s;
+      touch-action: none;
+      margin: 0.5rem;
+    }
+
+    .draggable-number:hover {
+      transform: scale(1.1);
+    }
+
+    .draggable-number.used {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: #ea2a33;
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      border: none;
+      font-size: 1.125rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0px 0px #b22027;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(2px);
+      box-shadow: 0 4px 0px 0px #b22027;
+    }
+
+    .btn-primary:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #ea2a33;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      border: 2px solid #ea2a33;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    .feedback-correct {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 3px solid #6ee7b7;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: slideDown 0.4s ease;
+    }
+
+    .feedback-incorrect {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border: 3px solid #fca5a5;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: shake 0.5s ease;
+    }
+
+    .feedback-message {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-card,
+    .teaching-module,
+    .speech-bubble {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .activity-card * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-10px);
+      }
+
+      75% {
+        transform: translateX(10px);
+      }
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .rewards-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .reward-badge {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      animation: bounce 0.6s ease;
+    }
+
+    .reward-icon {
+      font-size: 2rem;
+    }
+
+    .completion-screen {
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .completion-trophy {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+      animation: trophy-spin 1s ease;
+    }
+
+    @keyframes trophy-spin {
+      0% {
+        transform: rotate(0deg) scale(0);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.2);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    .completion-title {
+      font-family: 'Bungee', cursive;
+      font-size: 2.5rem;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .completion-message {
+      font-size: 1.25rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .activity-card {
+        padding: 1.5rem;
+        min-height: 400px;
+      }
+
+      .activity-title {
+        font-size: 1.5rem;
+      }
+
+      .number-choice-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+      }
+
+      .speech-bubble {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-display bg-gray-50 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white rounded-3xl shadow-xl p-8 max-w-xl w-full text-center">
+    <h1 class="font-brand text-4xl mb-4">LEVEL 1</h1>
+    <p class="text-lg mb-8">Let's learn to count together 😊</p>
+
+    <main class="flex flex-1 items-center justify-center py-8">
+      <div id="counting-friends-root" class="counting-friends-container w-full"></div>
+    </main>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ==================== MAIN APP COMPONENT ====================
+    function CountingFriendsLevel() {
+      const [currentActivity, setCurrentActivity] = useState(1);
+      const [completedActivities, setCompletedActivities] = useState([]);
+      const [rewards, setRewards] = useState({ stars: 0, badges: 0, tokens: 0 });
+      const [showCompletion, setShowCompletion] = useState(false);
+
+      useEffect(() => {
+        if (completedActivities.length === 10 && !showCompletion) {
+          setShowCompletion(true);
+        }
+      }, [completedActivities]);
+
+      const handleActivityComplete = (activityNum) => {
+        if (!completedActivities.includes(activityNum)) {
+          setCompletedActivities([...completedActivities, activityNum]);
+          setRewards(prev => ({ ...prev, tokens: prev.tokens + 1 }));
+          if (activityNum === 1 || activityNum === 6) {
+            setRewards(prev => ({ ...prev, badges: prev.badges + 1 }));
+          }
+        }
+      };
+
+      const handleRetry = () => {
+        setRewards(prev => ({ ...prev, stars: prev.stars + 1 }));
+      };
+
+      const nextActivity = () => {
+        if (currentActivity < 10) {
+          setCurrentActivity(currentActivity + 1);
+        }
+      };
+
+      const finishLevel = () => {
+        if (typeof window.completeLevel === 'function') {
+          window.completeLevel();
+        }
+      };
+
+      if (showCompletion) {
+        return <CompletionScreen rewards={rewards} onFinish={finishLevel} />;
+      }
+
+      return (
+        <div>
+          <ProgressBar
+            current={completedActivities.length}
+            total={10}
+            rewards={rewards}
+          />
+          <ActivityRenderer
+            activityNum={currentActivity}
+            onComplete={handleActivityComplete}
+            onRetry={handleRetry}
+            onNext={nextActivity}
+            isCompleted={completedActivities.includes(currentActivity)}
+          />
+        </div>
+      );
+    }
+
+    // ==================== PROGRESS BAR ====================
+    function ProgressBar({ current, total, rewards }) {
+      const percentage = (current / total) * 100;
+
+      return (
+        <div className="progress-bar-container">
+          <div className="flex justify-between items-center mb-3">
+            <span className="font-bold text-lg">Your Progress</span>
+            <span className="text-sm text-gray-600">{current} of {total} activities</span>
+          </div>
+
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${percentage}%` }}>
+              {current > 0 && `${current}/${total}`}
+            </div>
+          </div>
+
+          <div className="rewards-container mt-4">
+            <div className="reward-badge">
+              <span className="reward-icon">⭐</span>
+              <span>{rewards.stars} Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🏅</span>
+              <span>{rewards.badges} Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🎨</span>
+              <span>{rewards.tokens} Tokens</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY RENDERER ====================
+    function ActivityRenderer({ activityNum, onComplete, onRetry, onNext, isCompleted }) {
+      const activities = {
+        1: Activity01_MeetTheNumbers,
+        2: Activity02_CountingBuddies,
+        3: Activity03_MatchTheStars,
+        4: Activity04_BigNumbers,
+        5: Activity05_QuickLookGame,
+        6: Activity06_WhichGroupIsBigger,
+        7: Activity07_WhoHasMore,
+        8: Activity08_LineThemUp,
+        9: Activity09_FindMissingFriend,
+        10: Activity10_CountingChampion,
+      };
+
+      const ActivityComponent = activities[activityNum];
+
+      return (
+        <div className="activity-card">
+          <ActivityComponent
+            onComplete={onComplete}
+            onRetry={onRetry}
+            onNext={onNext}
+            isCompleted={isCompleted}
+            activityNum={activityNum}
+          />
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 1: MEET THE NUMBERS (1-3) ====================
+    function Activity01_MeetTheNumbers({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { objects: ['🐶'], correctAnswer: 1, emoji: '🐶' },
+        { objects: ['🐱', '🐱'], correctAnswer: 2, emoji: '🐱' },
+        { objects: ['🐸', '🐸', '🐸'], correctAnswer: 3, emoji: '🐸' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.correctAnswer) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 1: Meet the Numbers!</h2>
+              <p className="activity-subtitle">Let's learn 1, 2, and 3! 🌟</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Hi! I'm Count the Counting Wizard!</strong> ✨
+                </p>
+                <p className="text-base mb-3">
+                  Numbers help us count things! Let me show you:
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl p-4">
+                  <div className="text-6xl mb-2">🎈</div>
+                  <div className="text-5xl font-bold text-primary font-brand">1</div>
+                  <p className="text-lg">One balloon</p>
+                </div>
+
+                <div className="bg-white rounded-xl p-4">
+                  <div className="text-6xl mb-2">🎈🎈</div>
+                  <div className="text-5xl font-bold text-primary font-brand">2</div>
+                  <p className="text-lg">Two balloons</p>
+                </div>
+
+                <div className="bg-white rounded-xl p-4">
+                  <div className="text-6xl mb-2">🎈🎈🎈</div>
+                  <div className="text-5xl font-bold text-primary font-brand">3</div>
+                  <p className="text-lg">Three balloons</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Practice! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Amazing Work!</p>
+              <p>You know numbers 1, 2, and 3!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">How Many Do You See?</h2>
+            <p className="activity-subtitle">Click the correct number!</p>
+          </div>
+
+          <div className="objects-container">
+            {currentProblem.objects.map((obj, i) => (
+              <span key={i} style={{ fontSize: '4rem' }}>{obj}</span>
+            ))}
+          </div>
+
+          <div className="flex gap-4 justify-center mt-6">
+            {[1, 2, 3].map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.correctAnswer ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.correctAnswer && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.correctAnswer && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! Count carefully! 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 2: COUNTING BUDDIES (4-5) ====================
+    function Activity02_CountingBuddies({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { objects: ['🦆', '🦆', '🦆', '🦆'], correctAnswer: 4, emoji: '🦆' },
+        { objects: ['🦋', '🦋', '🦋', '🦋', '🦋'], correctAnswer: 5, emoji: '🦋' },
+        { objects: ['🍕', '🍕', '🍕', '🍕'], correctAnswer: 4, emoji: '🍕' },
+        { objects: ['🐝', '🐝', '🐝', '🐝', '🐝'], correctAnswer: 5, emoji: '🐝' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+      const choices = [3, 4, 5]; // Options focused on the new numbers + one previous number
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.correctAnswer) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry(); // Trigger retry logic (stars update)
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 2: Counting Buddies</h2>
+              <p className="activity-subtitle">Let's meet numbers 4 and 5! 👋</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Great job with 1, 2, and 3!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Now let's count a few more friends.
+                  Meet <strong>4</strong> and <strong>5</strong>!
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-white rounded-xl p-4">
+                  <div className="text-6xl mb-2">🦆🦆🦆🦆</div>
+                  <div className="text-5xl font-bold text-primary font-brand">4</div>
+                  <p className="text-lg">Four ducks</p>
+                </div>
+
+                <div className="bg-white rounded-xl p-4">
+                  <div className="text-6xl mb-2">🦋🦋🦋🦋🦋</div>
+                  <div className="text-5xl font-bold text-primary font-brand">5</div>
+                  <p className="text-lg">Five butterflies</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Count! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 High Five!</p>
+              <p>You can count up to 5 now!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Count the Buddies!</h2>
+            <p className="activity-subtitle">How many {currentProblem.emoji} are there?</p>
+          </div>
+
+          <div className="objects-container">
+            {currentProblem.objects.map((obj, i) => (
+              <span key={i} style={{ fontSize: '4rem', animation: 'pop 0.5s ease' }}>{obj}</span>
+            ))}
+          </div>
+
+          <div className="flex gap-4 justify-center mt-6">
+            {choices.map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.correctAnswer ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.correctAnswer && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ That's Right!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.correctAnswer && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Oops! Count again carefully! 👆</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 3: MATCH THE STARS ====================
+    function Activity03_MatchTheStars({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { number: 2, choices: [1, 2, 3], emoji: '⭐' },
+        { number: 4, choices: [3, 4, 5], emoji: '💙' },
+        { number: 5, choices: [4, 5, 6], emoji: '🌸' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.number) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 3: Match the Stars</h2>
+              <p className="activity-subtitle">Connect numbers to groups! 🔗</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Numbers and objects go together!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  When you see 3 stars, that matches the number 3!
+                </p>
+                <div className="bg-white rounded-xl p-4 my-4">
+                  <div className="text-5xl mb-2">⭐⭐⭐</div>
+                  <div className="text-4xl">↕️</div>
+                  <div className="text-5xl font-bold text-primary font-brand">3</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Match! 🎯
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Perfect Matching!</p>
+              <p>You can match numbers to groups!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Which Number Matches?</h2>
+            <p className="activity-subtitle">Count the objects, then pick the number!</p>
+          </div>
+
+          <div className="objects-container">
+            {Array.from({ length: currentProblem.number }).map((_, i) => (
+              <span key={i} style={{ fontSize: '4rem' }}>{currentProblem.emoji}</span>
+            ))}
+          </div>
+
+          <div className="flex gap-4 justify-center mt-6">
+            {currentProblem.choices.map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.number ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.number && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ That's Right!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.number && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try counting again! 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 4: BIG NUMBERS (6-10) ====================
+    function Activity04_BigNumbers({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [counted, setCounted] = useState([]);
+
+      const practiceProblems = [
+        { total: 6, emoji: '🍎' },
+        { total: 8, emoji: '🌟' },
+        { total: 10, emoji: '🎈' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleClick = (index) => {
+        if (!counted.includes(index)) {
+          const newCounted = [...counted, index];
+          setCounted(newCounted);
+
+          if (newCounted.length === currentProblem.total) {
+            setTimeout(() => {
+              if (practiceStep < practiceProblems.length - 1) {
+                setPracticeStep(practiceStep + 1);
+                setCounted([]);
+              } else {
+                onComplete(activityNum);
+              }
+            }, 1000);
+          }
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 4: Big Numbers!</h2>
+              <p className="activity-subtitle">Let's learn 6, 7, 8, 9, and 10! 🎯</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Now for bigger numbers!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Let me show you numbers 6 through 10:
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="text-3xl">🍓🍓🍓🍓🍓🍓</div>
+                  <div className="text-4xl font-bold text-primary font-brand">6</div>
+                </div>
+
+                <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="text-3xl">🌈🌈🌈🌈🌈🌈🌈</div>
+                  <div className="text-4xl font-bold text-primary font-brand">7</div>
+                </div>
+
+                <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="text-3xl">⚡⚡⚡⚡⚡⚡⚡⚡</div>
+                  <div className="text-4xl font-bold text-primary font-brand">8</div>
+                </div>
+
+                <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="text-2xl">🌺🌺🌺🌺🌺🌺🌺🌺🌺</div>
+                  <div className="text-4xl font-bold text-primary font-brand">9</div>
+                </div>
+
+                <div className="bg-white rounded-xl p-3 flex items-center justify-between">
+                  <div className="text-2xl">🎵🎵🎵🎵🎵🎵🎵🎵🎵🎵</div>
+                  <div className="text-4xl font-bold text-primary font-brand">10</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Count Big! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Big Number Expert!</p>
+              <p>You can count all the way to 10!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Count Them All!</h2>
+            <p className="activity-subtitle">Click each {currentProblem.emoji} to count</p>
+          </div>
+
+          <div className="text-center mb-4">
+            <p className="text-2xl font-bold">
+              Counted: {counted.length} / {currentProblem.total}
+            </p>
+          </div>
+
+          <div className="objects-container">
+            {Array.from({ length: currentProblem.total }).map((_, i) => (
+              <span
+                key={i}
+                className={`clickable-object ${counted.includes(i) ? 'counted' : ''}`}
+                onClick={() => handleClick(i)}
+                style={{ fontSize: '3rem' }}
+              >
+                {currentProblem.emoji}
+              </span>
+            ))}
+          </div>
+
+          {counted.length === currentProblem.total && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ You counted {currentProblem.total}!</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 5: QUICK LOOK GAME ====================
+    function Activity05_QuickLookGame({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [showObjects, setShowObjects] = useState(true);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { number: 3, emoji: '🌟', choices: [2, 3, 4] },
+        { number: 5, emoji: '🦋', choices: [4, 5, 6] },
+        { number: 7, emoji: '💎', choices: [6, 7, 8] }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      useEffect(() => {
+        if (step === 'practice' && showObjects) {
+          const timer = setTimeout(() => {
+            setShowObjects(false);
+          }, 2000);
+          return () => clearTimeout(timer);
+        }
+      }, [step, showObjects, practiceStep]);
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.number) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+              setShowObjects(true);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry();
+          setTimeout(() => {
+            setSelectedAnswer(null);
+            setShowObjects(true);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 5: Quick Look!</h2>
+              <p className="activity-subtitle">See it and know it! 👀</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Sometimes we can see "how many" without counting!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  I'll show you some objects quickly. Try to see how many there are!
+                </p>
+                <p className="text-base">
+                  Ready for a fun challenge? 🎯
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                I'm Ready! 👀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Quick Eyes!</p>
+              <p>You can see numbers fast!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">How Many Did You See?</h2>
+            <p className="activity-subtitle">Look quickly!</p>
+          </div>
+
+          <div className="objects-container" style={{ minHeight: '200px' }}>
+            {showObjects ? (
+              Array.from({ length: currentProblem.number }).map((_, i) => (
+                <span key={i} style={{ fontSize: '4rem', animation: 'pop 0.3s ease' }}>
+                  {currentProblem.emoji}
+                </span>
+              ))
+            ) : (
+              <p className="text-2xl text-gray-400">Remember what you saw!</p>
+            )}
+          </div>
+
+          {!showObjects && (
+            <>
+              <div className="flex gap-4 justify-center mt-6">
+                {currentProblem.choices.map(num => (
+                  <button
+                    key={num}
+                    className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.number ? 'selected' : '') : ''}`}
+                    onClick={() => handleAnswer(num)}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+
+              {selectedAnswer === currentProblem.number && (
+                <div className="feedback-correct mt-4">
+                  <p className="feedback-message">✨ Perfect!</p>
+                </div>
+              )}
+
+              {selectedAnswer && selectedAnswer !== currentProblem.number && (
+                <div className="feedback-incorrect mt-4">
+                  <p className="feedback-message">Look carefully next time! 💪</p>
+                </div>
+              )}
+            </>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 6: WHICH GROUP IS BIGGER? ====================
+    function Activity06_WhichGroupIsBigger({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedGroup, setSelectedGroup] = useState(null);
+
+      const practiceProblems = [
+        { groupA: 2, groupB: 5, correct: 'B', emoji: '🍎' },
+        { groupA: 7, groupB: 4, correct: 'A', emoji: '⭐' },
+        { groupA: 6, groupB: 9, correct: 'B', emoji: '🌸' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleSelect = (group) => {
+        setSelectedGroup(group);
+        if (group === currentProblem.correct) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedGroup(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry();
+          setTimeout(() => {
+            setSelectedGroup(null);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 6: Which is Bigger?</h2>
+              <p className="activity-subtitle">Compare groups! 🔍</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Let's compare two groups!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Which group has MORE objects?
+                </p>
+                <div className="grid grid-cols-2 gap-4 my-4">
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-4xl mb-2">🌺🌺🌺</div>
+                    <p className="text-sm">3 flowers</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-4">
+                    <div className="text-4xl mb-2">🌺🌺🌺🌺🌺🌺🌺</div>
+                    <p className="text-sm">7 flowers</p>
+                  </div>
+                </div>
+                <p className="text-base">
+                  7 is bigger than 3! The right group is bigger! ✨
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Compare! 🔍
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Great Comparing!</p>
+              <p>You can tell which group is bigger!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Which Group is Bigger?</h2>
+            <p className="activity-subtitle">Click the group with MORE {currentProblem.emoji}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div
+              className={`comparison-group ${selectedGroup === 'A' ? 'selected' : ''}`}
+              onClick={() => handleSelect('A')}
+            >
+              <div className="text-5xl mb-4">
+                {Array.from({ length: currentProblem.groupA }).map((_, i) => (
+                  <span key={i}>{currentProblem.emoji}</span>
+                ))}
+              </div>
+              <div className="text-3xl font-bold text-primary font-brand">{currentProblem.groupA}</div>
+            </div>
+
+            <div
+              className={`comparison-group ${selectedGroup === 'B' ? 'selected' : ''}`}
+              onClick={() => handleSelect('B')}
+            >
+              <div className="text-5xl mb-4">
+                {Array.from({ length: currentProblem.groupB }).map((_, i) => (
+                  <span key={i}>{currentProblem.emoji}</span>
+                ))}
+              </div>
+              <div className="text-3xl font-bold text-primary font-brand">{currentProblem.groupB}</div>
+            </div>
+          </div>
+
+          {selectedGroup === currentProblem.correct && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ That's the Bigger Group!</p>
+            </div>
+          )}
+
+          {selectedGroup && selectedGroup !== currentProblem.correct && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Look at both groups again! 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 7: WHO HAS MORE? ====================
+    function Activity07_WhoHasMore({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { numA: 3, numB: 7, correct: 7, wordProblem: "Sam has 3 🍎. Maya has 7 🍎. Who has more?" },
+        { numA: 9, numB: 5, correct: 9, wordProblem: "Tom found 9 ⭐. Lily found 5 ⭐. Who has more?" },
+        { numA: 4, numB: 8, correct: 8, wordProblem: "Anna picked 4 🌸. Ben picked 8 🌸. Who has more?" }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.correct) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry();
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 7: Who Has More?</h2>
+              <p className="activity-subtitle">More and less! 📊</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>More means BIGGER!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Less means SMALLER!
+                </p>
+                <div className="bg-white rounded-xl p-4 my-4">
+                  <p className="text-lg mb-2">If you have 8 candies and I have 3 candies:</p>
+                  <p className="text-xl font-bold text-primary">You have MORE! (8 is more than 3)</p>
+                  <p className="text-xl font-bold text-blue-600">I have LESS! (3 is less than 8)</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Find More! 🎯
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 More or Less Master!</p>
+              <p>You understand more and less!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Who Has More?</h2>
+            <p className="activity-subtitle">Read carefully!</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 mb-6">
+            <p className="text-xl leading-relaxed">
+              {currentProblem.wordProblem}
+            </p>
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            {[currentProblem.numA, currentProblem.numB].map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.correct ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.correct && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ That's More!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.correct && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Which number is bigger? 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 8: LINE THEM UP ====================
+    function Activity08_LineThemUp({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedNumbers, setSelectedNumbers] = useState([]);
+
+      const practiceProblems = [
+        { numbers: [1, 2, 3, 4, 5], scrambled: [3, 1, 5, 2, 4] },
+        { numbers: [4, 5, 6, 7, 8], scrambled: [6, 4, 8, 5, 7] },
+        { numbers: [6, 7, 8, 9, 10], scrambled: [9, 6, 10, 7, 8] }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleNumberClick = (num) => {
+        if (!selectedNumbers.includes(num)) {
+          const newSelected = [...selectedNumbers, num];
+          setSelectedNumbers(newSelected);
+
+          if (newSelected.length === currentProblem.numbers.length) {
+            const isCorrect = JSON.stringify(newSelected) === JSON.stringify(currentProblem.numbers);
+            if (isCorrect) {
+              setTimeout(() => {
+                if (practiceStep < practiceProblems.length - 1) {
+                  setPracticeStep(practiceStep + 1);
+                  setSelectedNumbers([]);
+                } else {
+                  onComplete(activityNum);
+                }
+              }, 1000);
+            } else {
+              onRetry();
+              setTimeout(() => {
+                setSelectedNumbers([]);
+              }, 1500);
+            }
+          }
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 8: Line Them Up!</h2>
+              <p className="activity-subtitle">Put numbers in order! 📏</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Numbers have an order!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  They go from smallest to biggest:
+                </p>
+                <div className="bg-white rounded-xl p-4 my-4">
+                  <div className="text-5xl font-bold text-primary font-brand flex justify-center gap-3">
+                    1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+                  </div>
+                </div>
+                <p className="text-base">
+                  Each number comes after the one before it! 🎯
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Order! 📏
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Perfect Order!</p>
+              <p>You know number order!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      const isCorrectSoFar = selectedNumbers.every((num, idx) => num === currentProblem.numbers[idx]);
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Put in Order!</h2>
+            <p className="activity-subtitle">Click numbers from smallest to biggest</p>
+          </div>
+
+          <div className="number-order-slots mb-6">
+            {currentProblem.numbers.map((_, idx) => (
+              <div key={idx} className={`number-slot ${selectedNumbers[idx] ? 'filled' : ''}`}>
+                {selectedNumbers[idx] || '?'}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3 justify-center flex-wrap mb-6">
+            {currentProblem.scrambled.map(num => (
+              <div
+                key={num}
+                className={`draggable-number ${selectedNumbers.includes(num) ? 'used' : ''}`}
+                onClick={() => !selectedNumbers.includes(num) && handleNumberClick(num)}
+              >
+                {num}
+              </div>
+            ))}
+          </div>
+
+          {selectedNumbers.length === currentProblem.numbers.length && isCorrectSoFar && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect Order!</p>
+            </div>
+          )}
+
+          {selectedNumbers.length === currentProblem.numbers.length && !isCorrectSoFar && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try ordering from smallest to biggest! 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 9: FIND THE MISSING FRIEND ====================
+    function Activity09_FindMissingFriend({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { sequence: [1, 2, null, 4, 5], missing: 3, choices: [2, 3, 4] },
+        { sequence: [4, 5, 6, null, 8], missing: 7, choices: [6, 7, 8] },
+        { sequence: [6, 7, null, 9, 10], missing: 8, choices: [7, 8, 9] }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.missing) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry();
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 9: Find the Missing Friend!</h2>
+              <p className="activity-subtitle">Who's hiding? 🔍</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Sometimes a number is missing!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Look at this line: 1, 2, ?, 4, 5
+                </p>
+                <p className="text-base mb-3">
+                  What number comes after 2 and before 4?
+                </p>
+                <div className="bg-white rounded-xl p-4 my-4">
+                  <div className="text-4xl font-bold text-primary font-brand">
+                    It's 3! ✨
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Find Them! 🔍
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Number Detective!</p>
+              <p>You can find missing numbers!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">What Number is Missing?</h2>
+            <p className="activity-subtitle">Look at the sequence carefully!</p>
+          </div>
+
+          <div className="flex gap-4 justify-center items-center mb-8 flex-wrap">
+            {currentProblem.sequence.map((num, idx) => (
+              <div
+                key={idx}
+                className="number-slot filled"
+                style={{
+                  background: num === null ? '#fef3c7' : '#d1fae5',
+                  borderColor: num === null ? '#fbbf24' : '#10b981'
+                }}
+              >
+                {num === null ? '?' : num}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            {currentProblem.choices.map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.missing ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.missing && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ You Found It!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.missing && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">What comes between? 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 10: COUNTING CHAMPION ====================
+    function Activity10_CountingChampion({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+      const practiceProblems = [
+        { type: 'count', objects: 7, emoji: '🌟', question: "How many stars?", answer: 7, choices: [6, 7, 8] },
+        { type: 'compare', numA: 4, numB: 9, emoji: '🍎', question: "Which is bigger?", answer: 9, choices: [4, 9] },
+        { type: 'sequence', sequence: [3, 4, null, 6], question: "What's missing?", answer: 5, choices: [4, 5, 6] }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleAnswer = (num) => {
+        setSelectedAnswer(num);
+        if (num === currentProblem.answer) {
+          setTimeout(() => {
+            if (practiceStep < practiceProblems.length - 1) {
+              setPracticeStep(practiceStep + 1);
+              setSelectedAnswer(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          onRetry();
+          setTimeout(() => {
+            setSelectedAnswer(null);
+          }, 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 10: Counting Champion!</h2>
+              <p className="activity-subtitle">The final challenge! 🏆</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>You've learned so much!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Now let's use all your skills together:
+                </p>
+                <ul className="text-left text-base space-y-2 ml-6">
+                  <li>✨ Counting objects</li>
+                  <li>✨ Comparing numbers</li>
+                  <li>✨ Finding patterns</li>
+                  <li>✨ Understanding bigger and smaller</li>
+                </ul>
+                <p className="text-lg font-bold text-primary mt-3">
+                  You're ready to be a Counting Champion! 🏆
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Final Challenge! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🏆 COUNTING CHAMPION!</p>
+              <p>You mastered all counting skills!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">{currentProblem.question}</h2>
+            <p className="activity-subtitle">Challenge {practiceStep + 1} of {practiceProblems.length}</p>
+          </div>
+
+          {currentProblem.type === 'count' && (
+            <div className="objects-container mb-6">
+              {Array.from({ length: currentProblem.objects }).map((_, i) => (
+                <span key={i} style={{ fontSize: '3.5rem' }}>{currentProblem.emoji}</span>
+              ))}
+            </div>
+          )}
+
+          {currentProblem.type === 'compare' && (
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="bg-white rounded-xl p-6 border-4 border-gray-300">
+                <div className="text-5xl mb-3">
+                  {Array.from({ length: currentProblem.numA }).map((_, i) => (
+                    <span key={i}>{currentProblem.emoji}</span>
+                  ))}
+                </div>
+                <div className="text-4xl font-bold text-primary font-brand">{currentProblem.numA}</div>
+              </div>
+              <div className="bg-white rounded-xl p-6 border-4 border-gray-300">
+                <div className="text-5xl mb-3">
+                  {Array.from({ length: currentProblem.numB }).map((_, i) => (
+                    <span key={i}>{currentProblem.emoji}</span>
+                  ))}
+                </div>
+                <div className="text-4xl font-bold text-primary font-brand">{currentProblem.numB}</div>
+              </div>
+            </div>
+          )}
+
+          {currentProblem.type === 'sequence' && (
+            <div className="flex gap-4 justify-center items-center mb-8 flex-wrap">
+              {currentProblem.sequence.map((num, idx) => (
+                <div
+                  key={idx}
+                  className="number-slot filled"
+                  style={{
+                    background: num === null ? '#fef3c7' : '#d1fae5',
+                    borderColor: num === null ? '#fbbf24' : '#10b981'
+                  }}
+                >
+                  {num === null ? '?' : num}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex gap-4 justify-center">
+            {currentProblem.choices.map(num => (
+              <button
+                key={num}
+                className={`number-choice-btn ${selectedAnswer === num ? (num === currentProblem.answer ? 'selected' : '') : ''}`}
+                onClick={() => handleAnswer(num)}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+
+          {selectedAnswer === currentProblem.answer && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Excellent!</p>
+            </div>
+          )}
+
+          {selectedAnswer && selectedAnswer !== currentProblem.answer && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Think carefully! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== COMPLETION SCREEN ====================
+    function CompletionScreen({ rewards, onFinish }) {
+      return (
+        <div className="completion-screen">
+          <div className="completion-trophy">🏆</div>
+          <h1 className="completion-title">You Did It!</h1>
+          <p className="completion-message">
+            You completed all 10 Counting Friends activities!
+          </p>
+
+          <div className="rewards-container mb-8">
+            <div className="reward-badge">
+              <span className="reward-icon">⭐</span>
+              <span>{rewards.stars} Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🏅</span>
+              <span>{rewards.badges} Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🎨</span>
+              <span>{rewards.tokens} Tokens</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-lg text-gray-700">
+              You learned how to count from 1 to 10, compare numbers, and find patterns!
+            </p>
+            <p className="text-lg font-bold text-primary">
+              You're a Counting Master! ✨
+            </p>
+          </div>
+
+          <button className="btn-primary mt-8" onClick={onFinish}>
+            Complete Level 1 🎉
+          </button>
+        </div>
+      );
+    }
+
+    // ==================== RENDER APP ====================
+    const root = ReactDOM.createRoot(document.getElementById('counting-friends-root'));
+    root.render(<CountingFriendsLevel />);
+  </script>
+
+  <script>
+    const TOTAL_LEVELS = 5;
+
+    const match = window.location.pathname.match(/level-(\d+)/);
+    const LEVEL_NUMBER = match ? Number(match[1]) : null;
+
+    if (!LEVEL_NUMBER || LEVEL_NUMBER < 1 || LEVEL_NUMBER > TOTAL_LEVELS) {
+      window.location.href = "../roadmap.html";
+    }
+
+    const storedLevel = Number(localStorage.getItem("arithmoLevel")) || 1;
+
+    if (storedLevel !== LEVEL_NUMBER) {
+      window.location.href = "../roadmap.html";
+    }
+
+    function completeLevel() {
+      if (storedLevel < TOTAL_LEVELS) {
+        localStorage.setItem("arithmoLevel", storedLevel + 1);
+      }
+      window.location.href = "../roadmap.html";
+    }
+  </script>
+
+</body>
+
+>>>>>>> b0a3f6489ab5e97546de9d22486dfaae8ed39fb1
 </html>

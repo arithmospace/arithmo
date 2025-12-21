@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -2391,4 +2392,2399 @@
 
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arithmo – Level 2 :Adding friends</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Arithmo" />
+  <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#ea2a33" },
+          fontFamily: {
+            display: ["Lexend", "sans-serif"],
+            brand: ["Bungee", "cursive"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ==================== ADDING MAGIC LEVEL STYLES ==================== */
+
+    /* Main Container */
+    .adding-magic-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 24px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ea2a33 0%, #ff6b6b 100%);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Activity Card */
+    .activity-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .activity-title {
+      font-family: 'Bungee', cursive;
+      font-size: 2rem;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-subtitle {
+      font-size: 1.125rem;
+      color: #6b7280;
+    }
+
+    /* Teaching Module */
+    .teaching-module {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e6 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 3px solid #fecaca;
+    }
+
+    .wizard-character {
+      width: 80px;
+      height: 80px;
+      background: #ea2a33;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(234, 42, 51, 0.3);
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+    }
+
+    /* Interactive Elements */
+    .draggable-item {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: move;
+      user-select: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      touch-action: none;
+    }
+
+    .draggable-item:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .draggable-item.dragging {
+      opacity: 0.5;
+      transform: scale(1.15);
+    }
+
+    .drop-zone {
+      min-height: 120px;
+      border: 3px dashed #d1d5db;
+      border-radius: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .drop-zone.drag-over {
+      border-color: #ea2a33;
+      background: #fff5f5;
+    }
+
+    /* Number Line */
+    .number-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 2rem 0;
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .number-node {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.25rem;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s;
+    }
+
+    .number-node.active {
+      background: #ea2a33;
+      border-color: #ea2a33;
+      color: white;
+      transform: scale(1.3);
+    }
+
+    .number-line-path {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #d1d5db;
+      z-index: 1;
+    }
+
+    .frog {
+      font-size: 2.5rem;
+      position: absolute;
+      transition: left 0.5s ease;
+      z-index: 3;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    /* Ten Frame */
+    .ten-frame {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 8px;
+      max-width: 400px;
+      margin: 1.5rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 1rem;
+      border: 3px solid #d1d5db;
+    }
+
+    .frame-cell {
+      aspect-ratio: 1;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .frame-cell.filled {
+      background: #ea2a33;
+      border-color: #ea2a33;
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Number Input */
+    .number-input {
+      width: 120px;
+      height: 80px;
+      font-size: 2.5rem;
+      text-align: center;
+      border: 4px solid #d1d5db;
+      border-radius: 1rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin: 0 auto;
+      display: block;
+      transition: all 0.3s;
+    }
+
+    .number-input:focus {
+      outline: none;
+      border-color: #ea2a33;
+      box-shadow: 0 0 0 4px rgba(234, 42, 51, 0.2);
+    }
+
+    /* Number Pad */
+    .number-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      max-width: 300px;
+      margin: 1.5rem auto;
+    }
+
+    .number-pad-btn {
+      aspect-ratio: 1;
+      font-size: 2rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 1rem;
+      background: white;
+      border: 3px solid #d1d5db;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #1f2937;
+    }
+
+    .number-pad-btn:hover {
+      background: #ea2a33;
+      border-color: #ea2a33;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .number-pad-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: #ea2a33;
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      border: none;
+      font-size: 1.125rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0px 0px #b22027;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(2px);
+      box-shadow: 0 4px 0px 0px #b22027;
+    }
+
+    .btn-primary:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #ea2a33;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      border: 2px solid #ea2a33;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    .btn-secondary:hover {
+      background: #fff5f5;
+    }
+
+    .btn-hint {
+      background: #f3f4f6;
+      color: #6b7280;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      border: 2px solid #d1d5db;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    .btn-hint:hover {
+      background: #e5e7eb;
+      border-color: #9ca3af;
+    }
+
+    /* Feedback Messages */
+    .feedback-correct {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 3px solid #6ee7b7;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: slideDown 0.4s ease;
+    }
+
+    .feedback-incorrect {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border: 3px solid #fca5a5;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: shake 0.5s ease;
+    }
+
+    .feedback-message {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ==================== OVERFLOW FIXES ==================== */
+
+    /* Prevent text spilling outside rounded cards */
+    .activity-card,
+    .teaching-module,
+    .speech-bubble,
+    .place-value-box,
+    .feedback-correct,
+    .feedback-incorrect {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    /* Make emojis and large text respect container width */
+    .activity-card * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Fix number line + frog overflow */
+    .number-line {
+      overflow: hidden;
+    }
+
+    /* Prevent place value boxes from stretching on small screens */
+    .place-value-box {
+      min-width: 0;
+    }
+
+    /* Fix large emoji rows pushing layout */
+    .objects-container,
+    .text-5xl,
+    .text-6xl {
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .speech-bubble {
+        padding: 1rem;
+      }
+
+      .activity-title {
+        line-height: 1.2;
+      }
+
+      .text-5xl,
+      .text-6xl {
+        font-size: 2.5rem;
+      }
+    }
+
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-10px);
+      }
+
+      75% {
+        transform: translateX(10px);
+      }
+    }
+
+    /* Rewards Display */
+    .rewards-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .reward-badge {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .reward-icon {
+      font-size: 2rem;
+    }
+
+    /* Completion Screen */
+    .completion-screen {
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .completion-trophy {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+      animation: trophy-spin 1s ease;
+    }
+
+    @keyframes trophy-spin {
+      0% {
+        transform: rotate(0deg) scale(0);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.2);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    .completion-title {
+      font-family: 'Bungee', cursive;
+      font-size: 2.5rem;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .completion-message {
+      font-size: 1.25rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    /* Visual Objects (for activities) */
+    .visual-object {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .objects-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border-radius: 1rem;
+    }
+
+    /* Place Value Boxes */
+    .place-value-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .place-value-box {
+      background: white;
+      border: 3px solid #d1d5db;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .place-value-label {
+      font-weight: bold;
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .place-value-value {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ea2a33;
+      font-family: 'Bungee', cursive;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .activity-card {
+        padding: 1.5rem;
+        min-height: 400px;
+      }
+
+      .activity-title {
+        font-size: 1.5rem;
+      }
+
+      .number-input {
+        width: 100px;
+        height: 70px;
+        font-size: 2rem;
+      }
+
+      .number-pad {
+        max-width: 250px;
+      }
+
+      .place-value-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    /* Loading State */
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f4f6;
+      border-top-color: #ea2a33;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 2rem auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body class="font-display bg-gray-50 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white rounded-3xl shadow-xl p-8 max-w-xl w-full text-center">
+
+    <h1 class="font-brand text-4xl mb-4">LEVEL 2</h1>
+    <p class="text-lg mb-8">Let’s do math together 😊</p>
+
+    <!-- ACTUAL LEVEL CONTENT -->
+    <main class="flex flex-1 items-center justify-center py-8">
+      <div id="adding-magic-root" class="adding-magic-container w-full"></div>
+    </main>
+
+  </div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ==================== MAIN APP COMPONENT ====================
+    function AddingMagicLevel() {
+      const [currentActivity, setCurrentActivity] = useState(1);
+      const [completedActivities, setCompletedActivities] = useState([]);
+      const [rewards, setRewards] = useState({ stars: 0, badges: 0, tokens: 0 });
+      const [showCompletion, setShowCompletion] = useState(false);
+
+      // Check if all activities completed
+      useEffect(() => {
+        if (completedActivities.length === 10 && !showCompletion) {
+          setShowCompletion(true);
+        }
+      }, [completedActivities]);
+
+      const handleActivityComplete = (activityNum) => {
+        if (!completedActivities.includes(activityNum)) {
+          setCompletedActivities([...completedActivities, activityNum]);
+
+          // Award tokens for every activity
+          setRewards(prev => ({ ...prev, tokens: prev.tokens + 1 }));
+
+          // Award badge for starting new activity
+          if (activityNum === 1 || activityNum === 6) {
+            setRewards(prev => ({ ...prev, badges: prev.badges + 1 }));
+          }
+        }
+      };
+
+      const handleRetry = () => {
+        setRewards(prev => ({ ...prev, stars: prev.stars + 1 }));
+      };
+
+      const nextActivity = () => {
+        if (currentActivity < 10) {
+          setCurrentActivity(currentActivity + 1);
+        }
+      };
+
+      const finishLevel = () => {
+        // Call the parent page's completeLevel function
+        if (typeof window.completeLevel === 'function') {
+          window.completeLevel();
+        }
+      };
+
+      if (showCompletion) {
+        return (
+          <CompletionScreen
+            rewards={rewards}
+            onFinish={finishLevel}
+          />
+        );
+      }
+
+      return (
+        <div>
+          <ProgressBar
+            current={completedActivities.length}
+            total={10}
+            rewards={rewards}
+          />
+
+          <ActivityRenderer
+            activityNum={currentActivity}
+            onComplete={handleActivityComplete}
+            onRetry={handleRetry}
+            onNext={nextActivity}
+            isCompleted={completedActivities.includes(currentActivity)}
+          />
+        </div>
+      );
+    }
+
+    // ==================== PROGRESS BAR ====================
+    function ProgressBar({ current, total, rewards }) {
+      const percentage = (current / total) * 100;
+
+      return (
+        <div className="progress-bar-container">
+          <div className="flex justify-between items-center mb-3">
+            <span className="font-bold text-lg">Your Progress</span>
+            <span className="text-sm text-gray-600">{current} of {total} activities</span>
+          </div>
+
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${percentage}%` }}>
+              {current > 0 && `${current}/${total}`}
+            </div>
+          </div>
+
+          <div className="rewards-container mt-4">
+            <div className="reward-badge">
+              <span className="reward-icon">⭐</span>
+              <span>{rewards.stars} Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🏅</span>
+              <span>{rewards.badges} Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🎨</span>
+              <span>{rewards.tokens} Tokens</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY RENDERER ====================
+    function ActivityRenderer({ activityNum, onComplete, onRetry, onNext, isCompleted }) {
+      const activities = {
+        1: Activity01_WhatIsAdding,
+        2: Activity02_CountingOn,
+        3: Activity03_NumberBonds,
+        4: Activity04_Making10,
+        5: Activity05_AdditionRace,
+        6: Activity06_WhatAreTens,
+        7: Activity07_AddingTens,
+        8: Activity08_Regrouping,
+        9: Activity09_TwoDigitWithRegroup,
+        10: Activity10_WordProblems,
+        
+      };
+
+      const ActivityComponent = activities[activityNum];
+
+      return (
+        <div className="activity-card">
+          <ActivityComponent
+            onComplete={onComplete}
+            onRetry={onRetry}
+            onNext={onNext}
+            isCompleted={isCompleted}
+            activityNum={activityNum}
+          />
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 1: WHAT IS ADDING? ====================
+    function Activity01_WhatIsAdding({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [practiceStep, setPracticeStep] = useState(0);
+      const [droppedItems, setDroppedItems] = useState([]);
+
+      const practiceProblems = [
+        { left: 1, right: 2, emoji: '🍎' },
+        { left: 2, right: 1, emoji: '⭐' },
+        { left: 2, right: 3, emoji: '💙' }
+      ];
+
+      const currentProblem = practiceProblems[practiceStep];
+
+      const handleDrop = (item) => {
+        setDroppedItems([...droppedItems, item]);
+      };
+
+      const checkAnswer = () => {
+        const totalNeeded = currentProblem.left + currentProblem.right;
+        if (droppedItems.length === totalNeeded) {
+          if (practiceStep < practiceProblems.length - 1) {
+            setPracticeStep(practiceStep + 1);
+            setDroppedItems([]);
+          } else {
+            onComplete(activityNum);
+          }
+        }
+      };
+
+      useEffect(() => {
+        if (droppedItems.length > 0) {
+          checkAnswer();
+        }
+      }, [droppedItems]);
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 1: What is Adding?</h2>
+              <p className="activity-subtitle">Let's learn together! 🌟</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Hi! I'm Addy the Addition Wizard!</strong> ✨
+                </p>
+                <p className="text-base mb-3">
+                  Addition means <strong>putting things together</strong> to make a bigger group!
+                </p>
+                <p className="text-base">
+                  Watch: 2 balloons 🎈🎈 + 3 balloons 🎈🎈🎈 = 5 balloons total!
+                </p>
+              </div>
+
+              <div className="objects-container">
+                <div style={{ fontSize: '3rem' }}>🎈🎈</div>
+                <div style={{ fontSize: '2rem', margin: '0 1rem' }}>+</div>
+                <div style={{ fontSize: '3rem' }}>🎈🎈🎈</div>
+                <div style={{ fontSize: '2rem', margin: '0 1rem' }}>=</div>
+                <div style={{ fontSize: '3rem' }}>🎈🎈🎈🎈🎈</div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Practice! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Amazing Work!</p>
+              <p>You understand what addition means!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Practice Time!</h2>
+            <p className="activity-subtitle">Drag the {currentProblem.emoji} into the basket</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <p className="text-xl font-bold">
+              {currentProblem.left} {currentProblem.emoji} + {currentProblem.right} {currentProblem.emoji} = ?
+            </p>
+          </div>
+
+          <div className="flex justify-around mb-6">
+            <div>
+              {Array.from({ length: currentProblem.left }).map((_, i) => (
+                <span
+                  key={`left-${i}`}
+                  className="draggable-item cursor-pointer"
+                  onClick={() => handleDrop('left')}
+                  style={{ margin: '0.25rem', display: 'inline-block' }}
+                >
+                  {currentProblem.emoji}
+                </span>
+              ))}
+            </div>
+            <div>
+              {Array.from({ length: currentProblem.right }).map((_, i) => (
+                <span
+                  key={`right-${i}`}
+                  className="draggable-item cursor-pointer"
+                  onClick={() => handleDrop('right')}
+                  style={{ margin: '0.25rem', display: 'inline-block' }}
+                >
+                  {currentProblem.emoji}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="drop-zone">
+            {droppedItems.map((_, i) => (
+              <span key={i} className="visual-object">{currentProblem.emoji}</span>
+            ))}
+            {droppedItems.length === 0 && (
+              <p className="text-gray-400">Click objects to add them here</p>
+            )}
+          </div>
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              Problem {practiceStep + 1} of {practiceProblems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 2: COUNTING ON ====================
+    function Activity02_CountingOn({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [frogPosition, setFrogPosition] = useState(0);
+      const [hops, setHops] = useState(0);
+
+      const problems = [
+        { start: 3, add: 2, answer: 5 },
+        { start: 4, add: 3, answer: 7 },
+        { start: 6, add: 2, answer: 8 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const handleHop = () => {
+        if (hops < problem.add) {
+          setFrogPosition(problem.start + hops + 1);
+          setHops(hops + 1);
+
+          if (hops + 1 === problem.add) {
+            setTimeout(() => {
+              if (currentProblem < problems.length - 1) {
+                setCurrentProblem(currentProblem + 1);
+                setFrogPosition(problems[currentProblem + 1].start);
+                setHops(0);
+              } else {
+                onComplete(activityNum);
+              }
+            }, 1000);
+          }
+        }
+      };
+
+      useEffect(() => {
+        if (step === 'practice') {
+          setFrogPosition(problem.start);
+        }
+      }, [step, currentProblem]);
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 2: Counting On</h2>
+              <p className="activity-subtitle">A magic trick! 🎩</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Here's a smart trick!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  When we add, we don't count everything again. We start from the first number and count up!
+                </p>
+                <p className="text-base mb-3">
+                  Example: 5 + 3 = ?
+                </p>
+                <p className="text-base">
+                  Start at 5, then count: <strong>5... 6, 7, 8!</strong> ✨
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Try It! 🐸
+              </button>
+            </div>
+          </div>
+        );
+      }
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 You're a Counting Champion!</p>
+              <p>You learned how to count on!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Help the Frog Hop!</h2>
+            <p className="activity-subtitle">
+              Start at {problem.start}, hop {problem.add} times
+            </p>
+          </div>
+          <div className="number-line" style={{ position: 'relative', padding: '3rem 0' }}>
+            <div className="number-line-path"></div>
+            {Array.from({ length: 11 }).map((_, i) => (
+              <div
+                key={i}
+                className={`number-node ${frogPosition === i ? 'active' : ''}`}
+              >
+                {i}
+              </div>
+            ))}
+            <div
+              className="frog"
+              style={{
+                left: `${(frogPosition / 10) * 100}%`,
+                top: '-20px'
+              }}
+            >
+              🐸
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <p className="text-xl font-bold mb-4">
+              Hops made: {hops} / {problem.add}
+            </p>
+            <button
+              className="btn-primary"
+              onClick={handleHop}
+              disabled={hops >= problem.add}
+            >
+              Hop! 🐸
+            </button>
+            <p className="text-sm text-gray-600 mt-4">
+              Problem {currentProblem + 1} of {problems.length}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    // ==================== ACTIVITY 3: NUMBER BONDS TO 10 ====================
+    function Activity03_NumberBonds({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [selected, setSelected] = useState([]);
+      const [foundPairs, setFoundPairs] = useState([]);
+      const pairs = [
+        [1, 9], [2, 8], [3, 7], [4, 6], [5, 5]
+      ];
+      const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const handleNumberClick = (num) => {
+        if (foundPairs.flat().includes(num)) return;
+        if (selected.length === 0) {
+          setSelected([num]);
+        } else if (selected.length === 1) {
+          const newSelected = [...selected, num];
+          const sum = newSelected[0] + newSelected[1];
+
+          if (sum === 10) {
+            setFoundPairs([...foundPairs, newSelected]);
+            setSelected([]);
+
+            if (foundPairs.length + 1 === pairs.length) {
+              setTimeout(() => onComplete(activityNum), 500);
+            }
+          } else {
+            setTimeout(() => setSelected([]), 500);
+          }
+        }
+      };
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 3: Number Bonds</h2>
+              <p className="activity-subtitle">Best friends that make 10! 👯</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Some numbers are best friends!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  They always add up to 10:
+                </p>
+                <div className="text-center text-xl font-bold space-y-2">
+                  <div>1 + 9 = 10 ✨</div>
+                  <div>2 + 8 = 10 ✨</div>
+                  <div>3 + 7 = 10 ✨</div>
+                  <div>4 + 6 = 10 ✨</div>
+                  <div>5 + 5 = 10 ✨</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Find the Pairs! 🔍
+              </button>
+            </div>
+          </div>
+        );
+      }
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Perfect Matching!</p>
+              <p>You found all the number bonds to 10!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Find Pairs That Make 10</h2>
+            <p className="activity-subtitle">Click two numbers that add to 10</p>
+          </div><div className="number-pad" style={{ maxWidth: '400px', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            {allNumbers.map((num) => {
+              const isFound = foundPairs.flat().includes(num);
+              const isSelected = selected.includes(num);
+
+              return (
+                <button
+                  key={num}
+                  className="number-pad-btn"
+                  onClick={() => handleNumberClick(num)}
+                  disabled={isFound}
+                  style={{
+                    background: isFound ? '#6ee7b7' : isSelected ? '#fcd34d' : 'white',
+                    borderColor: isFound ? '#10b981' : isSelected ? '#f59e0b' : '#d1d5db',
+                    opacity: isFound ? 0.5 : 1
+                  }}
+                >
+                  {num}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="text-center mt-6">
+            <p className="text-lg font-bold">
+              Pairs found: {foundPairs.length} / {pairs.length}
+            </p>
+            {foundPairs.length > 0 && (
+              <div className="mt-4">
+                {foundPairs.map((pair, i) => (
+                  <span key={i} className="inline-block mx-2 text-lg">
+                    {pair[0]} + {pair[1]} = 10 ✨
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>);
+    }
+    // ==================== ACTIVITY 4: MAKING 10 AND MORE ====================
+    function Activity04_Making10({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { a: 8, b: 6, answer: 14, breakdown: { make10: 2, remaining: 3 } },
+        { a: 7, b: 6, answer: 13, breakdown: { make10: 3, remaining: 3 } },
+        { a: 9, b: 6, answer: 15, breakdown: { make10: 1, remaining: 3 } }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 4: Making 10 and More</h2>
+              <p className="activity-subtitle">A super useful trick! 🎯</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Here's a REALLY cool trick!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  When adding 8 + 5, we can make it easier by making 10 first!
+                </p>
+                <div className="text-center my-4 p-4 bg-white rounded-lg">
+                  <p className="text-xl font-bold mb-2">8 + 5 = ?</p>
+                  <p className="text-base">8 needs 2 more to reach 10</p>
+                  <p className="text-base">Take 2 from the 5 → Now it's 10 + 3</p>
+                  <p className="text-2xl font-bold text-primary mt-3">10 + 3 = 13!</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Try This! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 You're a Strategy Master!</p>
+              <p>Making 10 first is so helpful!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Make 10 First!</h2>
+            <p className="activity-subtitle">Problem {currentProblem + 1} of {problems.length}</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="text-4xl font-bold mb-4">
+              {problem.a} + {problem.b} = ?
+            </div>
+
+            <div className="bg-gray-100 rounded-xl p-6 max-w-md mx-auto mb-6">
+              <p className="text-lg mb-2">💡 Hint:</p>
+              <p className="text-base">
+                {problem.a} needs {problem.breakdown.make10} to make 10
+              </p>
+              <p className="text-base">
+                Take {problem.breakdown.make10} from {problem.b}
+              </p>
+              <p className="text-base font-bold text-primary">
+                10 + {problem.breakdown.remaining} = ?
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+            />
+
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Not quite! Try again! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 5: ADDITION RACE ====================
+    function Activity05_AdditionRace({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+      const [flowers, setFlowers] = useState(0);
+
+      const problems = [
+        { a: 2, b: 3, answer: 5 },
+        { a: 4, b: 1, answer: 5 },
+        { a: 6, b: 4, answer: 10 }
+      ];
+
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setFlowers(flowers + 1);
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1000);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 1500);
+        }
+      };
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🌸 Beautiful Garden!</p>
+              <p>You planted {flowers} flowers!</p>
+              <div className="text-6xl mt-4">
+                {Array.from({ length: Math.min(flowers, 5) }).map((_, i) => (
+                  <span key={i}>🌸</span>
+                ))}
+              </div>
+            </div>
+            <button className="btn-primary mt-6" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Activity 5: Addition Garden</h2>
+            <p className="activity-subtitle">Plant flowers with correct answers! 🌸</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="text-2xl mb-4">
+              🌸 Flowers Planted: {flowers} / {problems.length}
+            </div>
+
+            <div className="text-4xl font-bold mb-6">
+              {problem.a} + {problem.b} = ?
+            </div>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+              onKeyPress={(e) => e.key === 'Enter' && answer && checkAnswer()}
+            />
+
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Plant Flower 🌸
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">🌸 Beautiful!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! 💪</p>
+            </div>
+          )}
+
+          <div className="text-center mt-6 text-4xl">
+            {Array.from({ length: flowers }).map((_, i) => (
+              <span key={i} className="inline-block animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}>
+                🌸
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 6: WHAT ARE TENS? ====================
+    function Activity06_WhatAreTens({ onComplete, onNext, activityNum, isCompleted ,onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentNumber, setCurrentNumber] = useState(0);
+      const [tensCount, setTensCount] = useState('');
+      const [onesCount, setOnesCount] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const numbers = [15, 23, 32];
+      const number = numbers[currentNumber];
+
+      const correctTens = Math.floor(number / 10);
+      const correctOnes = number % 10;
+
+      const checkAnswer = () => {
+        if (parseInt(tensCount) === correctTens && parseInt(onesCount) === correctOnes) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentNumber < numbers.length - 1) {
+              setCurrentNumber(currentNumber + 1);
+              setTensCount('');
+              setOnesCount('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry && onRetry();
+          setTimeout(() => {
+            setTensCount('');
+            setOnesCount('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 6: What are Tens?</h2>
+              <p className="activity-subtitle">Understanding place value! 📦</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>When we have 10 of something, we bundle them!</strong>
+                </p>
+                <p className="text-base mb-4">
+                  Look at the number 24:
+                </p>
+                <div className="text-center my-4">
+                  <div className="text-6xl mb-2">
+                    📦📦 🔴🔴🔴🔴
+                  </div>
+                  <p className="text-xl font-bold">
+                    2 tens (📦) + 4 ones (🔴) = 24
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Practice! 📦
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Place Value Expert!</p>
+              <p>You understand tens and ones!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Count the Tens and Ones</h2>
+            <p className="activity-subtitle">Number {currentNumber + 1} of {numbers.length}</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="text-6xl font-bold text-primary mb-6">
+              {number}
+            </div>
+
+            <div className="text-5xl mb-6">
+              {Array.from({ length: correctTens }).map((_, i) => (
+                <span key={`ten-${i}`}>📦</span>
+              ))}
+              {' '}
+              {Array.from({ length: correctOnes }).map((_, i) => (
+                <span key={`one-${i}`}>🔴</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="place-value-container">
+            <div className="place-value-box">
+              <div className="place-value-label">Tens 📦</div>
+              <input
+                type="number"
+                className="number-input"
+                style={{ width: '100px', height: '70px', fontSize: '2rem' }}
+                value={tensCount}
+                onChange={(e) => setTensCount(e.target.value)}
+                placeholder="?"
+              />
+            </div>
+
+            <div className="place-value-box">
+              <div className="place-value-label">Ones 🔴</div>
+              <input
+                type="number"
+                className="number-input"
+                style={{ width: '100px', height: '70px', fontSize: '2rem' }}
+                value={onesCount}
+                onChange={(e) => setOnesCount(e.target.value)}
+                placeholder="?"
+              />
+            </div>
+          </div>
+
+          <div className="text-center mt-6">
+            <button
+              className="btn-primary"
+              onClick={checkAnswer}
+              disabled={!tensCount || !onesCount}
+            >
+              Check Answer ✓
+            </button>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try counting again! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 7: ADDING TENS ====================
+    function Activity07_AddingTens({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { a: 20, b: 30, answer: 50 },
+        { a: 10, b: 40, answer: 50 },
+        { a: 30, b: 40, answer: 70 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 7: Adding Tens</h2>
+              <p className="activity-subtitle">Tens are easy! 🎯</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Adding tens is like adding regular numbers!</strong>
+                </p>
+                <p className="text-base mb-4">
+                  Just add the digits and put a zero at the end:
+                </p>
+                <div className="text-center text-2xl font-bold space-y-3">
+                  <div>20 + 30 = ?</div>
+                  <div className="text-primary">2 tens + 3 tens = 5 tens</div>
+                  <div className="text-3xl">20 + 30 = 50! ✨</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Add Tens! 📦
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Tens Master!</p>
+              <p>Adding tens is easy for you!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Add the Tens!</h2>
+            <p className="activity-subtitle">Problem {currentProblem + 1} of {problems.length}</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-4">
+              {Array.from({ length: problem.a / 10 }).map((_, i) => (
+                <span key={i}>📦</span>
+              ))}
+              <span className="mx-4 text-4xl">+</span>
+              {Array.from({ length: problem.b / 10 }).map((_, i) => (
+                <span key={i}>📦</span>
+              ))}
+            </div>
+
+            <div className="text-4xl font-bold mt-6">
+              {problem.a} + {problem.b} = ?
+            </div>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+            />
+
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Excellent!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+
+    // ==================== ACTIVITY 8: REGROUPING ====================
+    function Activity08_Regrouping({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+      const [showHint, setShowHint] = useState(false);
+
+      const problems = [
+        { a: 18, b: 4, answer: 22, ones: 12, newTen: true },
+        { a: 27, b: 5, answer: 32, ones: 12, newTen: true },
+        { a: 25, b: 7, answer: 32, ones: 12, newTen: true }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+              setShowHint(false);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 8: Making New Tens</h2>
+              <p className="activity-subtitle">When ones make 10 or more! 🎁</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>What happens when ones add up to 10 or more?</strong>
+                </p>
+                <p className="text-base mb-3">
+                  We make a NEW ten!
+                </p>
+                <div className="text-center my-4 p-4 bg-white rounded-lg">
+                  <p className="text-xl font-bold mb-2">27 + 5 = ?</p>
+                  <p className="text-base">📦📦 🔴🔴🔴🔴🔴🔴🔴 + 🔴🔴🔴🔴🔴</p>
+                  <p className="text-base mt-2">Ones: 7 + 5 = 12</p>
+                  <p className="text-base">12 is MORE than 10!</p>
+                  <p className="text-base">10 ones → 1 new ten (📦)</p>
+                  <p className="text-2xl font-bold text-primary mt-3">📦📦📦 🔴🔴 = 32!</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Practice! 📦
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Regrouping Master!</p>
+              <p>You can handle ones that make new tens!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+      const aTens = Math.floor(problem.a / 10);
+      const aOnes = problem.a % 10;
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Regroup When Needed!</h2>
+            <p className="activity-subtitle">Problem {currentProblem + 1} of {problems.length}</p>
+          </div>
+          <div className="text-center mb-6">
+            <div className="text-4xl font-bold mb-4">
+              {problem.a} + {problem.b} = ?
+            </div>
+
+            <div className="text-3xl mb-4">
+              {Array.from({ length: aTens }).map((_, i) => (
+                <span key={i}>📦</span>
+              ))}
+              {' '}
+              {Array.from({ length: aOnes }).map((_, i) => (
+                <span key={i}>🔴</span>
+              ))}
+              <span className="mx-2">+</span>
+              {Array.from({ length: problem.b }).map((_, i) => (
+                <span key={i}>🔴</span>
+              ))}
+            </div>
+
+            {showHint && (
+              <div className="bg-yellow-50 border-3 border-yellow-300 rounded-xl p-4 max-w-md mx-auto mb-4">
+                <p className="text-lg font-bold mb-2">💡 Hint:</p>
+                <p>Ones: {aOnes} + {problem.b} = {problem.ones}</p>
+                <p>That's {problem.ones - 10} ones + 1 new ten!</p>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+            />
+
+            <div className="mt-6 space-x-4">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+
+              <button
+                className="btn-hint"
+                onClick={() => setShowHint(!showHint)}
+              >
+                {showHint ? 'Hide' : 'Show'} Hint 💡
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect Regrouping!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! Remember to regroup! 💪</p>
+            </div>
+          )}
+        </div>);
+    }
+
+
+    // ==================== ACTIVITY 9: TWO-DIGIT WITH REGROUP ====================
+    function Activity09_TwoDigitWithRegroup({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+      const [showHint, setShowHint] = useState(false);
+
+      const problems = [
+        { a: 38, b: 27, answer: 65 },
+        { a: 47, b: 28, answer: 75 },
+        { a: 29, b: 36, answer: 65 }
+      ];
+
+      const problem = problems[currentProblem];
+      const aTens = Math.floor(problem.a / 10);
+      const aOnes = problem.a % 10;
+      const bTens = Math.floor(problem.b / 10);
+      const bOnes = problem.b % 10;
+      const onesSum = aOnes + bOnes;
+      const needsRegroup = onesSum >= 10;
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+              setShowHint(false);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 9: The Hardest Kind!</h2>
+              <p className="activity-subtitle">But you're ready! 💪</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Two-digit addition with regrouping!</strong>
+                </p>
+                <div className="text-center my-4 p-4 bg-white rounded-lg">
+                  <p className="text-xl font-bold mb-2">38 + 27 = ?</p>
+                  <p className="text-base">Ones: 8 + 7 = 15 (more than 10!)</p>
+                  <p className="text-base">Regroup: 15 = 1 ten + 5 ones</p>
+                  <p className="text-base">Tens: 3 + 2 + 1 (new ten) = 6 tens</p>
+                  <p className="text-2xl font-bold text-primary mt-3">38 + 27 = 65!</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                I'm Ready! 🚀
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Advanced Addition Master!</p>
+              <p>You conquered the hardest type!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Add with Regrouping!</h2>
+            <p className="activity-subtitle">Problem {currentProblem + 1} of {problems.length}</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="text-4xl font-bold mb-6">
+              {problem.a} + {problem.b} = ?
+            </div>
+
+            {showHint && (
+              <div className="bg-yellow-50 border-3 border-yellow-300 rounded-xl p-4 max-w-md mx-auto mb-4">
+                <p className="text-lg font-bold mb-2">💡 Steps:</p>
+                <p>1. Ones: {aOnes} + {bOnes} = {onesSum}</p>
+                {needsRegroup && (
+                  <>
+                    <p>2. Regroup: {onesSum} = 1 ten + {onesSum - 10} ones</p>
+                    <p>3. Tens: {aTens} + {bTens} + 1 = {aTens + bTens + 1}</p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+            />
+
+            <div className="mt-6 space-x-4">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+
+              <button
+                className="btn-hint"
+                onClick={() => setShowHint(!showHint)}
+              >
+                {showHint ? 'Hide' : 'Show'} Steps 💡
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Amazing! You did it!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! Remember to regroup! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+
+
+    // ==================== ACTIVITY 10: WORD PROBLEMS ====================
+    function Activity10_WordProblems({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        {
+          story: "Tom collected 42 shells at the beach. Emma collected 39 shells. How many shells did they collect together?",
+          a: 42,
+          b: 39,
+          answer: 81,
+          emoji: "🐚"
+        },
+        {
+          story: "A library has 56 picture books and 38 chapter books. How many books does the library have?",
+          a: 56,
+          b: 38,
+          answer: 94,
+          emoji: "📚"
+        },
+        {
+          story: "At the park, 48 children are playing soccer and 37 children are playing basketball. How many children are playing in total?",
+          a: 48,
+          b: 37,
+          answer: 85,
+          emoji: "⚽"
+        }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.answer) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(currentProblem + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => {
+            setAnswer('');
+            setFeedback(null);
+          }, 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 10: Story Problems</h2>
+              <p className="activity-subtitle">Math in real life! 📖</p>
+            </div>
+
+            <div className="teaching-module">
+              <div className="wizard-character">🧙</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Math is everywhere in our daily lives!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  Let's solve real-world problems using addition!
+                </p>
+                <p className="text-base">
+                  Read carefully, find the numbers, and add them up!
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Read Stories! 📚
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Problem Solver!</p>
+              <p>You can solve real-world math problems!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Solve the Story! {problem.emoji}</h2>
+            <p className="activity-subtitle">Problem {currentProblem + 1} of {problems.length}</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
+            <p className="text-lg leading-relaxed">
+              {problem.story}
+            </p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="bg-white rounded-xl p-4 inline-block">
+              <p className="text-2xl font-bold">
+                {problem.a} + {problem.b} = ?
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+              autoFocus
+            />
+
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Great thinking!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! Read carefully! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+ 
+    // ==================== COMPLETION SCREEN ====================
+    function CompletionScreen({ rewards, onFinish }) {
+      return (
+        <div className="completion-screen">
+          <div className="completion-trophy">🏆</div>
+          <h1 className="completion-title">You Did It!</h1>
+          <p className="completion-message">
+            You completed all 10 Adding Magic activities!
+          </p><div className="rewards-container mb-8">
+            <div className="reward-badge">
+              <span className="reward-icon">⭐</span>
+              <span>{rewards.stars} Calm Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🏅</span>
+              <span>{rewards.badges} Brave Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🎨</span>
+              <span>{rewards.tokens} Color Tokens</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-lg text-gray-700">
+              You learned how to add numbers from 1 all the way to two-digit numbers!
+            </p>
+            <p className="text-lg font-bold text-primary">
+              You're an Addition Master! ✨
+            </p>
+          </div>
+
+          <button className="btn-primary mt-8" onClick={onFinish}>
+            Complete Level 2 🎉
+          </button>
+        </div>);
+    }
+    // ==================== RENDER APP ====================
+    const root = ReactDOM.createRoot(document.getElementById('adding-magic-root'));
+    root.render(<AddingMagicLevel />);
+  </script>
+  <script>
+    const TOTAL_LEVELS = 5;
+
+    /* GET LEVEL NUMBER FROM FILE NAME */
+    const match = window.location.pathname.match(/level-(\d+)/);
+    const LEVEL_NUMBER = match ? Number(match[1]) : null;
+
+    /* SAFETY CHECK */
+    if (!LEVEL_NUMBER || LEVEL_NUMBER < 1 || LEVEL_NUMBER > TOTAL_LEVELS) {
+      window.location.href = "../roadmap.html";
+    }
+
+
+    const storedLevel = Number(localStorage.getItem("arithmoLevel")) || 1;
+
+    /* ANTI-SKIP PROTECTION */
+    if (storedLevel !== LEVEL_NUMBER) {
+      window.location.href = "../roadmap.html";
+    }
+
+    function completeLevel() {
+      if (storedLevel < TOTAL_LEVELS) {
+        localStorage.setItem("arithmoLevel", storedLevel + 1);
+      }
+      window.location.href = "../roadmap.html";
+    }
+
+  </script>
+
+</body>
+
+>>>>>>> b0a3f6489ab5e97546de9d22486dfaae8ed39fb1
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -2040,4 +2041,2048 @@
 
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arithmo – Level 4: Sharing Fairly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Arithmo" />
+  <link rel="manifest" href="../assets/favicon/site.webmanifest" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ea2a33",
+            secondary: "#3b82f6", // Blue for sharing theme
+            accent: "#8b5cf6"     // Purple for magic/groups
+          },
+          fontFamily: {
+            display: ["Lexend", "sans-serif"],
+            brand: ["Bungee", "cursive"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ==================== SHARING FAIRLY LEVEL STYLES ==================== */
+    /* Inherits core design system from Levels 2 & 3 for consistency */
+
+    .sharing-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 24px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+      /* Blue/Purple gradient for Level 4 */
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* Activity Card */
+    .activity-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .activity-title {
+      font-family: 'Bungee', cursive;
+      font-size: 2rem;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-subtitle {
+      font-size: 1.125rem;
+      color: #6b7280;
+    }
+
+    /* Teaching Module */
+    .teaching-module {
+      background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 3px solid #bfdbfe;
+    }
+
+    .wizard-character {
+      width: 80px;
+      height: 80px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      color: white;
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+    }
+
+    /* Interaction Elements */
+    .group-container {
+      border: 3px dashed #d1d5db;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f9fafb;
+      width: 100%;
+    }
+
+    .group-container:hover {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .group-container.selected {
+      border-color: #10b981;
+      background: #d1fae5;
+      border-style: solid;
+    }
+
+    .pile-box {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      width: 70px;
+      min-height: 70px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .visual-item {
+      font-size: 2.5rem;
+      user-select: none;
+      animation: pop 0.3s ease;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      border: none;
+      font-size: 1.125rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0px 0px #1d4ed8;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(2px);
+      box-shadow: 0 4px 0px 0px #1d4ed8;
+    }
+
+    .btn-primary:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #3b82f6;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      border: 2px solid #3b82f6;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Lexend', sans-serif;
+    }
+
+    /* Inputs */
+    .number-input {
+      width: 120px;
+      height: 80px;
+      font-size: 2.5rem;
+      text-align: center;
+      border: 4px solid #d1d5db;
+      border-radius: 1rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin: 0 auto;
+      display: block;
+      transition: all 0.3s;
+    }
+
+    .number-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Feedback */
+    .feedback-correct {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 3px solid #6ee7b7;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: slideDown 0.4s ease;
+    }
+
+    .feedback-incorrect {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border: 3px solid #fca5a5;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      animation: shake 0.5s ease;
+    }
+
+    /* Animations */
+    @keyframes pop {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-10px);
+      }
+
+      75% {
+        transform: translateX(10px);
+      }
+    }
+
+    /* Arrays Grid */
+    .array-grid {
+      display: inline-grid;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: #f3f4f6;
+      border-radius: 1rem;
+      margin: 1rem auto;
+    }
+
+    .array-item {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Rewards */
+    .rewards-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .reward-badge {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .completion-trophy {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+      animation: trophy-spin 1s ease;
+    }
+
+    @keyframes trophy-spin {
+      0% {
+        transform: rotate(0deg) scale(0);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.2);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .activity-title {
+        font-size: 1.5rem;
+      }
+
+      .visual-item {
+        font-size: 2rem;
+      }
+
+      .activity-card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-display bg-gray-50 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white rounded-3xl shadow-xl p-8 max-w-xl w-full text-center">
+
+    <h1 class="font-brand text-4xl mb-4">LEVEL 4</h1>
+    <p class="text-lg mb-8">Sharing Fairly 🤝</p>
+
+    <main class="flex flex-1 items-center justify-center py-8">
+      <div id="sharing-fairly-root" class="sharing-container w-full"></div>
+    </main>
+
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ==================== MAIN APP COMPONENT ====================
+    function SharingFairlyLevel() {
+      const [currentActivity, setCurrentActivity] = useState(1);
+      const [completedActivities, setCompletedActivities] = useState([]);
+      const [rewards, setRewards] = useState({ stars: 0, badges: 0, tokens: 0 });
+      const [showCompletion, setShowCompletion] = useState(false);
+
+      // Check for level completion
+      useEffect(() => {
+        if (completedActivities.length === 10 && !showCompletion) {
+          setShowCompletion(true);
+        }
+      }, [completedActivities]);
+
+      const handleActivityComplete = (activityNum) => {
+        if (!completedActivities.includes(activityNum)) {
+          setCompletedActivities([...completedActivities, activityNum]);
+          setRewards(prev => ({ ...prev, tokens: prev.tokens + 1 }));
+          if (activityNum === 1 || activityNum === 6) {
+            setRewards(prev => ({ ...prev, badges: prev.badges + 1 }));
+          }
+        }
+      };
+
+      const handleRetry = () => {
+        setRewards(prev => ({ ...prev, stars: prev.stars + 1 }));
+      };
+
+      const nextActivity = () => {
+        if (currentActivity < 10) {
+          setCurrentActivity(currentActivity + 1);
+        }
+      };
+
+      const finishLevel = () => {
+        if (typeof window.completeLevel === 'function') {
+          window.completeLevel();
+        }
+      };
+
+      if (showCompletion) {
+        return (
+          <CompletionScreen rewards={rewards} onFinish={finishLevel} />
+        );
+      }
+
+      return (
+        <div>
+          <ProgressBar
+            current={completedActivities.length}
+            total={10}
+            rewards={rewards}
+          />
+
+          <ActivityRenderer
+            activityNum={currentActivity}
+            onComplete={handleActivityComplete}
+            onRetry={handleRetry}
+            onNext={nextActivity}
+            isCompleted={completedActivities.includes(currentActivity)}
+          />
+        </div>
+      );
+    }
+
+    // ==================== PROGRESS BAR ====================
+    function ProgressBar({ current, total, rewards }) {
+      const percentage = (current / total) * 100;
+
+      return (
+        <div className="progress-bar-container">
+          <div className="flex justify-between items-center mb-3">
+            <span className="font-bold text-lg">Your Progress</span>
+            <span className="text-sm text-gray-600">{current} of {total} activities</span>
+          </div>
+
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${percentage}%` }}>
+              {current > 0 && `${current}/${total}`}
+            </div>
+          </div>
+
+          <div className="rewards-container mt-4">
+            <div className="reward-badge">
+              <span className="reward-icon text-yellow-500">⭐</span>
+              <span>{rewards.stars} Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon text-blue-500">🏅</span>
+              <span>{rewards.badges} Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon text-purple-500">🎨</span>
+              <span>{rewards.tokens} Tokens</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY RENDERER ====================
+    function ActivityRenderer({ activityNum, onComplete, onRetry, onNext, isCompleted }) {
+      const activities = {
+        1: Activity01_WhatAreEqualGroups,
+        2: Activity02_MakingEqualGroups,
+        3: Activity03_RepeatedAddition,
+        4: Activity04_GroupsOf,
+        5: Activity05_Arrays,
+        6: Activity06_WhatIsSharing,
+        7: Activity07_SharingEqually,
+        8: Activity08_HowManyEach,
+        9: Activity09_EqualJumps,
+        10: Activity10_FairFeast
+      };
+
+      const ActivityComponent = activities[activityNum];
+
+      return (
+        <div className="activity-card">
+          <ActivityComponent
+            onComplete={onComplete}
+            onRetry={onRetry}
+            onNext={onNext}
+            isCompleted={isCompleted}
+            activityNum={activityNum}
+          />
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 1: WHAT ARE EQUAL GROUPS? ====================
+    function Activity01_WhatAreEqualGroups({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        {
+          emoji: '🍪',
+          correct: 'A',
+          groupA: [3, 3, 3], // Equal
+          groupB: [3, 2, 4], // Unequal
+          hint: "Which group has the SAME amount in every pile?"
+        },
+        {
+          emoji: '🍎',
+          correct: 'B',
+          groupA: [2, 3, 2], // Unequal
+          groupB: [2, 2, 2, 2], // Equal
+          hint: "Look for fairness! Everyone should have the same."
+        },
+        {
+          emoji: '⭐',
+          correct: 'A',
+          groupA: [4, 4], // Equal
+          groupB: [4, 5], // Unequal
+          hint: "Equal means the numbers are exactly the same."
+        }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const handleSelect = (choice) => {
+        if (feedback) return;
+
+        if (choice === problem.correct) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 1500);
+        }
+      };
+
+      // Helper to render piles
+      const renderPiles = (amounts, emoji) => (
+        <div className="flex justify-center gap-2">
+          {amounts.map((amt, i) => (
+            <div key={i} className="bg-white border-2 border-gray-200 rounded-lg p-2 flex flex-wrap w-16 h-16 items-center justify-center content-center overflow-hidden">
+              {Array.from({ length: amt }).map((_, j) => (
+                <span key={j} className="text-sm">{emoji}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      );
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 1: Equal Groups</h2>
+              <p className="activity-subtitle">Fair means everyone gets the same! ⚖️</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Hi! I'm Equa the Elf!</strong> 🧝
+                </p>
+                <p className="text-base mb-3">
+                  I love when things are <strong>EQUAL</strong> (fair).
+                </p>
+                <p className="text-base">
+                  Equal groups have the <strong>same number</strong> of things in them.
+                </p>
+                <div className="flex justify-around mt-4 p-4 bg-white rounded-xl">
+                  <div className="text-center">
+                    <p className="text-green-600 font-bold mb-2">EQUAL ✅</p>
+                    <div className="flex gap-2">
+                      <div className="border-2 border-green-200 rounded p-1">🍎🍎</div>
+                      <div className="border-2 border-green-200 rounded p-1">🍎🍎</div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-red-500 font-bold mb-2">NOT EQUAL ❌</p>
+                    <div className="flex gap-2">
+                      <div className="border-2 border-red-200 rounded p-1">🍎🍎</div>
+                      <div className="border-2 border-red-200 rounded p-1">🍎</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Find Equal Groups! 🔍
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Fair and Square!</p>
+              <p>You can spot equal groups!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Which One is Equal?</h2>
+            <p className="activity-subtitle">Find the fair sharing!</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div onClick={() => handleSelect('A')} className={`group-container ${feedback === 'correct' && problem.correct === 'A' ? 'selected' : ''}`}>
+              {problem.groupA.map((count, i) => (
+                <div key={i} className="pile-box">
+                  {Array.from({ length: count }).map((_, j) => (
+                    <span key={j} className="text-lg leading-none animate-[pop_0.3s_ease]">{problem.emoji}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div onClick={() => handleSelect('B')} className={`group-container ${feedback === 'correct' && problem.correct === 'B' ? 'selected' : ''}`}>
+              {problem.groupB.map((count, i) => (
+                <div key={i} className="pile-box">
+                  {Array.from({ length: count }).map((_, j) => (
+                    <span key={j} className="text-lg leading-none animate-[pop_0.3s_ease]">{problem.emoji}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ That's Fair! Equal groups!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Look closely... are they all the same?</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 2: MAKING EQUAL GROUPS ====================
+    function Activity02_MakingEqualGroups({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [baskets, setBaskets] = useState([]); // Array of counts
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { baskets: 3, target: 2, emoji: '🥕' }, // 3 baskets, need 2 in each
+        { baskets: 2, target: 4, emoji: '🦴' }, // 2 baskets, need 4 in each
+        { baskets: 3, target: 3, emoji: '🐞' }
+      ];
+
+      const problem = problems[currentProblem];
+
+      // Init baskets on problem load
+      useEffect(() => {
+        if (step === 'practice') {
+          setBaskets(Array(problem.baskets).fill(0));
+          setFeedback(null);
+        }
+      }, [step, currentProblem]);
+
+      const addToBasket = (index) => {
+        if (feedback === 'correct') return;
+        const newBaskets = [...baskets];
+        if (newBaskets[index] < problem.target) {
+          newBaskets[index]++;
+          setBaskets(newBaskets);
+        }
+      };
+
+      const resetBasket = (index) => {
+        if (feedback === 'correct') return;
+        const newBaskets = [...baskets];
+        newBaskets[index] = 0;
+        setBaskets(newBaskets);
+      };
+
+      const checkAnswer = () => {
+        const isCorrect = baskets.every(count => count === problem.target);
+        if (isCorrect) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 2: Make Them Equal</h2>
+              <p className="activity-subtitle">Fill the baskets! 🧺</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Now YOU make the groups equal!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  I want <strong>3 apples</strong> in every basket.
+                </p>
+                <p className="text-base">
+                  Tap the baskets to add items until they match!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Fill Them! 🍎
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Perfect Balance!</p>
+              <p>You made all the groups equal!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Put {problem.target} in Each!</h2>
+            <p className="activity-subtitle">Tap baskets to add {problem.emoji}</p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
+            {baskets.map((count, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <div
+                  onClick={() => addToBasket(i)}
+                  className="w-24 h-24 border-4 border-amber-600 rounded-b-xl rounded-t-sm bg-amber-100 flex flex-wrap items-end justify-center p-2 cursor-pointer hover:bg-amber-200 transition-colors relative"
+                >
+                  {Array.from({ length: count }).map((_, j) => (
+                    <span key={j} className="text-xl leading-none animate-[pop_0.3s_ease]">{problem.emoji}</span>
+                  ))}
+                  {count === 0 && <span className="text-gray-400 text-sm absolute top-1/2 -translate-y-1/2">Tap me</span>}
+                </div>
+                <div className="mt-2 flex gap-2">
+                  <span className="font-bold text-lg">{count}</span>
+                  {count > 0 && <button onClick={() => resetBasket(i)} className="text-xs text-red-500 font-bold">Clear</button>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <button
+              className="btn-primary"
+              onClick={checkAnswer}
+            >
+              Check My Work ✓
+            </button>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ All equal! Great job!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Not quite! Check the numbers.</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 3: REPEATED ADDITION ====================
+    function Activity03_RepeatedAddition({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { groups: 3, perGroup: 2, emoji: '🎈', formula: "2 + 2 + 2", ans: 6 },
+        { groups: 2, perGroup: 4, emoji: '💎', formula: "4 + 4", ans: 8 },
+        { groups: 4, perGroup: 3, emoji: '🍪', formula: "3 + 3 + 3 + 3", ans: 12 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.ans) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 3: Adding Groups</h2>
+              <p className="activity-subtitle">Adding the same number again and again! ➕</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Look at this magic trick!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  If I have 3 bags with 2 candies each...
+                </p>
+                <div className="flex justify-center gap-4 text-2xl my-2">
+                  <span>🍬🍬</span> + <span>🍬🍬</span> + <span>🍬🍬</span>
+                </div>
+                <p className="text-xl font-bold text-blue-600">
+                  2 + 2 + 2 = 6!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Add Groups! 🔢
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Addition Master!</p>
+              <p>You can add equal groups!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Add the Groups!</h2>
+          </div>
+
+          <div className="flex justify-center gap-4 mb-4">
+            {Array.from({ length: problem.groups }).map((_, i) => (
+              <div key={i} className="bg-blue-50 border-2 border-blue-200 rounded-full p-4 w-20 h-20 flex flex-wrap items-center justify-center content-center">
+                {Array.from({ length: problem.perGroup }).map((_, j) => (
+                  <span key={j} className="text-xl">{problem.emoji}</span>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mb-6">
+            <p className="text-2xl font-brand text-gray-700 mb-2">{problem.formula} = ?</p>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+            />
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Correct!</p>
+            </div>
+          )}
+
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try counting them all! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 4: GROUPS OF... ====================
+    function Activity04_GroupsOf({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [selected, setSelected] = useState(null);
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        {
+          visual: { groups: 3, count: 4, emoji: '🍕' },
+          options: ["3 groups of 4", "4 groups of 3"],
+          correctIndex: 0
+        },
+        {
+          visual: { groups: 2, count: 5, emoji: '🖐️' },
+          options: ["5 groups of 2", "2 groups of 5"],
+          correctIndex: 1
+        },
+        {
+          visual: { groups: 4, count: 2, emoji: '👞' },
+          options: ["4 groups of 2", "2 groups of 4"],
+          correctIndex: 0
+        }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const handleSelect = (index) => {
+        if (feedback) return;
+
+        if (index === problem.correctIndex) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setFeedback(null);
+              setSelected(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 1500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 4: "Groups Of"</h2>
+              <p className="activity-subtitle">Learning special math words! 🗣️</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>We call these "Groups Of"!</strong>
+                </p>
+                <div className="flex justify-center gap-2 my-2">
+                  <div className="border border-gray-400 rounded p-1">🐼🐼</div>
+                  <div className="border border-gray-400 rounded p-1">🐼🐼</div>
+                  <div className="border border-gray-400 rounded p-1">🐼🐼</div>
+                </div>
+                <p className="text-base">
+                  I see 3 boxes. Each has 2 pandas.
+                </p>
+                <p className="text-xl font-bold text-primary mt-2">
+                  "3 groups of 2"
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Name Groups! 🏷️
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Language Expert!</p>
+              <p>You can name the groups perfectly!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">What Do You See?</h2>
+          </div>
+
+          <div className="flex justify-center gap-4 mb-8">
+            {Array.from({ length: problem.visual.groups }).map((_, i) => (
+              <div key={i} className="bg-white border-2 border-gray-300 rounded-xl p-3 shadow-sm">
+                <div className="flex flex-wrap w-16 justify-center">
+                  {Array.from({ length: problem.visual.count }).map((_, j) => (
+                    <span key={j} className="text-2xl">{problem.visual.emoji}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 max-w-sm mx-auto">
+            {problem.options.map((opt, i) => (
+              <button
+                key={i}
+                onClick={() => handleSelect(i)}
+                className={`p-4 rounded-xl border-2 text-xl font-bold transition-all ${feedback === 'correct' && i === problem.correctIndex ? 'bg-green-100 border-green-500 text-green-700' :
+                  feedback === 'incorrect' && selected === i ? 'bg-red-100 border-red-500 text-red-700' :
+                    'bg-white border-blue-200 hover:border-blue-500 hover:bg-blue-50 text-gray-700'
+                  }`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 5: ARRAYS ====================
+    function Activity05_Arrays({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { rows: 2, cols: 3, emoji: '🥚', ans: 6 },
+        { rows: 3, cols: 3, emoji: '🍫', ans: 9 },
+        { rows: 2, cols: 5, emoji: '🍩', ans: 10 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.ans) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 5: Arrays</h2>
+              <p className="activity-subtitle">Neat rows and columns! 🧱</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Sometimes groups are in tidy lines.</strong>
+                </p>
+                <p className="text-base mb-3">
+                  We call this an <strong>Array</strong>.
+                </p>
+                <div className="array-grid" style={{ gridTemplateColumns: `repeat(3, 1fr)` }}>
+                  <div className="array-item">🚙</div>
+                  <div className="array-item">🚙</div>
+                  <div className="array-item">🚙</div>
+                  <div className="array-item">🚙</div>
+                  <div className="array-item">🚙</div>
+                  <div className="array-item">🚙</div>
+                </div>
+                <p className="text-sm text-gray-600 mt-2">
+                  2 Rows of 3 cars = 6 cars!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Count Arrays! 🧮
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Array Ace!</p>
+              <p>You can count organized groups!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">How Many in Total?</h2>
+          </div>
+
+          <div className="flex justify-center mb-6">
+            <div className="array-grid" style={{ gridTemplateColumns: `repeat(${problem.cols}, 1fr)` }}>
+              {Array.from({ length: problem.rows * problem.cols }).map((_, i) => (
+                <div key={i} className="array-item animate-[pop_0.4s_ease]">{problem.emoji}</div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-center mb-4 text-gray-500 font-bold">
+            {problem.rows} rows of {problem.cols}
+          </p>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+            />
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Correct!</p>
+            </div>
+          )}
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try again! 💪</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 6: WHAT IS SHARING? ====================
+    function Activity06_WhatIsSharing({ onComplete, onNext, activityNum, isCompleted }) {
+      const [step, setStep] = useState('teaching');
+      const [currentAnim, setCurrentAnim] = useState(0);
+
+      // Simple animation sequence simulation
+      useEffect(() => {
+        if (step === 'practice') {
+          // Nothing interactive here really, just concept check. 
+          // Let's make it a simple "Click to Share" demo.
+        }
+      }, [step]);
+
+      const [sharedCount, setSharedCount] = useState(0);
+      const totalItems = 6;
+
+      const handleShareClick = () => {
+        if (sharedCount < totalItems) {
+          const nextCount = sharedCount + 1;
+          setSharedCount(nextCount);
+
+          // Check if this was the very last candy to be shared
+          if (nextCount === totalItems) {
+            // Wait 2 seconds so the child can see the final fair distribution
+            setTimeout(() => {
+              onComplete(activityNum);
+            }, 2500);
+          }
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 6: Sharing Fairly</h2>
+              <p className="activity-subtitle">One for you, one for me... 🍪</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>Division means Sharing Fairly!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  When we share, everyone must get the <strong>same amount</strong>.
+                </p>
+                <p className="text-base">
+                  If I have 4 cookies and 2 friends, each friend gets 2!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Try Sharing! 🤝
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Sharing is Caring!</p>
+              <p>You understand how to share!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Tap the Bag to Share!</h2>
+            <p className="activity-subtitle">Give 6 candies to 2 friends</p>
+          </div>
+
+          <div className="flex justify-center mb-8 relative h-32">
+            <div
+              onClick={handleShareClick}
+              className={`cursor-pointer transition-transform active:scale-95 ${sharedCount >= totalItems ? 'opacity-50' : ''}`}
+            >
+              <div className="text-6xl">🛍️</div>
+              <div className="font-bold text-gray-500">{totalItems - sharedCount} left</div>
+            </div>
+          </div>
+
+          <div className="flex justify-around items-end">
+            <div className="text-center w-1/3">
+              <div className="text-4xl mb-2">👦</div>
+              <div className="border-b-4 border-gray-300 w-full min-h-[50px] flex flex-wrap justify-center bg-gray-50 rounded-t-lg p-2">
+                {Array.from({ length: Math.ceil(sharedCount / 2) }).map((_, i) => (
+                  <span key={i} className="text-2xl animate-[pop_0.3s_ease]">🍬</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center w-1/3">
+              <div className="text-4xl mb-2">👧</div>
+              <div className="border-b-4 border-gray-300 w-full min-h-[50px] flex flex-wrap justify-center bg-gray-50 rounded-t-lg p-2">
+                {Array.from({ length: Math.floor(sharedCount / 2) }).map((_, i) => (
+                  <span key={i} className="text-2xl animate-[pop_0.3s_ease]">🍬</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            {sharedCount < totalItems ? (
+              <p className="text-blue-500 font-bold animate-pulse">Tap the bag!</p>
+            ) : (
+              <div className="feedback-correct">
+                <p className="feedback-message">All shared! 3 each! 🎉</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 7: SHARING EQUALLY (INTERACTIVE) ====================
+    function Activity07_SharingEqually({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [plates, setPlates] = useState([]);
+      const [stash, setStash] = useState(0);
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { total: 8, people: 2, emoji: '🍓' },
+        { total: 9, people: 3, emoji: '🍪' },
+        { total: 4, people: 4, emoji: '🧁' }
+      ];
+
+      const problem = problems[currentProblem];
+
+      useEffect(() => {
+        if (step === 'practice') {
+          setStash(problem.total);
+          setPlates(Array(problem.people).fill(0));
+          setFeedback(null);
+        }
+      }, [step, currentProblem]);
+
+      const distribute = (index) => {
+        if (stash > 0 && !feedback) {
+          setStash(prev => prev - 1);
+          const newPlates = [...plates];
+          newPlates[index]++;
+          setPlates(newPlates);
+        }
+      };
+
+      const checkAnswer = () => {
+        if (stash > 0) {
+          setFeedback('incorrect-stash');
+          setTimeout(() => setFeedback(null), 2000);
+          return;
+        }
+
+        // Check if all equal
+        const firstAmt = plates[0];
+        const allEqual = plates.every(p => p === firstAmt);
+
+        if (allEqual) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect-equal');
+          onRetry();
+          // Simple reset mechanism for frustration free design:
+          setTimeout(() => {
+            setFeedback(null);
+            setStash(problem.total);
+            setPlates(Array(problem.people).fill(0));
+          }, 2500);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 7: You Share It!</h2>
+              <p className="activity-subtitle">Pass them out fairly! 🥣</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>It's your turn to be fair.</strong>
+                </p>
+                <p className="text-base">
+                  Tap a plate to put food on it. Keep going until the food is gone and everyone has the same amount!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Start Sharing! 🍽️
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Fair Sharer!</p>
+              <p>Everyone is happy!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Share {problem.total} Items</h2>
+            <p className="activity-subtitle">Tap plates to give {problem.emoji}</p>
+          </div>
+
+          <div className="text-center mb-6">
+            <div className="inline-block bg-gray-100 rounded-full px-6 py-2">
+              Left to share: <span className="font-bold text-xl">{stash}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {plates.map((count, i) => (
+              <div
+                key={i}
+                onClick={() => distribute(i)}
+                className="w-24 h-24 rounded-full border-4 border-blue-200 bg-white flex flex-wrap items-center justify-center p-3 cursor-pointer hover:border-blue-400 transition-colors shadow-md"
+              >
+                {Array.from({ length: count }).map((_, j) => (
+                  <span key={j} className="text-lg leading-none animate-[pop_0.2s_ease]">{problem.emoji}</span>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <button
+              className="btn-primary"
+              onClick={checkAnswer}
+            >
+              Done! ✓
+            </button>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Perfect sharing!</p>
+            </div>
+          )}
+          {feedback === 'incorrect-stash' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Share everything first!</p>
+            </div>
+          )}
+          {feedback === 'incorrect-equal' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Not fair! Someone has more. Trying again...</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 8: HOW MANY EACH? ====================
+    function Activity08_HowManyEach({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { total: 10, groups: 2, emoji: '🍌', ans: 5 },
+        { total: 6, groups: 3, emoji: '🎈', ans: 2 },
+        { total: 12, groups: 4, emoji: '🪙', ans: 3 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.ans) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 8: How Many Each?</h2>
+              <p className="activity-subtitle">Solving the puzzle! 🧩</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>The big question is: How many does one person get?</strong>
+                </p>
+                <p className="text-base mb-3">
+                  If I share 10 bananas with 2 monkeys...
+                </p>
+                <div className="flex justify-center gap-4 my-2">
+                  <div className="bg-white p-2 rounded border">🐵 🍌🍌🍌🍌🍌</div>
+                  <div className="bg-white p-2 rounded border">🐵 🍌🍌🍌🍌🍌</div>
+                </div>
+                <p className="text-base font-bold text-primary">
+                  Each monkey gets 5!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Let's Solve! 🐒
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Division Whiz!</p>
+              <p>You can solve sharing problems!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Share {problem.total} {problem.emoji} into {problem.groups} Groups</h2>
+          </div>
+
+          {/* Visual Representation */}
+          <div className="flex justify-center gap-4 mb-8">
+            {Array.from({ length: problem.groups }).map((_, i) => (
+              <div key={i} className="bg-gray-100 border-2 border-dashed border-gray-400 rounded-lg p-4 w-24 h-32 flex flex-wrap content-start justify-center">
+                <span className="text-xs text-gray-500 w-full text-center mb-1">Group {i + 1}</span>
+                {/* We show hints (question marks) or actual items? Let's show empty groups to make them think/count mentally or use fingers */}
+                <div className="text-2xl opacity-20">?</div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center mb-4 text-lg">
+            If you share {problem.total} equally into {problem.groups} groups... <br />
+            <strong>How many are in EACH group?</strong>
+          </p>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+            />
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ Correct! {problem.ans} each!</p>
+            </div>
+          )}
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Try sharing them one by one!</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 9: EQUAL JUMPS ====================
+    function Activity09_EqualJumps({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [currentJump, setCurrentJump] = useState(0); // 0 to target
+
+      const problems = [
+        { jumpSize: 2, totalJumps: 3, ans: 6 },
+        { jumpSize: 5, totalJumps: 2, ans: 10 },
+        { jumpSize: 3, totalJumps: 4, ans: 12 }
+      ];
+
+      const problem = problems[currentProblem];
+
+      // Reset when problem changes
+      useEffect(() => {
+        setCurrentJump(0);
+      }, [currentProblem]);
+
+      const doJump = () => {
+        if (currentJump < problem.totalJumps) {
+          setCurrentJump(prev => prev + 1);
+
+          if (currentJump + 1 === problem.totalJumps) {
+            setTimeout(() => {
+              if (currentProblem < problems.length - 1) {
+                setCurrentProblem(prev => prev + 1);
+              } else {
+                onComplete(activityNum);
+              }
+            }, 1500);
+          }
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 9: Equal Jumps</h2>
+              <p className="activity-subtitle">Froggy math! 🐸</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>We can multiply on a number line!</strong>
+                </p>
+                <p className="text-base mb-3">
+                  It's like taking equal jumps.
+                </p>
+                <p className="text-base">
+                  3 jumps of 2 means: 0 → 2 → 4 → 6!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Start Jumping! 🐸
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Super Jumper!</p>
+              <p>You can multiply with jumps!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Next Activity →
+            </button>
+          </div>
+        );
+      }
+
+      const maxVal = 15; // static width context
+      const progressPercent = ((currentJump * problem.jumpSize) / maxVal) * 100;
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Jump by {problem.jumpSize}s!</h2>
+            <p className="activity-subtitle">Make {problem.totalJumps} jumps.</p>
+          </div>
+
+          <div className="relative w-full h-24 mt-10 mb-10 border-b-4 border-gray-400">
+            {/* Number Line Markers */}
+            {Array.from({ length: maxVal + 1 }).map((_, i) => (
+              <div key={i} className="absolute bottom-0 h-4 border-l-2 border-gray-300" style={{ left: `${(i / maxVal) * 100}%` }}>
+                <span className="absolute top-6 -translate-x-1/2 text-xs text-gray-500">{i}</span>
+              </div>
+            ))}
+
+            {/* Frog */}
+            <div
+              className="absolute bottom-4 text-4xl transition-all duration-500 ease-in-out"
+              style={{ left: `calc(${progressPercent}% - 20px)` }}
+            >
+              🐸
+            </div>
+          </div>
+
+          <div className="text-center text-2xl font-bold mb-6">
+            You are at: {currentJump * problem.jumpSize}
+          </div>
+
+          <div className="text-center">
+            {currentJump < problem.totalJumps ? (
+              <button
+                className="btn-primary"
+                onClick={doJump}
+              >
+                Jump! 🚀
+              </button>
+            ) : (
+              <div className="feedback-correct">
+                <p className="feedback-message">Landed on {problem.ans}! 🏁</p>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center mt-4 text-gray-400">
+            Jumps: {currentJump} / {problem.totalJumps}
+          </div>
+        </div>
+      );
+    }
+
+    // ==================== ACTIVITY 10: FAIR FEAST (WORD PROBLEMS) ====================
+    function Activity10_FairFeast({ onComplete, onNext, activityNum, isCompleted, onRetry }) {
+      const [step, setStep] = useState('teaching');
+      const [currentProblem, setCurrentProblem] = useState(0);
+      const [answer, setAnswer] = useState('');
+      const [feedback, setFeedback] = useState(null);
+
+      const problems = [
+        { text: "There are 2 baskets. Each basket has 3 apples. How many apples total?", ans: 6, emoji: '🍎' },
+        { text: "Share 8 cookies between 2 friends. How many does each friend get?", ans: 4, emoji: '🍪' },
+        { text: "There are 3 nests. Each nest has 3 eggs. How many eggs total?", ans: 9, emoji: '🥚' }
+      ];
+
+      const problem = problems[currentProblem];
+
+      const checkAnswer = () => {
+        if (parseInt(answer) === problem.ans) {
+          setFeedback('correct');
+          setTimeout(() => {
+            if (currentProblem < problems.length - 1) {
+              setCurrentProblem(prev => prev + 1);
+              setAnswer('');
+              setFeedback(null);
+            } else {
+              onComplete(activityNum);
+            }
+          }, 1500);
+        } else {
+          setFeedback('incorrect');
+          onRetry();
+          setTimeout(() => setFeedback(null), 2000);
+        }
+      };
+
+      if (step === 'teaching') {
+        return (
+          <div>
+            <div className="activity-header">
+              <h2 className="activity-title">Activity 10: Fair Feast</h2>
+              <p className="activity-subtitle">Real life sharing! 🧺</p>
+            </div>
+            <div className="teaching-module">
+              <div className="wizard-character">🧝</div>
+              <div className="speech-bubble">
+                <p className="text-lg mb-3">
+                  <strong>You are ready for the final challenge!</strong>
+                </p>
+                <p className="text-base">
+                  Read the story, picture the groups, and find the answer.
+                  Draw a picture on paper if it helps!
+                </p>
+              </div>
+            </div>
+            <div className="text-center">
+              <button className="btn-primary" onClick={() => setStep('practice')}>
+                Start Feast! 🥐
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      if (isCompleted) {
+        return (
+          <div className="text-center">
+            <div className="feedback-correct">
+              <p className="feedback-message">🎉 Level Complete!</p>
+              <p>You mastered Sharing and Grouping!</p>
+            </div>
+            <button className="btn-primary" onClick={onNext}>
+              Finish Level 4 →
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div>
+          <div className="activity-header">
+            <h2 className="activity-title">Solve the Story</h2>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-6 border-2 border-indigo-100">
+            <div className="text-4xl mb-4 text-center">{problem.emoji}</div>
+            <p className="text-xl leading-relaxed font-medium text-center text-gray-800">
+              {problem.text}
+            </p>
+          </div>
+
+          <div className="text-center">
+            <input
+              type="number"
+              className="number-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder="?"
+            />
+            <div className="mt-6">
+              <button
+                className="btn-primary"
+                onClick={checkAnswer}
+                disabled={!answer}
+              >
+                Check Answer ✓
+              </button>
+            </div>
+          </div>
+
+          {feedback === 'correct' && (
+            <div className="feedback-correct mt-4">
+              <p className="feedback-message">✨ You got it!</p>
+            </div>
+          )}
+          {feedback === 'incorrect' && (
+            <div className="feedback-incorrect mt-4">
+              <p className="feedback-message">Read carefully! Try again.</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ==================== COMPLETION SCREEN ====================
+    function CompletionScreen({ rewards, onFinish }) {
+      return (
+        <div className="completion-screen">
+          <div className="completion-trophy">🏆</div>
+          <h1 className="completion-title">Sharing Master!</h1>
+          <p className="completion-message">
+            You completed all 10 Sharing Fairly activities!
+          </p>
+
+          <div className="rewards-container mb-8">
+            <div className="reward-badge">
+              <span className="reward-icon">⭐</span>
+              <span>{rewards.stars} Stars</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🏅</span>
+              <span>{rewards.badges} Badges</span>
+            </div>
+            <div className="reward-badge">
+              <span className="reward-icon">🎨</span>
+              <span>{rewards.tokens} Tokens</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-lg text-gray-700">
+              You learned about equal groups, arrays, and sharing fairly!
+            </p>
+            <p className="text-lg font-bold text-blue-600">
+              You are ready for Math adventures! ✨
+            </p>
+          </div>
+
+          <button className="btn-primary mt-8" onClick={onFinish}>
+            Complete Level 4 🎉
+          </button>
+        </div>
+      );
+    }
+
+    // ==================== RENDER APP ====================
+    const root = ReactDOM.createRoot(document.getElementById('sharing-fairly-root'));
+    root.render(<SharingFairlyLevel />);
+  </script>
+
+  <script>
+    // Logic to handle level progression and protection
+    const TOTAL_LEVELS = 5;
+    const match = window.location.pathname.match(/level-(\d+)/);
+    const LEVEL_NUMBER = match ? Number(match[1]) : null;
+
+    // Safety check
+    if (!LEVEL_NUMBER || LEVEL_NUMBER < 1 || LEVEL_NUMBER > TOTAL_LEVELS) {
+      // In a real app, redirect to map. For standalone, we allow it.
+      // window.location.href = "../roadmap.html";
+    }
+
+    const storedLevel = Number(localStorage.getItem("arithmoLevel")) || 1;
+
+    // Anti-skip logic (Optional, based on requirement)
+    if (storedLevel !== LEVEL_NUMBER) {
+      // window.location.href = "../roadmap.html";
+    }
+
+    function completeLevel() {
+      if (storedLevel < TOTAL_LEVELS) {
+        localStorage.setItem("arithmoLevel", storedLevel + 1);
+      }
+      window.location.href = "../roadmap.html";
+    }
+  </script>
+
+</body>
+
+>>>>>>> b0a3f6489ab5e97546de9d22486dfaae8ed39fb1
 </html>
