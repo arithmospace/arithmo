@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -15,11 +17,30 @@ app.use(cors({
     credentials: true
 }));
 
+// Add this BEFORE your other routes:
+app.get('/api', (req, res) => {
+    res.json({
+        message: '🚀 Arithmo API is running!',
+        version: '1.0.0',
+        endpoints: {
+            health: '/api/health',
+            auth: {
+                register: '/api/auth/register',
+                login: '/api/auth/login'
+            },
+            users: '/api/users',
+            // Add more endpoints you have
+        },
+        documentation: 'Add your docs link here',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // JWT Secret (SET THIS IN RENDER.COM ENVIRONMENT VARIABLES!)
-const JWT_SECRET = process.env.JWT_SECRET || 'arithmo-super-secret-key-2025-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // ========== MONGODB CONNECTION ==========
-const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/arithmo';
+const MONGO_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGO_URI)
     .then(() => console.log('✅ Connected to MongoDB'))
     .catch(err => console.error('❌ MongoDB Error:', err));
