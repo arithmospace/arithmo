@@ -11,18 +11,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Arithmo" />
     <link rel="manifest" href="assets/favicon/site.webmanifest" />
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
 
-    <!-- Toast Notification System -->
     <script src="assets/toast-notifications.js"></script>
 
-    <!-- Balls Background CSS -->
     <link rel="stylesheet" href="assets/moving-balls-bg.css" />
     <link rel="stylesheet" href="assets/common_style.css" />
     <link rel="stylesheet" href="assets/style.css">
@@ -79,6 +75,7 @@
             border: 1px solid rgba(234, 42, 51, 0.1);
             border-radius: 20px;
             padding: 2rem;
+            padding-top: 3rem;
             margin-bottom: 3rem;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(234, 42, 51, 0.1);
@@ -393,16 +390,30 @@
 
     <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8 py-6">
 
-        <!-- NAV BAR -->
         <div class="nav_container" id="nav_container_id">
-            <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
         </div>
 
-        <!-- MAIN CONTENT -->
         <main class="flex-1">
             <div class="roadmap-wrapper py-8">
 
-                <!-- Progress Summary Card -->
+                <div id="guest-banner" class="hidden transform transition-all duration-300 hover:scale-[1.01] mb-8">
+                    <div
+                        class="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 rounded-xl p-5 shadow-lg flex items-center gap-4">
+                        <div class="bg-yellow-100 p-3 rounded-full text-yellow-600">
+                            <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-yellow-800 text-lg">Playing as Guest</h3>
+                            <p class="text-yellow-700 text-sm">Your progress will be saved temporarily. Login to save
+                                and sync your stars!</p>
+                        </div>
+                        <a href="arithmo-login.html"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg font-bold text-sm shadow-md transition-all">
+                            Login
+                        </a>
+                    </div>
+                </div>
+
                 <div id="overall-progress-display" class="progress-header">
                     <div class="text-center mb-8">
                         <h1 class="font-brand text-4xl sm:text-5xl text-gray-900 mb-4">
@@ -412,7 +423,6 @@
                             Master math one level at a time. Track your progress and earn rewards!
                         </p>
 
-                        <!-- Overall Stats -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                             <div
                                 class="bg-white p-6 rounded-2xl shadow-soft text-center border border-gray-100 hover:shadow-md transition-shadow">
@@ -436,11 +446,9 @@
                             </div>
                         </div>
 
-                        <!-- Badges Display -->
                         <div class="mt-8">
                             <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">🏆 Your Badges</h3>
                             <div class="flex flex-wrap justify-center gap-4" id="badges-container">
-                                <!-- Badges will be dynamically added here -->
                                 <div
                                     class="bg-gradient-to-br from-amber-200 to-yellow-400 p-4 rounded-full shadow-md hover:scale-110 transition-transform duration-300 opacity-50">
                                     <i class="fas fa-trophy text-2xl text-gray-600"></i>
@@ -464,7 +472,6 @@
                     </div>
                 </div>
 
-                <!-- Roadmap -->
                 <div class="backdrop-blur-xl bg-white/60 dark:bg-black/30 border border-white/30
                             shadow-2xl rounded-3xl p-6 sm:p-10 mb-10">
 
@@ -478,10 +485,8 @@
                     </div>
 
                     <div class="roadmap-container relative">
-                        <!-- Connecting Line -->
                         <div class="roadmap-line"></div>
 
-                        <!-- LEVEL 1 -->
                         <div class="roadmap-item">
                             <button class="level-node" data-level="1" onclick="openLevel(1)">
                                 <span>1</span>
@@ -496,7 +501,6 @@
                             </div>
                         </div>
 
-                        <!-- LEVEL 2 -->
                         <div class="roadmap-item">
                             <button class="level-node" data-level="2" onclick="openLevel(2)">
                                 <span>2</span>
@@ -511,7 +515,6 @@
                             </div>
                         </div>
 
-                        <!-- LEVEL 3 -->
                         <div class="roadmap-item">
                             <button class="level-node" data-level="3" onclick="openLevel(3)">
                                 <span>3</span>
@@ -526,7 +529,6 @@
                             </div>
                         </div>
 
-                        <!-- LEVEL 4 -->
                         <div class="roadmap-item">
                             <button class="level-node" data-level="4" onclick="openLevel(4)">
                                 <span>4</span>
@@ -541,7 +543,6 @@
                             </div>
                         </div>
 
-                        <!-- LEVEL 5 -->
                         <div class="roadmap-item">
                             <button class="level-node" data-level="5" onclick="openLevel(5)">
                                 <span>5</span>
@@ -559,7 +560,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div
                         class="bg-gradient-to-br from-primary to-primary-light p-6 rounded-3xl text-white shadow-medium">
@@ -612,7 +612,6 @@
             </div>
         </main>
 
-        <!-- MODAL -->
         <div id="levelModal" class="level-modal">
             <div class="modal-card">
                 <div class="modal-icon" id="modalIcon">🎯</div>
@@ -643,7 +642,6 @@
 
     </div>
 
-    <!-- Balls Background JS -->
     <script src="assets/moving-balls-bg.js"></script>
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
@@ -962,6 +960,12 @@
                     await window.ArithmoProgress.ready();
                     await renderRoadmap();
 
+                    // NEW: Show Guest Banner if not logged in
+                    if (!window.ArithmoProgress.isAuthenticated()) {
+                        const banner = document.getElementById('guest-banner');
+                        if (banner) banner.classList.remove('hidden');
+                    }
+
                     // Setup click handlers
                     document.querySelectorAll('.level-node').forEach(node => {
                         node.addEventListener('click', async function (e) {
@@ -981,10 +985,11 @@
                     // Auto-refresh every 10 seconds
                     setInterval(renderRoadmap, 10000);
 
+                    clearInterval(checkInterval);
+
                 } else if (attempts >= 50) {
                     clearInterval(checkInterval);
                     console.error('❌ Progress Manager failed to load');
-                    alert('Failed to load progress system. Please refresh the page.');
                 }
             }, 100);
         });
@@ -992,7 +997,6 @@
 
     <script src="assets/check-navbar.js"></script>
 
-    <!-- Progress Manager -->
     <script src="assets/progress-manager.js"></script>
 
 </body>

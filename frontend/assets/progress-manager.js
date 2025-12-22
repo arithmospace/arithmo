@@ -5,13 +5,10 @@
 
     class ProgressManager {
         constructor() {
-            // REPLACE THIS WITH YOUR RENDER URL
             this.API_BASE = 'https://arithmobackend.onrender.com/api';
             this.progress = null;
-            this.syncQueue = [];
             this.isOnline = navigator.onLine;
             this.initialized = false;
-
             this.init();
         }
 
@@ -21,23 +18,16 @@
 
         async init() {
             console.log('🔧 Progress Manager Initializing...');
-
             window.addEventListener('online', () => this.handleOnline());
             window.addEventListener('offline', () => this.handleOffline());
 
-            // 1. Check Authentication
             const token = localStorage.getItem('arithmo_jwt');
-
             if (token) {
-                // 2. If logged in, load from Backend
                 await this.loadProgress();
             } else {
-                console.warn('⚠️ User not logged in. Progress will be local only.');
                 this.loadLocalProgress();
             }
-
             this.initialized = true;
-            // Dispatch event for other scripts to know we are ready
             window.dispatchEvent(new CustomEvent('ArithmoProgressReady'));
         }
 
@@ -46,7 +36,6 @@
                 this.loadLocalProgress();
                 return;
             }
-
             try {
                 const token = localStorage.getItem('arithmo_jwt');
                 const response = await fetch(`${this.API_BASE}/progress/load-progress`, {
@@ -57,28 +46,24 @@
                     const data = await response.json();
                     if (data.success) {
                         this.progress = data.progressData;
-                        this.saveLocalProgress(); // Update cache
-                        console.log('✅ Progress synced from Backend');
-                    }
-                } else {
-                    if (response.status === 401 || response.status === 403) {
-                        // Token invalid
-                        localStorage.removeItem('arithmo_jwt');
-                        window.location.href = '../arithmo-login.html';
+                        this.saveLocalProgress();
+                        console.log('✅ Progress synced');
                     }
                 }
             } catch (err) {
                 console.error('Backend load failed:', err);
-                this.loadLocalProgress(); // Fallback
+                this.loadLocalProgress();
             }
         }
 
         async saveActivityProgress(level, activity, rewards = {}, isCompleted = false) {
-            // Update Local Memory First (Optimistic UI)
             this.updateLocalState(level, activity, rewards, isCompleted);
-
             const token = localStorage.getItem('arithmo_jwt');
-            if (!token) return { success: false, error: 'Not logged in' };
+
+            // Guest Mode (Success Local)
+            if (!token) {
+                return { success: true, savedLocally: true };
+            }
 
             try {
                 const response = await fetch(`${this.API_BASE}/progress/update-activity`, {
@@ -91,33 +76,65 @@
                 });
 
                 const data = await response.json();
-                if (data.success) {
-                    this.progress = data.progressData; // Sync full state
+
+                if (response.ok && data.success) {
+                    this.progress = data.progressData;
                     this.saveLocalProgress();
                     return { success: true };
+                } else {
+                    return { success: false, error: data.error };
                 }
             } catch (err) {
-                console.error('Save failed, queueing...', err);
-                // Queue logic can go here (omitted for brevity, focus on core save)
+                return { success: true, error: err.message, savedLocally: true };
             }
         }
 
-        // Helper to update state in memory immediately
+        // NEW: Reset Function
+        async resetProgress() {
+            // 1. Clear Local
+            this.progress = this.createDefault();
+            this.saveLocalProgress();
+
+            const token = localStorage.getItem('arithmo_jwt');
+            if (!token) return { success: true }; // Guest reset done
+
+            // 2. Clear Backend
+            try {
+                const response = await fetch(`${this.API_BASE}/progress/reset`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                return data;
+            } catch (err) {
+                console.error('Reset failed:', err);
+                return { success: false, error: 'Network error' };
+            }
+        }
+
         updateLocalState(level, activity, rewards, isCompleted) {
             if (!this.progress) this.progress = this.createDefault();
 
-            // Ensure level exists
+            // Init totals if missing
+            if (!this.progress.totals) this.progress.totals = { totalStars: 0, totalBadges: 0, totalTokens: 0 };
+
+            // Init level if missing
             if (!this.progress.levels[level]) {
                 this.progress.levels[level] = { completedActivities: [], rewards: { stars: 0, badges: 0, tokens: 0 } };
             }
 
             const lvl = this.progress.levels[level];
+
+            // Add rewards to Totals
             if (!lvl.completedActivities.includes(activity)) {
+                this.progress.totals.totalStars = (this.progress.totals.totalStars || 0) + (rewards.stars || 0);
+                this.progress.totals.totalBadges = (this.progress.totals.totalBadges || 0) + (rewards.badges || 0);
+                this.progress.totals.totalTokens = (this.progress.totals.totalTokens || 0) + (rewards.tokens || 0);
+
                 lvl.completedActivities.push(activity);
             }
 
             if (isCompleted) lvl.status = 'completed';
-
             this.saveLocalProgress();
         }
 
@@ -131,20 +148,20 @@
         }
 
         createDefault() {
-            return { levels: {}, totals: {} };
+            return { levels: {}, totals: { totalStars: 0, totalBadges: 0, totalTokens: 0 } };
         }
 
-        // Helper for Levels
         async isLevelUnlocked(level) {
             if (level === 1) return true;
-            if (!this.progress) await this.loadProgress();
-
-            // Check if previous level is completed
-            const prev = this.progress?.levels?.[level - 1];
+            if (!this.progress) {
+                await this.ready();
+                if (!this.progress) await this.loadProgress();
+            }
+            if (!this.progress) return false;
+            const prev = this.progress.levels && this.progress.levels[level - 1];
             return prev && prev.status === 'completed';
         }
 
-        // Wait for init
         async ready() {
             if (this.initialized) return true;
             return new Promise(resolve => {
@@ -152,13 +169,10 @@
             });
         }
 
-        getProgress() {
-            return this.progress;
-        }
-
-        getSyncStatus() {
-            return { isOnline: this.isOnline, hasToken: this.isAuthenticated() };
-        }
+        getProgress() { return this.progress; }
+        getSyncStatus() { return { isOnline: this.isOnline, hasToken: this.isAuthenticated() }; }
+        handleOnline() { this.isOnline = true; this.loadProgress(); }
+        handleOffline() { this.isOnline = false; }
     }
 
     window.ArithmoProgress = new ProgressManager();

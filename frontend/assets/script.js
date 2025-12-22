@@ -5,6 +5,7 @@
     function setupGlobalSyncIndicator() {
         const isRoadmapOrLevel = window.location.pathname.includes('roadmap.html') ||
             window.location.pathname.includes('level-');
+        window.location.pathname.includes('profile.html');
 
         if (!isRoadmapOrLevel) return;
 
@@ -46,20 +47,22 @@
         indicator.style.opacity = '1';
 
         if (!status.isOnline) {
+            // Case 1: Offline
+            indicator.style.opacity = '1';
             indicator.innerHTML = '📴 Offline Mode';
             indicator.style.background = 'rgba(255, 152, 0, 0.9)'; // Orange
             indicator.style.color = 'white';
-        } else if (!status.hasToken) {
+        }
+        else if (!status.hasToken) {
+            // Case 2: Not Logged In
+            indicator.style.opacity = '1';
             indicator.innerHTML = '⚠️ Not Logged In';
             indicator.style.background = 'rgba(100, 100, 100, 0.9)'; // Grey
             indicator.style.color = 'white';
-        } else {
-            indicator.innerHTML = '✅ Progress Saved';
-            indicator.style.background = 'rgba(76, 175, 80, 0.9)'; // Green
-            indicator.style.color = 'white';
-
-            // Fade out if everything is good to not distract
-            setTimeout(() => { indicator.style.opacity = '0.5'; }, 1000);
+        }
+        else {
+            // Case 3: Online & Logged In (Hidden)
+            indicator.style.opacity = '0';
         }
     }
 

@@ -4,26 +4,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arithmo - Contact</title>
+    <title>Arithmo - Contact Us</title>
+
     <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
     <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="Arithmo" />
-    <link rel="manifest" href="assets/favicon/site.webmanifest" />
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
-
-    <!-- Toast Notification System -->
     <script src="assets/toast-notifications.js"></script>
 
-    <!-- Balls Background CSS -->
     <link rel="stylesheet" href="assets/moving-balls-bg.css" />
     <link rel="stylesheet" href="assets/common_style.css" />
     <link rel="stylesheet" href="assets/style.css">
@@ -33,151 +25,194 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
-                        "primary": "#ea2a33",
-                        "background-light": "#f8f6f6",
-                        "background-dark": "#211111",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"],
-                        "brand": ["Bungee", "cursive"],
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
+                    colors: { "primary": "#ea2a33", "background-light": "#f8f6f6", "background-dark": "#211111" },
+                    fontFamily: { "display": ["Lexend", "sans-serif"], "brand": ["Bungee", "cursive"] },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
                 },
             },
         }
     </script>
 </head>
 
-<body class="font-display moving-balls-bg">
+<body class="font-display moving-balls-bg bg-gray-50">
 
     <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
+        <div class="nav_container" id="nav_container_id"></div>
 
-        <!-- NAV BAR -->
-        <div class="nav_container" id="nav_container_id">
+        <main class="flex flex-1 items-center justify-center py-10 sm:py-20">
 
-            <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-        </div>
+                    <div
+                        class="bg-white/60 dark:bg-black/30 border border-white/30 shadow-2xl rounded-3xl p-8 sm:p-10 backdrop-blur-xl h-full flex flex-col justify-center">
+                        <h1 class="font-brand text-4xl sm:text-5xl text-zinc-900 dark:text-white mb-6">
+                            Get in Touch
+                        </h1>
+                        <p class="text-lg text-zinc-600 dark:text-zinc-300 mb-8 leading-relaxed">
+                            Have questions, suggestions, or just want to say hi? We'd love to hear from you! Arithmo is
+                            always growing, and your feedback helps us make math even more magical.
+                        </p>
 
-
-        <!-- MAIN SECTION (EMPTY FOR FUTURE PAGES) -->
-        <main class="flex flex-1 items-center justify-center py-12 sm:py-20">
-
-            <section class="w-full max-w-4xl mx-auto px-6">
-
-                <!-- GLASS CARD -->
-                <div class="backdrop-blur-xl bg-white/20 dark:bg-black/30 border border-white/30 
-    shadow-2xl rounded-2xl p-4 sm:p-8 lg:p-10 space-y-6 sm:space-y-8"
-                    style="box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);">
-                    <!-- Contact Page Section -->
-                    <section class="py-10 sm:py-20">
-                        <div class="w-full max-w-3xl mx-auto px-2 sm:px-6">
-                            <h2 class="text-4xl font-brand text-zinc-900 dark:text-white text-center mb-8">Contact Us
-                            </h2>
-                            <p class="text-lg text-zinc-700 dark:text-zinc-300 text-center mb-12">
-                                Have any questions or feedback? Reach out to us!
-                            </p>
-                            <form class="space-y-6 bg-white dark:bg-zinc-800 shadow-xl rounded-2xl p-4 sm:p-8 w-full"
-                                action="https://formsubmit.co/arithmospace@gmail.com" method="POST"
-                                style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);">
-                                <input type="hidden" name="_subject" value="New Contact Message - Arithmo">
-                                <input type="hidden" name="_captcha" value="false">
-                                <input type="hidden" name="_template" value="table">
-                                <input type="hidden" name="_next" value="https://arithmo.in/thank-you">
-
-                                <div>
-                                    <label for="name"
-                                        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Name</label>
-                                    <input type="text" id="name" name="name" required
-                                        class="mt-1 block w-full rounded-md border-zinc-300 dark:border-zinc-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-zinc-700 dark:text-white" />
+                        <div class="space-y-6">
+                            <a href="mailto:arithmospace@gmail.com"
+                                class="flex items-center gap-4 p-4 rounded-2xl bg-white/50 border border-white/40 hover:bg-white/80 transition-all hover:-translate-y-1">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 text-xl">
+                                    <i class="fa-solid fa-envelope"></i>
                                 </div>
                                 <div>
-                                    <label for="email"
-                                        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Email</label>
-                                    <input type="email" id="email" name="email" required
-                                        class="mt-1 block w-full rounded-md border-zinc-300 dark:border-zinc-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-zinc-700 dark:text-white" />
+                                    <p class="text-sm font-bold text-zinc-500 uppercase">Email Us</p>
+                                    <p class="text-lg font-semibold text-zinc-900">arithmospace@gmail.com</p>
+                                </div>
+                            </a>
+
+                            <div class="flex items-center gap-4 p-4 rounded-2xl bg-white/50 border border-white/40">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 text-xl">
+                                    <i class="fa-solid fa-earth-americas"></i>
                                 </div>
                                 <div>
-                                    <label for="message"
-                                        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Message</label>
-                                    <textarea id="message" name="message" rows="4" required
-                                        class="mt-1 block w-full rounded-md border-zinc-300 dark:border-zinc-600 shadow-sm focus:border-primary focus:ring-primary dark:bg-zinc-700 dark:text-white"></textarea>
+                                    <p class="text-sm font-bold text-zinc-500 uppercase">Global HQ</p>
+                                    <p class="text-lg font-semibold text-zinc-900">Arithmo Digital Space</p>
                                 </div>
-                                <div class="flex justify-center">
-                                    <button type="submit"
-                                        class="rounded-full bg-primary text-white px-6 py-3 font-bold hover:bg-primary/90 transition">Send
-                                        Message</button>
-                                </div>
-                            </form>
+                            </div>
+                        </div>
+                    </div>
 
-                            <div class="text-center mt-8 sm:mt-10">
-                                <p class="text-zinc-700 dark:text-zinc-300">
-                                    Or email us directly at
-                                </p>
-                                <a href="mailto:arithmospace@gmail.com"
-                                    class="block mt-2 text-primary font-semibold hover:underline break-all">
-                                    arithmospace@gmail.com
-                                </a>
+                    <div class="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 sm:p-10 border border-zinc-100">
+                        <h2 class="font-brand text-2xl text-zinc-900 dark:text-white mb-6">Send a Message</h2>
+
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-zinc-700 mb-1">First Name</label>
+                                    <input type="text" name="firstName" required
+                                        class="w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 focus:border-primary focus:ring-primary transition-shadow">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-zinc-700 mb-1">Last Name</label>
+                                    <input type="text" name="lastName"
+                                        class="w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 focus:border-primary focus:ring-primary transition-shadow">
+                                </div>
                             </div>
 
-                        </div>
-                    </section>
-                </div>
-            </section>
-        </main>
+                            <div>
+                                <label class="block text-sm font-bold text-zinc-700 mb-1">Email Address</label>
+                                <input type="email" name="email" required
+                                    class="w-full rounded-xl border-zinc-200 bg-zinc-50 px-4 py-3 focus:border-primary focus:ring-primary transition-shadow">
+                            </div>
 
+                            <div>
+                                <label class="block text-sm font-bold text-zinc-700 mb-1">Message</label>
+                                <textarea name="message" required rows="4"
+                                    class="w-full rounded-lg border-zinc-200 bg-zinc-50 px-5 py-4 focus:border-primary focus:ring-primary transition-shadow resize-y"></textarea>
+                            </div>
+
+                            <button type="submit" id="submitBtn"
+                                class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-red-500/30 hover:bg-red-600 hover:shadow-red-500/40 hover:-translate-y-1 transition-all duration-300">
+                                Send Message 🚀
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <footer class="arithmo-footer glass">
         <div class="footer-inner">
-
             <div class="footer-brand">
                 <h3>ARITHMO</h3>
                 <p class="footer-tagline">Precision meets play.</p>
             </div>
-
             <div class="footer-contact">
-                <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">
-                    📺 YouTube
-                </a>
-                <a href="mailto:arithmospace@gmail.com">
-                    ✉️ arithmospace@gmail.com
-                </a>
+                <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">📺
+                    YouTube</a>
+                <a href="mailto:arithmospace@gmail.com">✉️ arithmospace@gmail.com</a>
             </div>
-
         </div>
-
-        <div class="footer-bottom">
-            © 2025 Arithmo. All rights reserved.
-        </div>
+        <div class="footer-bottom">© 2025 Arithmo. All rights reserved.</div>
     </footer>
 
-
-    <!-- Balls Background JS -->
     <script src="assets/moving-balls-bg.js"></script>
+    <script src="assets/check-navbar.js"></script>
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
-    <script src="assets/check-navbar.js"></script>
 
-    <!-- Navbar scroll effect -->
     <script>
-        const navbar = document.getElementById("navbar");
+        // NOTE: This relies on the backend route /api/contact existing in server.js
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
 
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 2) {
-                navbar.classList.add("nav-scrolled");
-            } else {
-                navbar.classList.remove("nav-scrolled");
+            // 1. Loading State
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+            btn.classList.add('opacity-75');
+
+            try {
+                // 2. Gather Data
+                const formData = new FormData(document.getElementById('contactForm'));
+                const data = Object.fromEntries(formData.entries());
+
+                // 3. Send to Backend
+                // ENSURE THIS URL MATCHES YOUR RENDER BACKEND URL EXACTLY
+                const response = await fetch('https://arithmobackend.onrender.com/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // 4. Success UI
+                    btn.innerHTML = '✅ Message Sent!';
+                    btn.classList.remove('bg-primary', 'shadow-red-500/30');
+                    btn.classList.add('bg-green-500', 'shadow-green-500/30');
+
+                    if (window.ArithmoToast) {
+                        window.ArithmoToast.success("Message sent! We'll reply soon.");
+                    } else {
+                        alert("Message sent successfully!");
+                    }
+
+                    document.getElementById('contactForm').reset();
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-75', 'bg-green-500', 'shadow-green-500/30');
+                        btn.classList.add('bg-primary', 'shadow-red-500/30');
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Failed to send');
+                }
+
+            } catch (error) {
+                console.error(error);
+                btn.innerHTML = '❌ Error';
+                btn.classList.add('bg-red-600');
+
+                if (window.ArithmoToast) {
+                    window.ArithmoToast.error("Could not send. Try again later.");
+                } else {
+                    alert("Could not send message.");
+                }
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    btn.classList.remove('bg-red-600', 'opacity-75');
+                    btn.classList.add('bg-primary');
+                }, 3000);
             }
-        });
+        }
     </script>
-
 </body>
 
 </html>

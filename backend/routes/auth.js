@@ -1,166 +1,144 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 const User = require('../models/User');
 
-require('dotenv').config();
-
-// Helper: Generate 12-char recovery code
-function generateRecoveryCode() {
-    return crypto.randomBytes(8).toString('hex').toUpperCase().slice(0, 12);
-}
-
-// ============================================================
-// 1. SIGNUP
-// ============================================================
-router.post('/signup', async (req, res) => {
+// @route   POST /api/auth/register
+// @desc    Register a new user
+// @access  Public
+router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        if (!username || !password) return res.status(400).json({ error: 'Fields required' });
+        const { username, email, password } = req.body;
 
-        // Check if user exists
-        const existing = await User.findOne({ username });
-        if (existing) return res.status(400).json({ error: 'Username exists' });
+        // 1. Validation
+        if (!username || !email || !password) {
+            return res.status(400).json({ success: false, error: 'Please provide all fields' });
+        }
 
-        // Hash Password
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const recoveryCode = generateRecoveryCode();
+        // 2. Check if user exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ success: false, error: 'Email already registered' });
+        }
 
-        // Create User
-        const user = new User({ username, password: hashedPassword, recoveryCode });
+        // 3. Create User
+        const user = new User({
+            username,
+            email,
+            password
+        });
+
         await user.save();
 
-        // Generate Token
-        const token = jwt.sign({ userId: user._id, username }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        // 4. Create Token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
 
-        res.status(201).json({ success: true, token, username, recoveryCode, userId: user._id });
+        res.status(201).json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                joinedDate: user.createdAt // Send creation date
+            }
+        });
+
     } catch (err) {
-        console.error('Signup Error:', err);
-        res.status(500).json({ error: err.message });
+        console.error('Register Error:', err);
+        res.status(500).json({ success: false, error: 'Server Error' });
     }
 });
 
-// ============================================================
-// 2. LOGIN
-// ============================================================
+// @route   POST /api/auth/login
+// @desc    Login user & get token
+// @access  Public
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        // Find user
-        const user = await User.findOne({ username });
-        if (!user) return res.status(400).json({ error: 'Invalid credentials' });
-
-        // Check password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
-
-        // Generate Token
-        const token = jwt.sign({ userId: user._id, username }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-        res.json({ success: true, token, username, userId: user._id });
-    } catch (err) {
-        console.error('Login Error:', err);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// ============================================================
-// 3. RECOVER ACCOUNT (Lookup)
-// ============================================================
-router.post('/recover-lookup', async (req, res) => {
-    try {
-        const { username } = req.body;
-        const user = await User.findOne({ username });
-
-        if (!user) return res.status(404).json({ success: false, error: 'User not found' });
-
-        // We found the user, now ask frontend to prompt for Recovery Code
-        res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ success: false, error: 'Server error' });
-    }
-});
-
-// ============================================================
-// 4. RESET PASSWORD
-// ============================================================
-router.post('/reset-password', async (req, res) => {
-    try {
-        const { username, recoveryCode, newPassword } = req.body;
-
-        const user = await User.findOne({ username });
-        if (!user) return res.status(404).json({ success: false, error: 'User not found' });
-
-        // Check Recovery Code (Case insensitive)
-        if (user.recoveryCode !== recoveryCode.toUpperCase()) {
-            return res.status(400).json({ success: false, error: 'Invalid recovery code' });
+        // 1. Validation
+        if (!email || !password) {
+            return res.status(400).json({ success: false, error: 'Please provide email and password' });
         }
 
-        // Hash New Password
-        user.password = await bcrypt.hash(newPassword, 10);
-        // Rotate recovery code for security
-        user.recoveryCode = generateRecoveryCode();
-        await user.save();
-
-        res.json({ success: true, message: 'Password reset successful' });
-    } catch (error) {
-        res.status(500).json({ success: false, error: 'Server error' });
-    }
-});
-
-// ============================================================
-// 5. REFRESH TOKEN
-// ============================================================
-router.post('/refresh-token', async (req, res) => {
-    try {
-        const authHeader = req.headers.authorization;
-        const oldToken = authHeader && authHeader.replace('Bearer ', '');
-
-        if (!oldToken) {
-            return res.status(401).json({ success: false, error: 'No token provided' });
-        }
-
-        // Decode without verifying signature first to handle expired tokens
-        const decoded = jwt.decode(oldToken);
-        if (!decoded || !decoded.userId) {
-            return res.status(401).json({ success: false, error: 'Invalid token format' });
-        }
-
-        // Check if user still exists
-        const user = await User.findById(decoded.userId);
+        // 2. Check for user
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, error: 'User not found' });
+            return res.status(400).json({ success: false, error: 'Invalid credentials' });
         }
 
-        // Verify the old token (we allow it to be expired, but signature must be valid)
-        try {
-            jwt.verify(oldToken, process.env.JWT_SECRET);
-        } catch (err) {
-            if (err.name !== 'TokenExpiredError') {
-                return res.status(403).json({ success: false, error: 'Invalid token signature' });
-            }
+        // 3. Check password
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, error: 'Invalid credentials' });
         }
 
-        // Generate NEW token (7 days)
-        const newToken = jwt.sign(
-            { userId: user._id, username: user.username },
+        // 4. Create Token
+        const token = jwt.sign(
+            { userId: user._id },
             process.env.JWT_SECRET,
             { expiresIn: '7d' }
         );
 
         res.json({
             success: true,
-            token: newToken,
-            username: user.username,
-            userId: user._id.toString()
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                joinedDate: user.createdAt // Send creation date
+            }
         });
 
-    } catch (error) {
-        console.error('Token refresh error:', error);
-        res.status(500).json({ success: false, error: 'Server error' });
+    } catch (err) {
+        console.error('Login Error:', err);
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
+// @route   GET /api/auth/profile
+// @desc    Get current user data
+// @access  Private
+router.get('/profile', async (req, res) => {
+    try {
+        // 1. Get token from header
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({ success: false, error: 'No token provided' });
+        }
+
+        // 2. Verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // 3. Find user (exclude password)
+        // Note: 'createdAt' is included by default if {timestamps: true} is in Model
+        const user = await User.findById(decoded.userId).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        // 4. Send Response with Date
+        res.json({
+            success: true,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                joinedDate: user.createdAt // <--- THIS IS THE KEY PART
+            }
+        });
+
+    } catch (err) {
+        console.error('Profile Error:', err);
+        res.status(401).json({ success: false, error: 'Invalid token' });
     }
 });
 

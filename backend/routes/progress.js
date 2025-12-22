@@ -2,10 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Progress = require('../models/Progress');
 
-// NOTE: authenticateToken is already applied in server.js for all /api/progress routes
-// So we don't need to add it here again.
-
-// ==================== HELPER FUNCTIONS ====================
+// Helper Functions
 const createDefaultProgress = () => {
     const defaultProgress = {
         version: "1.0",
@@ -17,7 +14,6 @@ const createDefaultProgress = () => {
             completedLevels: 0, totalActivitiesCompleted: 0
         }
     };
-    // Initialize 5 levels
     for (let i = 1; i <= 5; i++) {
         defaultProgress.levels[i] = {
             status: i === 1 ? "not-started" : "locked",
@@ -32,8 +28,6 @@ const createDefaultProgress = () => {
 
 const calculateTotals = (levels) => {
     let totals = { totalStars: 0, totalBadges: 0, totalTokens: 0, completedLevels: 0, totalActivitiesCompleted: 0 };
-
-    // Iterate over keys since it's an Object now, not a Map
     Object.keys(levels).forEach(key => {
         const level = levels[key];
         totals.totalStars += level.rewards?.stars || 0;
@@ -82,7 +76,6 @@ router.post('/update-activity', async (req, res) => {
 
         let pData = progressDoc.progressData;
 
-        // Ensure level object exists
         if (!pData.levels[level]) {
             pData.levels[level] = {
                 status: "in-progress", completedActivities: [],
@@ -93,27 +86,22 @@ router.post('/update-activity', async (req, res) => {
 
         const lvl = pData.levels[level];
 
-        // 1. Add Activity (Avoid duplicates)
         if (!lvl.completedActivities.includes(activity)) {
             lvl.completedActivities.push(activity);
             lvl.completedActivities.sort((a, b) => a - b);
         }
 
-        // 2. Add Rewards
         if (rewards) {
             lvl.rewards.stars += rewards.stars || 0;
             lvl.rewards.badges += rewards.badges || 0;
             lvl.rewards.tokens += rewards.tokens || 0;
         }
 
-        // 3. Update Status
         lvl.lastActivity = Math.max(lvl.lastActivity, activity);
 
         if (isCompleted) {
             lvl.status = "completed";
             lvl.completedAt = new Date();
-
-            // Unlock next level
             const nextLevel = level + 1;
             if (pData.levels[nextLevel] && pData.levels[nextLevel].status === "locked") {
                 pData.levels[nextLevel].status = "not-started";
@@ -122,12 +110,10 @@ router.post('/update-activity', async (req, res) => {
             lvl.status = "in-progress";
         }
 
-        // 4. Update Global Totals
         pData.totals = calculateTotals(pData.levels);
         pData.currentLevel = Math.max(pData.currentLevel, level);
         pData.lastSync = new Date();
 
-        // 5. Save (Mark Modified because Mixed/Object types sometimes don't detect changes)
         progressDoc.markModified('progressData');
         await progressDoc.save();
 
@@ -136,6 +122,34 @@ router.post('/update-activity', async (req, res) => {
     } catch (error) {
         console.error('Update Error:', error);
         res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// @route   POST /api/progress/reset
+// @desc    Reset all user progress
+// @access  Private
+router.post('/reset', async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) return res.status(401).json({ success: false, error: 'No token' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Find and reset progress
+        let progress = await Progress.findOne({ userId: decoded.userId });
+
+        if (progress) {
+            // Reset to default empty state
+            progress.levels = {};
+            progress.totals = { totalStars: 0, totalBadges: 0, totalTokens: 0 };
+            await progress.save();
+        }
+
+        res.json({ success: true, message: 'Progress reset successfully' });
+
+    } catch (err) {
+        console.error('Reset Error:', err);
+        res.status(500).json({ success: false, error: 'Server Error' });
     }
 });
 

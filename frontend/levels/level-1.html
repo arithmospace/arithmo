@@ -651,24 +651,24 @@
         // Check if this completes the level (activity 10)
         const isLevelCompleted = activityNum === 10;
 
-        // Save progress
-        if (window.saveActivityProgress) {
-          try {
-            await window.saveActivityProgress(
-              currentLevel,
-              activityNum,
-              rewards,
-              isLevelCompleted
-            );
-            console.log(`✅ Progress saved: Level ${currentLevel}, Activity ${activityNum}`);
-          } catch (error) {
-            console.error('❌ Failed to save progress:', error);
-          }
-        }
-
-        // Call original onComplete
+        // 1. UPDATE UI IMMEDIATELY (Optimistic)
         if (onComplete) {
           onComplete(activityNum);
+        }
+
+        // 2. SAVE IN BACKGROUND (Don't await/block the UI)
+        if (window.saveActivityProgress) {
+          window.saveActivityProgress(
+            currentLevel,
+            activityNum,
+            rewards,
+            isLevelCompleted
+          ).then(() => {
+            console.log(`✅ Progress saved: Level ${currentLevel}, Activity ${activityNum}`);
+          }).catch((error) => {
+            console.error('❌ Failed to save progress in background:', error);
+            // Optional: Show a small "Save Failed" toast here if you want
+          });
         }
       };
 
@@ -906,7 +906,7 @@
 
       const finishLevel = () => {
         if (typeof window.completeLevel === 'function') {
-          window.completeLevel();
+          window.completeLevel(1);
         }
       };
 

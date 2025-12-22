@@ -76,6 +76,39 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Backend is running' });
 });
 
+const nodemailer = require('nodemailer');
+
+// API Endpoint for Contact Form
+app.post('/api/contact', async (req, res) => {
+    const { firstName, lastName, email, message } = req.body;
+
+    // 1. Setup Transporter (Use Gmail or any SMTP)
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER, // Your Gmail address
+            pass: process.env.EMAIL_PASS  // Your Gmail App Password (NOT your real password)
+        }
+    });
+
+    // 2. Email Options
+    const mailOptions = {
+        from: email,
+        to: process.env.EMAIL_USER, // You receive the email
+        subject: `New Arithmo Contact: ${firstName} ${lastName}`,
+        text: `From: ${firstName} ${lastName} (${email})\n\nMessage:\n${message}`
+    };
+
+    // 3. Send
+    try {
+        await transporter.sendMail(mailOptions);
+        res.json({ success: true, message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Email Error:', error);
+        res.status(500).json({ success: false, error: 'Failed to send email' });
+    }
+});
+
 // ========== START SERVER ==========
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {

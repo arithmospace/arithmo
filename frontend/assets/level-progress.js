@@ -2,107 +2,86 @@
 async function completeActivity(level, activityNumber, rewards = { stars: 1, badges: 0, tokens: 10 }) {
     console.log(`🎯 Completing activity ${activityNumber} on level ${level}`);
 
-    if (!window.ArithmoProgress) {
-        console.error('Progress system not loaded.');
-        return false;
-    }
-
-    // Wait for system to be ready
+    if (!window.ArithmoProgress) return false;
     await window.ArithmoProgress.ready();
 
-    if (!window.ArithmoProgress.isAuthenticated()) {
-        alert('Please login to save your progress!');
-        window.location.href = '../arithmo-login.html'; // Fixed path
-        return false;
-    }
+    // REMOVED: The check that forced login (isAuthenticated)
+    // Now guests can proceed!
 
-    try {
-        // Use the NEW method name: saveActivityProgress
-        const result = await window.ArithmoProgress.saveActivityProgress(
-            level,
-            activityNumber,
-            rewards,
-            false // isCompleted (level completion) is false for normal activities
-        );
+    // Call save
+    const result = await window.ArithmoProgress.saveActivityProgress(
+        level,
+        activityNumber,
+        rewards,
+        false
+    );
 
-        if (result.success) {
-            // Show success toast if available
-            if (window.ArithmoToast) {
-                window.ArithmoToast.success(`Activity ${activityNumber} Completed! +${rewards.stars} ⭐`);
-            }
-            return true;
-        } else {
-            console.error('Failed to save:', result.error);
-            return false;
+    if (result && result.success) {
+        if (window.ArithmoToast) {
+            window.ArithmoToast.success(`Activity ${activityNumber} Completed! +${rewards.stars} ⭐`);
         }
-    } catch (error) {
-        console.error('Error completing activity:', error);
+        return true;
+    } else {
+        console.error('Failed to save:', result ? result.error : 'Unknown error');
         return false;
     }
 }
 
 // ========== COMPLETE LEVEL HANDLER ==========
 async function completeLevel(level) {
+    if (!level) {
+        const match = window.location.pathname.match(/level-(\d+)/);
+        level = match ? parseInt(match[1]) : 1;
+    }
+
     console.log(`🏆 Completing Level ${level}`);
 
-    // Wait for system
     if (window.ArithmoProgress) await window.ArithmoProgress.ready();
 
-    try {
-        // Mark level as completed (isCompleted = true)
-        // We use activity '10' as the trigger for level completion usually
-        const result = await window.ArithmoProgress.saveActivityProgress(
-            level,
-            10,
-            { stars: 50, badges: 1, tokens: 100 }, // Completion Bonus
-            true // MARK LEVEL AS COMPLETED
-        );
+    if (!level) {
+        alert("Error: Could not determine current level.");
+        return false;
+    }
 
-        if (result.success) {
-            alert(`🎉 LEVEL ${level} COMPLETED!\n\n🎖️ Earned:\n• 50 ⭐ Stars\n• 1 🏅 Badge\n• 100 🎨 Tokens`);
+    const result = await window.ArithmoProgress.saveActivityProgress(
+        level,
+        10,
+        { stars: 50, badges: 1, tokens: 100 },
+        true // MARK LEVEL AS COMPLETED
+    );
 
-            // Redirect to roadmap after short delay
-            setTimeout(() => {
-                window.location.href = '../roadmap.html';
-            }, 1000);
-            return true;
-        } else {
-            alert('Could not save level completion. Please check your connection.');
-            return false;
-        }
-    } catch (error) {
-        console.error('Error completing level:', error);
+    if (result && result.success) {
+        alert(`🎉 LEVEL ${level} COMPLETED!\n\n🎖️ Earned:\n• 50 ⭐ Stars\n• 1 🏅 Badge\n• 100 🎨 Tokens`);
+        setTimeout(() => {
+            window.location.href = '../roadmap.html';
+        }, 1000);
+        return true;
+    } else {
+        console.error("Level completion failed:", result);
+        alert('Could not save level completion. Please check console for details.');
         return false;
     }
 }
 
 // ========== AUTO-UPDATE UI ==========
 document.addEventListener('DOMContentLoaded', async () => {
-    // Wait for progress manager
     if (!window.ArithmoProgress) return;
-
     await window.ArithmoProgress.ready();
     const progress = window.ArithmoProgress.getProgress();
-
-    if (progress) {
-        updateActivityUI(progress);
-    }
+    if (progress) updateActivityUI(progress);
 });
 
 function updateActivityUI(progress) {
-    // Determine level from URL
     const match = window.location.pathname.match(/level-(\d+)/);
     const currentLevel = match ? parseInt(match[1]) : 1;
 
     if (progress.levels && progress.levels[currentLevel]) {
         const completed = progress.levels[currentLevel].completedActivities || [];
-
-        // Visually mark buttons as done
         completed.forEach(activityNum => {
             const btn = document.querySelector(`[data-activity="${activityNum}"]`);
             if (btn) {
                 btn.innerHTML = '✓ ' + btn.textContent;
-                btn.classList.add('completed-activity-btn'); // Use CSS class instead of inline styles
+                btn.classList.add('completed-activity-btn');
                 btn.disabled = true;
             }
         });

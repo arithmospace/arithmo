@@ -12,18 +12,14 @@
   <meta name="apple-mobile-web-app-title" content="Arithmo" />
   <link rel="manifest" href="assets/favicon/site.webmanifest" />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
 
-  <!-- Toast Notification System -->
   <script src="assets/toast-notifications.js"></script>
 
-  <!-- Balls Background CSS -->
   <link rel="stylesheet" href="assets/moving-balls-bg.css" />
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/common_style.css">
@@ -53,20 +49,27 @@
     }
   </script>
 
+  <style>
+    /* Custom Guest Toast Animation */
+    #guest-toast {
+      transform: translateY(150%);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #guest-toast.show {
+      transform: translateY(0);
+    }
+  </style>
+
 </head>
 
 <body class="font-display moving-balls-bg">
 
   <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
 
-    <!-- NAV BAR -->
     <div class="nav_container" id="nav_container_id">
-
-      <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
-
     </div>
 
-    <!-- MAIN SECTION -->
     <main class="flex flex-1 items-center justify-center">
 
       <div class="home">
@@ -79,7 +82,7 @@
               <img src="assets/images/arithmo-home-img.png" alt="">
             </div>
             <div class="mt-6">
-              <button onclick="handleStart()" class="
+              <button onclick="handleStart()" id="learnBtn" class="
                 flex items-center justify-center gap-2
                 h-12 sm:h-14 lg:h-16
                 px-5 sm:px-8 lg:px-10
@@ -149,6 +152,17 @@
 
   </div>
 
+  <div id="guest-toast"
+    class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-zinc-900/90 text-white px-6 py-4 rounded-xl shadow-2xl backdrop-blur-md border border-zinc-700 max-w-sm">
+    <div
+      class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400 text-xl flex-shrink-0">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <div>
+      <h4 class="font-bold text-sm text-yellow-400 uppercase tracking-wide">Guest Mode</h4>
+      <p class="text-sm text-zinc-300">Progress won't be saved. Login to keep your stars!</p>
+    </div>
+  </div>
 
   <footer class="arithmo-footer">
     <div class="footer-inner">
@@ -175,7 +189,6 @@
   </footer>
 
 
-  <!-- Balls Background JS -->
   <script src="assets/moving-balls-bg.js"></script>
   <script src="assets/check-navbar.js"></script>
   <script src="assets/script.js"></script>
@@ -183,19 +196,31 @@
 
   <script>
     function handleStart() {
-      // Check if Progress Manager is loaded and user is authenticated
-      if (window.ArithmoProgress && window.ArithmoProgress.isAuthenticated()) {
+      const btn = document.getElementById('learnBtn');
+      const isAuth = window.ArithmoProgress && window.ArithmoProgress.isAuthenticated();
+
+      if (isAuth) {
+        // User logged in -> Go straight to roadmap (No warning)
+        btn.innerHTML = 'Loading... 🚀';
         window.location.href = "roadmap.html";
       } else {
-        // Redirect to login if not authenticated
-        window.location.href = "arithmo-login.html";
+        // Guest User -> Show Custom Toast at Bottom Right
+        const toast = document.getElementById('guest-toast');
+        toast.classList.add('show');
+
+        btn.innerHTML = 'Starting as Guest...';
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+        // Wait 4 seconds (4000ms) before redirecting
+        setTimeout(() => {
+          window.location.href = "roadmap.html";
+        }, 4000);
       }
     }
   </script>
 
   <script src="assets/progress-manager.js"></script>
 
-  <!-- NAVBAR GLASSMORPHISM -->
   <script>
     const navbar = document.getElementById("navbar");
 
