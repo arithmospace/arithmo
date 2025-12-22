@@ -71,6 +71,9 @@ const progressRoutes = require('./routes/progress');
 // We protect these routes with the authenticateToken middleware
 app.use('/api/progress', authenticateToken, progressRoutes);
 
+const contactRoutes = require('./routes/contact');
+app.use('/api/contact', contactRoutes);
+
 // Health Check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Backend is running' });

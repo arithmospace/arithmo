@@ -27,152 +27,145 @@
                     colors: { "primary": "#ea2a33", "background-light": "#f8f6f6", "background-dark": "#211111" },
                     fontFamily: { "display": ["Lexend", "sans-serif"], "brand": ["Bungee", "cursive"] },
                     borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
                 },
             },
         }
     </script>
 </head>
 
-<body class="font-display moving-balls-bg bg-gray-50">
+<body class="font-display moving-balls-bg bg-gray-50 flex flex-col min-h-screen">
 
-    <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col flex-1 w-full px-4 sm:px-6 lg:px-8">
         <div class="nav_container" id="nav_container_id"></div>
 
-        <main class="flex-1 py-12 sm:py-20">
-            <div class="max-w-5xl mx-auto space-y-10">
+        <main class="flex-1 flex items-center justify-center py-12">
+
+            <div
+                class="relative w-full max-w-md bg-white/80 dark:bg-black/50 backdrop-blur-xl border border-white/60 shadow-2xl rounded-[2.5rem] p-8 sm:p-10 overflow-hidden text-center">
 
                 <div
-                    class="bg-white/60 dark:bg-black/30 border border-white/30 shadow-2xl rounded-3xl p-8 sm:p-12 backdrop-blur-xl relative overflow-hidden">
+                    class="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none">
+                </div>
 
+                <div class="relative z-10 flex flex-col items-center mb-8">
                     <div
-                        class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none">
+                        class="w-32 h-32 mb-4 bg-gradient-to-br from-white to-zinc-100 rounded-full flex items-center justify-center border-[6px] border-white shadow-xl animate-float">
+                        <span class="text-6xl pt-1 pl-1">🚀</span>
+                        <div class="absolute bottom-1 right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white shadow-sm"
+                            title="Online"></div>
                     </div>
 
-                    <div class="flex flex-col md:flex-row items-center gap-10 relative z-10">
-                        <div class="relative group">
-                            <div
-                                class="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-primary to-orange-400 rounded-full flex items-center justify-center text-5xl sm:text-6xl text-white shadow-lg border-4 border-white transform transition-transform group-hover:scale-105">
-                                <i class="fa-solid fa-user-astronaut"></i>
-                            </div>
-                            <div class="absolute bottom-2 right-2 w-8 h-8 bg-green-400 rounded-full border-2 border-white shadow-sm"
-                                title="Online"></div>
-                        </div>
+                    <h1 class="font-brand text-3xl text-zinc-800 dark:text-white mb-2" id="profile-name">
+                        Loading...
+                    </h1>
 
-                        <div class="flex-1 text-center md:text-left space-y-3">
-                            <div>
-                                <h1 class="font-brand text-3xl sm:text-4xl text-zinc-900 dark:text-white"
-                                    id="profile-name">
-                                    Loading...
-                                </h1>
-                            </div>
-
-                            <div class="flex flex-wrap justify-center md:justify-start gap-3">
-                                <div
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white/60 rounded-xl border border-white/50 text-sm text-zinc-600 shadow-sm">
-                                    <i class="fa-regular fa-calendar-check text-primary"></i>
-                                    <span>Member Since: <strong id="member-since"
-                                            class="text-zinc-800">...</strong></span>
-                                </div>
-                                <div
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white/60 rounded-xl border border-white/50 text-sm text-zinc-600 shadow-sm">
-                                    <i class="fa-solid fa-earth-americas text-blue-500"></i>
-                                    <span>Math Explorer</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-3 w-full md:w-auto">
-                            <button onclick="handleLogout()"
-                                class="bg-white hover:bg-zinc-50 text-zinc-700 border border-zinc-200 font-bold py-3 px-6 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-                            </button>
-
-                            <button onclick="showResetModal()"
-                                class="bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 font-bold py-3 px-6 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-trash-can"></i> Reset Progress
-                            </button>
-                        </div>
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-100 border border-zinc-200 rounded-full text-xs font-bold text-zinc-500">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span id="member-since">Joined: ...</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-3 gap-4 mb-10">
                     <div
-                        class="bg-white/70 p-8 rounded-3xl shadow-lg border border-white/50 text-center transform hover:-translate-y-1 transition-transform duration-300">
-                        <div
-                            class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 text-yellow-500 shadow-inner">
-                            ⭐
-                        </div>
-                        <h3 class="text-zinc-500 font-bold uppercase text-xs tracking-wider mb-1">Total Stars</h3>
-                        <p class="font-brand text-5xl text-zinc-900" id="stat-stars">0</p>
+                        class="bg-yellow-50/80 p-4 rounded-2xl border border-yellow-100/50 flex flex-col items-center hover:scale-105 transition-transform">
+                        <div class="text-2xl mb-1">⭐</div>
+                        <span class="font-brand text-2xl text-zinc-800" id="stat-stars">0</span>
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">Stars</span>
                     </div>
 
                     <div
-                        class="bg-white/70 p-8 rounded-3xl shadow-lg border border-white/50 text-center transform hover:-translate-y-1 transition-transform duration-300">
-                        <div
-                            class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 text-blue-500 shadow-inner">
-                            🏅
-                        </div>
-                        <h3 class="text-zinc-500 font-bold uppercase text-xs tracking-wider mb-1">Badges Earned</h3>
-                        <p class="font-brand text-5xl text-zinc-900" id="stat-badges">0</p>
+                        class="bg-blue-50/80 p-4 rounded-2xl border border-blue-100/50 flex flex-col items-center hover:scale-105 transition-transform">
+                        <div class="text-2xl mb-1">🏅</div>
+                        <span class="font-brand text-2xl text-zinc-800" id="stat-badges">0</span>
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">Badges</span>
                     </div>
 
                     <div
-                        class="bg-white/70 p-8 rounded-3xl shadow-lg border border-white/50 text-center transform hover:-translate-y-1 transition-transform duration-300">
-                        <div
-                            class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 text-green-500 shadow-inner">
-                            🎨
-                        </div>
-                        <h3 class="text-zinc-500 font-bold uppercase text-xs tracking-wider mb-1">Tokens Collected</h3>
-                        <p class="font-brand text-5xl text-zinc-900" id="stat-tokens">0</p>
+                        class="bg-green-50/80 p-4 rounded-2xl border border-green-100/50 flex flex-col items-center hover:scale-105 transition-transform">
+                        <div class="text-2xl mb-1">🎨</div>
+                        <span class="font-brand text-2xl text-zinc-800" id="stat-tokens">0</span>
+                        <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">Tokens</span>
                     </div>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="showLogoutModal()"
+                        class="w-full bg-white hover:bg-zinc-50 text-zinc-700 font-bold py-3.5 rounded-xl border-2 border-zinc-100 shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        Log Out
+                    </button>
+
+                    <button onclick="showResetModal()"
+                        class="w-full text-red-500 hover:text-red-600 hover:bg-red-50 border-2 border-red-200 font-semibold py-3 rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i>
+                        Reset Progress
+                    </button>
                 </div>
 
             </div>
         </main>
     </div>
 
-    <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div
-            class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl border border-red-100 transform scale-100 transition-all">
-            <div class="text-center">
-                <div
-                    class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl text-red-500">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <h3 class="font-brand text-2xl text-zinc-900 mb-2">Reset All Progress?</h3>
-                <p class="text-zinc-600 mb-8 leading-relaxed">
-                    Are you sure you want to start over? This will delete all your stars, badges, and unlocked levels.
-                    <br><br>
-                    <strong class="text-red-500">This action cannot be undone.</strong>
-                </p>
-                <div class="flex gap-4 justify-center">
-                    <button onclick="closeResetModal()"
-                        class="px-6 py-3 rounded-xl font-bold text-zinc-600 hover:bg-zinc-100 transition-colors">
-                        Cancel
-                    </button>
-                    <button onclick="confirmReset()"
-                        class="px-6 py-3 rounded-xl font-bold bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all hover:scale-105">
-                        Yes, Reset Everything
-                    </button>
-                </div>
+    <div id="logout-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl transform scale-95 transition-transform duration-300 text-center"
+            id="logout-modal-content">
+            <div
+                class="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl text-zinc-500">
+                <i class="fa-solid fa-door-open"></i>
+            </div>
+            <h3 class="font-brand text-xl text-zinc-900 mb-2">Leaving so soon?</h3>
+            <p class="text-zinc-500 text-sm mb-6">Your progress is saved. See you next time!</p>
+
+            <div class="flex gap-3">
+                <button onclick="closeLogoutModal()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold text-zinc-600 bg-zinc-100 hover:bg-zinc-200 transition-colors">
+                    Stay
+                </button>
+                <button onclick="confirmLogout()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold bg-primary text-white hover:bg-red-600 shadow-lg transition-all">
+                    Log Out
+                </button>
             </div>
         </div>
     </div>
 
-    <footer class="arithmo-footer glass">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <h3>ARITHMO</h3>
-                <p class="footer-tagline">Precision meets play.</p>
+    <div id="reset-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-red-900/40 backdrop-blur-md p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border-2 border-red-100 transform scale-95 transition-transform duration-300 text-center"
+            id="reset-modal-content">
+            <div
+                class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-red-500 animate-bounce">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <div class="footer-contact">
-                <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">📺
-                    YouTube</a>
-                <a href="mailto:arithmospace@gmail.com">✉️ arithmospace@gmail.com</a>
+            <h3 class="font-brand text-xl text-red-600 mb-2">Reset Everything?</h3>
+            <p class="text-zinc-500 text-sm mb-6 leading-relaxed">
+                This will <strong>permanently delete</strong> all your stars, badges, and level progress. You cannot
+                undo this!
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeResetModal()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold text-zinc-600 bg-zinc-100 hover:bg-zinc-200 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmReset()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all">
+                    Yes, Reset
+                </button>
             </div>
         </div>
-        <div class="footer-bottom">© 2025 Arithmo. All rights reserved.</div>
-    </footer>
+    </div>
 
     <script src="assets/moving-balls-bg.js"></script>
     <script src="assets/check-navbar.js"></script>
@@ -200,26 +193,24 @@
 
                 if (data.success && data.user) {
                     document.getElementById('profile-name').innerText = data.user.username || "Explorer";
-                    // REMOVED EMAIL SETTER
 
-                    // Safe Date Formatting
                     if (data.user.joinedDate) {
                         try {
                             const date = new Date(data.user.joinedDate);
                             const formattedDate = date.toLocaleDateString('en-US', {
+                                month: 'short',
                                 year: 'numeric',
-                                month: 'long',
                                 day: 'numeric'
                             });
-                            document.getElementById('member-since').innerText = formattedDate;
+                            document.getElementById('member-since').innerText = `Joined: ${formattedDate}`;
                         } catch (e) {
-                            document.getElementById('member-since').innerText = "Unknown Date";
+                            document.getElementById('member-since').innerText = "Unknown";
                         }
                     } else {
                         document.getElementById('member-since').innerText = "Unknown";
                     }
                 } else {
-                    handleLogout();
+                    handleLogout(); // Token invalid
                     return;
                 }
 
@@ -228,7 +219,7 @@
 
             } catch (error) {
                 console.error("Profile Load Error:", error);
-                document.getElementById('profile-name').innerText = "Network Error";
+                document.getElementById('profile-name').innerText = "Offline";
             }
         });
 
@@ -238,16 +229,16 @@
                 const progress = window.ArithmoProgress.getProgress();
 
                 if (progress && progress.totals) {
-                    animateValue("stat-stars", 0, progress.totals.totalStars || 0, 1000);
-                    animateValue("stat-badges", 0, progress.totals.totalBadges || 0, 1000);
-                    animateValue("stat-tokens", 0, progress.totals.totalTokens || 0, 1000);
+                    animateValue("stat-stars", 0, progress.totals.totalStars || 0, 1500);
+                    animateValue("stat-badges", 0, progress.totals.totalBadges || 0, 1500);
+                    animateValue("stat-tokens", 0, progress.totals.totalTokens || 0, 1500);
                 }
             }
         }
 
         function setupGuestMode() {
             document.getElementById('profile-name').innerText = "Guest Explorer";
-            document.getElementById('member-since').innerText = "Today (Guest Mode)";
+            document.getElementById('member-since').innerText = "Joined: Today";
 
             const localData = JSON.parse(localStorage.getItem('arithmo_progress') || '{}');
             if (localData.totals) {
@@ -257,14 +248,55 @@
             }
         }
 
+        // --- LOGOUT MODAL LOGIC ---
+        function showLogoutModal() {
+            const modal = document.getElementById('logout-modal');
+            const content = document.getElementById('logout-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeLogoutModal() {
+            const modal = document.getElementById('logout-modal');
+            const content = document.getElementById('logout-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function confirmLogout() {
+            localStorage.removeItem('arithmo_jwt');
+            window.location.href = 'index.html';
+        }
+
+        // --- RESET MODAL LOGIC ---
         function showResetModal() {
-            document.getElementById('reset-modal').classList.remove('hidden');
-            document.getElementById('reset-modal').classList.add('flex');
+            const modal = document.getElementById('reset-modal');
+            const content = document.getElementById('reset-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
         }
 
         function closeResetModal() {
-            document.getElementById('reset-modal').classList.add('hidden');
-            document.getElementById('reset-modal').classList.remove('flex');
+            const modal = document.getElementById('reset-modal');
+            const content = document.getElementById('reset-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
 
         async function confirmReset() {
@@ -272,18 +304,13 @@
                 const result = await window.ArithmoProgress.resetProgress();
                 if (result.success) {
                     closeResetModal();
-                    if (window.ArithmoToast) window.ArithmoToast.success("Progress Reset Successfully!");
-                    else alert("Progress Reset Successfully!");
+                    if (window.ArithmoToast) window.ArithmoToast.success("Reset Complete!");
+                    else alert("Reset Complete!");
                     setTimeout(() => window.location.reload(), 1000);
                 } else {
-                    alert("Failed to reset progress. Please try again.");
+                    alert("Failed to reset. Try again.");
                 }
             }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('arithmo_jwt');
-            window.location.href = 'index.html';
         }
 
         function animateValue(id, start, end, duration) {
