@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');        // <--- ADDED THIS
+const User = require('../models/User');     // <--- ADDED THIS
 const Progress = require('../models/Progress');
 
 // Helper Functions
@@ -39,18 +41,42 @@ const calculateTotals = (levels) => {
     return totals;
 };
 
+// ==================== MIDDLEWARE ====================
+// This function gets the user from the token before the route runs
+const getAuthUser = async (req, res) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) throw new Error('No token');
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+    if (!user) throw new Error('User not found');
+
+    return user;
+};
+
 // ==================== ROUTES ====================
 
 // GET /api/progress/load-progress
 router.get('/load-progress', async (req, res) => {
     try {
-        const username = req.user.username;
+        // 1. Authenticate User
+        let user;
+        try {
+            user = await getAuthUser(req);
+        } catch (e) {
+            return res.status(401).json({ success: false, error: 'Unauthorized' });
+        }
+
+        const username = user.username;
+
+        // 2. Load Progress
         let progressDoc = await Progress.findOne({ username });
 
         if (!progressDoc) {
             console.log(`🆕 Creating default progress for: ${username}`);
             const defaultProgress = createDefaultProgress();
-            progressDoc = new Progress({ username, progressData: defaultProgress });
+            // We save both username and userId to be safe
+            progressDoc = new Progress({ username, userId: user._id, progressData: defaultProgress });
             await progressDoc.save();
         }
 
@@ -64,18 +90,27 @@ router.get('/load-progress', async (req, res) => {
 // POST /api/progress/update-activity
 router.post('/update-activity', async (req, res) => {
     try {
+        // 1. Authenticate User
+        let user;
+        try {
+            user = await getAuthUser(req);
+        } catch (e) {
+            return res.status(401).json({ success: false, error: 'Unauthorized' });
+        }
+
         const { level, activity, rewards, isCompleted } = req.body;
-        const username = req.user.username;
+        const username = user.username;
 
         if (!level || !activity) return res.status(400).json({ error: 'Missing data' });
 
         let progressDoc = await Progress.findOne({ username });
         if (!progressDoc) {
-            progressDoc = new Progress({ username, progressData: createDefaultProgress() });
+            progressDoc = new Progress({ username, userId: user._id, progressData: createDefaultProgress() });
         }
 
         let pData = progressDoc.progressData;
 
+        // Initialize level if missing
         if (!pData.levels[level]) {
             pData.levels[level] = {
                 status: "in-progress", completedActivities: [],
@@ -86,11 +121,13 @@ router.post('/update-activity', async (req, res) => {
 
         const lvl = pData.levels[level];
 
+        // Add activity if not already completed
         if (!lvl.completedActivities.includes(activity)) {
             lvl.completedActivities.push(activity);
             lvl.completedActivities.sort((a, b) => a - b);
         }
 
+        // Add Rewards
         if (rewards) {
             lvl.rewards.stars += rewards.stars || 0;
             lvl.rewards.badges += rewards.badges || 0;
@@ -99,10 +136,12 @@ router.post('/update-activity', async (req, res) => {
 
         lvl.lastActivity = Math.max(lvl.lastActivity, activity);
 
+        // Handle Status Updates
         if (isCompleted) {
             lvl.status = "completed";
             lvl.completedAt = new Date();
             const nextLevel = level + 1;
+            // Unlock next level
             if (pData.levels[nextLevel] && pData.levels[nextLevel].status === "locked") {
                 pData.levels[nextLevel].status = "not-started";
             }
@@ -110,10 +149,12 @@ router.post('/update-activity', async (req, res) => {
             lvl.status = "in-progress";
         }
 
+        // Recalculate Totals
         pData.totals = calculateTotals(pData.levels);
         pData.currentLevel = Math.max(pData.currentLevel, level);
         pData.lastSync = new Date();
 
+        // Save
         progressDoc.markModified('progressData');
         await progressDoc.save();
 
@@ -125,23 +166,24 @@ router.post('/update-activity', async (req, res) => {
     }
 });
 
-// @route   POST /api/progress/reset
-// @desc    Reset all user progress
-// @access  Private
+// POST /api/progress/reset
 router.post('/reset', async (req, res) => {
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-        if (!token) return res.status(401).json({ success: false, error: 'No token' });
+        // 1. Authenticate User
+        let user;
+        try {
+            user = await getAuthUser(req);
+        } catch (e) {
+            return res.status(401).json({ success: false, error: 'Unauthorized' });
+        }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Find and reset progress
-        let progress = await Progress.findOne({ userId: decoded.userId });
+        // 2. Find and reset progress (Using username to be consistent)
+        let progress = await Progress.findOne({ username: user.username });
 
         if (progress) {
             // Reset to default empty state
-            progress.levels = {};
-            progress.totals = { totalStars: 0, totalBadges: 0, totalTokens: 0 };
+            progress.progressData = createDefaultProgress(); // Reset the data structure
+            progress.markModified('progressData');
             await progress.save();
         }
 
