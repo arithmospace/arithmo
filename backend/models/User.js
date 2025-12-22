@@ -9,20 +9,14 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         minlength: 3
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true
-    },
+    // REMOVED EMAIL FIELD
     password: {
         type: String,
         required: true,
         minlength: 6
     }
 }, {
-    timestamps: true // <--- THIS ADDS 'createdAt' AND 'updatedAt' AUTOMATICALLY
+    timestamps: true
 });
 
 // Hash password before saving

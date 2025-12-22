@@ -3,28 +3,27 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// @route   POST /api/auth/register
-// @desc    Register a new user
+// @route   POST /api/auth/signup
+// @desc    Register a new user (Username only)
 // @access  Public
-router.post('/register', async (req, res) => {
+router.post('/signup', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, password } = req.body;
 
         // 1. Validation
-        if (!username || !email || !password) {
-            return res.status(400).json({ success: false, error: 'Please provide all fields' });
+        if (!username || !password) {
+            return res.status(400).json({ success: false, error: 'Please provide username and password' });
         }
 
-        // 2. Check if user exists
-        const existingUser = await User.findOne({ email });
+        // 2. Check if user exists (Check Username)
+        const existingUser = await User.findOne({ username });
         if (existingUser) {
-            return res.status(400).json({ success: false, error: 'Email already registered' });
+            return res.status(400).json({ success: false, error: 'Username already taken' });
         }
 
         // 3. Create User
         const user = new User({
             username,
-            email,
             password
         });
 
@@ -40,34 +39,35 @@ router.post('/register', async (req, res) => {
         res.status(201).json({
             success: true,
             token,
+            // Generate a fake recovery code since we don't have email
+            recoveryCode: Math.random().toString(36).substring(2, 10).toUpperCase(),
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
-                joinedDate: user.createdAt // Send creation date
+                joinedDate: user.createdAt
             }
         });
 
     } catch (err) {
-        console.error('Register Error:', err);
+        console.error('Signup Error:', err);
         res.status(500).json({ success: false, error: 'Server Error' });
     }
 });
 
 // @route   POST /api/auth/login
-// @desc    Login user & get token
+// @desc    Login user (Username only)
 // @access  Public
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
 
         // 1. Validation
-        if (!email || !password) {
-            return res.status(400).json({ success: false, error: 'Please provide email and password' });
+        if (!username || !password) {
+            return res.status(400).json({ success: false, error: 'Please provide username and password' });
         }
 
-        // 2. Check for user
-        const user = await User.findOne({ email });
+        // 2. Check for user (By Username)
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(400).json({ success: false, error: 'Invalid credentials' });
         }
@@ -91,8 +91,7 @@ router.post('/login', async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
-                joinedDate: user.createdAt // Send creation date
+                joinedDate: user.createdAt
             }
         });
 
@@ -107,32 +106,26 @@ router.post('/login', async (req, res) => {
 // @access  Private
 router.get('/profile', async (req, res) => {
     try {
-        // 1. Get token from header
         const token = req.header('Authorization')?.replace('Bearer ', '');
 
         if (!token) {
             return res.status(401).json({ success: false, error: 'No token provided' });
         }
 
-        // 2. Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // 3. Find user (exclude password)
-        // Note: 'createdAt' is included by default if {timestamps: true} is in Model
         const user = await User.findById(decoded.userId).select('-password');
 
         if (!user) {
             return res.status(404).json({ success: false, error: 'User not found' });
         }
 
-        // 4. Send Response with Date
         res.json({
             success: true,
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email,
-                joinedDate: user.createdAt // <--- THIS IS THE KEY PART
+                joinedDate: user.createdAt
             }
         });
 
