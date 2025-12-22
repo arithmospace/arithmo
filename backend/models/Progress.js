@@ -1,5 +1,22 @@
 const mongoose = require('mongoose');
 
+const levelSchema = new mongoose.Schema({
+    status: {
+        type: String,
+        enum: ['not-started', 'in-progress', 'completed', 'locked'],
+        default: 'locked'
+    },
+    completedActivities: [Number], // e.g., [1, 2, 3]
+    rewards: {
+        stars: { type: Number, default: 0 },
+        badges: { type: Number, default: 0 },
+        tokens: { type: Number, default: 0 }
+    },
+    lastActivity: { type: Number, default: 0 },
+    completedAt: { type: Date },
+    startedAt: { type: Date, default: Date.now }
+}, { _id: false });
+
 const progressSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -11,24 +28,9 @@ const progressSchema = new mongoose.Schema({
         version: { type: String, default: "1.0" },
         currentLevel: { type: Number, default: 1 },
         lastSync: { type: Date, default: Date.now },
+        // IMPORTANT: Using Object (Mixed) to allow flexible level keys (1, 2, 3...)
         levels: {
-            type: Map,
-            of: new mongoose.Schema({
-                status: {
-                    type: String,
-                    enum: ['not-started', 'in-progress', 'completed', 'locked'],
-                    default: 'not-started'
-                },
-                completedActivities: [Number],
-                rewards: {
-                    stars: { type: Number, default: 0 },
-                    badges: { type: Number, default: 0 },
-                    tokens: { type: Number, default: 0 }
-                },
-                lastActivity: { type: Number, default: 0 },
-                completedAt: { type: Date },
-                startedAt: { type: Date, default: Date.now }
-            }),
+            type: Object,
             default: {}
         },
         totals: {
@@ -44,10 +46,8 @@ const progressSchema = new mongoose.Schema({
         default: Date.now
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    minimize: false // Ensures empty objects are saved
 });
-
-// Create index for faster queries
-progressSchema.index({ username: 1 }, { unique: true });
 
 module.exports = mongoose.model('Progress', progressSchema);

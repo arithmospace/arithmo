@@ -23,9 +23,6 @@
   <!-- Toast Notification System -->
   <script src="assets/toast-notifications.js"></script>
 
-  <!-- Migration Helper -->
-  <script src="assets/migration-helper.js"></script>
-
   <!-- Balls Background CSS -->
   <link rel="stylesheet" href="assets/moving-balls-bg.css" />
   <link rel="stylesheet" href="assets/style.css">
@@ -82,24 +79,22 @@
               <img src="assets/images/arithmo-home-img.png" alt="">
             </div>
             <div class="mt-6">
-              <form action="roadmap.html">
-                <button class="
-                            flex items-center justify-center gap-2
-                            h-12 sm:h-14 lg:h-16
-                            px-5 sm:px-8 lg:px-10
-                            rounded-full
-                            bg-primary text-white
-                            text-sm sm:text-lg lg:text-xl
-                            font-bold
-                            shadow-[0_6px_0px_0px_#B22027] sm:shadow-[0_7px_0px_0px_#B22027] lg:shadow-[0_8px_0px_0px_#B22027]
-                            transition-all
-                            hover:translate-y-1 hover:shadow-[0_4px_0px_0px_#B22027]
-                            active:translate-y-2 active:shadow-none
-                            learn_button">
-                  LET'S LEARN
-                  <span class="text-base sm:text-xl lg:text-2xl">🔓</span>
-                </button>
-              </form>
+              <button onclick="handleStart()" class="
+                flex items-center justify-center gap-2
+                h-12 sm:h-14 lg:h-16
+                px-5 sm:px-8 lg:px-10
+                rounded-full
+                bg-primary text-white
+                text-sm sm:text-lg lg:text-xl
+                font-bold
+                shadow-[0_6px_0px_0px_#B22027] sm:shadow-[0_7px_0px_0px_#B22027] lg:shadow-[0_8px_0px_0px_#B22027]
+                transition-all
+                hover:translate-y-1 hover:shadow-[0_4px_0px_0px_#B22027]
+                active:translate-y-2 active:shadow-none
+                learn_button">
+                LET'S LEARN
+                <span class="text-base sm:text-xl lg:text-2xl">🔓</span>
+              </button>
             </div>
           </div>
           <div class="home_grid_col">
@@ -185,6 +180,20 @@
   <script src="assets/check-navbar.js"></script>
   <script src="assets/script.js"></script>
   <script src="assets/assets_common_script.js"></script>
+
+  <script>
+    function handleStart() {
+      // Check if Progress Manager is loaded and user is authenticated
+      if (window.ArithmoProgress && window.ArithmoProgress.isAuthenticated()) {
+        window.location.href = "roadmap.html";
+      } else {
+        // Redirect to login if not authenticated
+        window.location.href = "arithmo-login.html";
+      }
+    }
+  </script>
+
+  <script src="assets/progress-manager.js"></script>
 
   <!-- NAVBAR GLASSMORPHISM -->
   <script>

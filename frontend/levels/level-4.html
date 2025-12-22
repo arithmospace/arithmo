@@ -20,11 +20,8 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Toast Notification System -->
+  <script src="../assets/level-guard.js"></script>
   <script src="../assets/toast-notifications.js"></script>
-
-  <!-- Migration Helper -->
-  <script src="../assets/migration-helper.js"></script>
 
   <script>
     tailwind.config = {
@@ -2345,33 +2342,6 @@
     // ==================== RENDER APP ====================
     const root = ReactDOM.createRoot(document.getElementById('sharing-fairly-root'));
     root.render(<SharingFairlyLevel />);
-  </script>
-
-  <script>
-    // Logic to handle level progression and protection
-    const TOTAL_LEVELS = 5;
-    const match = window.location.pathname.match(/level-(\d+)/);
-    const LEVEL_NUMBER = match ? Number(match[1]) : null;
-
-    // Safety check
-    if (!LEVEL_NUMBER || LEVEL_NUMBER < 1 || LEVEL_NUMBER > TOTAL_LEVELS) {
-      // In a real app, redirect to map. For standalone, we allow it.
-      // window.location.href = "../roadmap.html";
-    }
-
-    const storedLevel = Number(localStorage.getItem("arithmoLevel")) || 1;
-
-    // Anti-skip logic (Optional, based on requirement)
-    if (storedLevel !== LEVEL_NUMBER) {
-      // window.location.href = "../roadmap.html";
-    }
-
-    function completeLevel() {
-      if (storedLevel < TOTAL_LEVELS) {
-        localStorage.setItem("arithmoLevel", storedLevel + 1);
-      }
-      window.location.href = "../roadmap.html";
-    }
   </script>
 
   <script src="../assets/script.js"></script>

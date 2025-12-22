@@ -1,120 +1,81 @@
-// script.js - Simplified version (no mobile menu handling here)
 (function () {
     console.log('📜 SCRIPT.JS: Loading...');
 
-    // ========== SYNC INDICATOR (ONLY FOR ROADMAP) ==========
+    // ========== SYNC INDICATOR ==========
     function setupGlobalSyncIndicator() {
-        // Check if we're on roadmap.html
-        const isRoadmapPage = window.location.pathname.includes('roadmap.html') ||
-            document.title.includes('Math Journey');
+        const isRoadmapOrLevel = window.location.pathname.includes('roadmap.html') ||
+            window.location.pathname.includes('level-');
 
-        if (!isRoadmapPage) {
-            // Remove any existing indicator if we're not on roadmap
-            const existingIndicator = document.getElementById('global-sync-status');
-            if (existingIndicator) {
-                existingIndicator.remove();
+        if (!isRoadmapOrLevel) return;
+
+        // Wait for manager to exist
+        const checkInterval = setInterval(() => {
+            if (window.ArithmoProgress) {
+                clearInterval(checkInterval);
+                createSyncIndicator();
             }
-            return;
-        }
-
-        // Check if progress manager is available
-        if (!window.ArithmoProgress) {
-            // Try to load it
-            const script = document.createElement('script');
-            script.src = 'assets/progress-manager.js';
-            script.onload = function () {
-                if (window.ArithmoProgress) {
-                    createSyncIndicator();
-                }
-            };
-            document.head.appendChild(script);
-            return;
-        }
-
-        // Create indicator if progress manager is already loaded
-        createSyncIndicator();
+        }, 500);
     }
 
     function createSyncIndicator() {
-        // Check if indicator already exists
-        if (document.getElementById('global-sync-status')) {
-            return;
-        }
+        if (document.getElementById('global-sync-status')) return;
 
         const indicator = document.createElement('div');
         indicator.id = 'global-sync-status';
+        // Styling matches your previous design
         indicator.style.cssText = `
-            position: fixed;
-            bottom: 70px;
-            right: 20px;
-            z-index: 1000;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            pointer-events: none;
-            transition: all 0.3s;
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            padding: 8px 12px; border-radius: 20px; font-size: 12px;
+            font-weight: bold; backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s; opacity: 0;
         `;
         document.body.appendChild(indicator);
 
-        function updateGlobalSyncStatus() {
-            if (!window.ArithmoProgress) return;
-
-            const status = window.ArithmoProgress.getSyncStatus();
-            const indicator = document.getElementById('global-sync-status');
-            if (!indicator) return;
-
-            if (!status.isOnline) {
-                indicator.innerHTML = '📴 Offline';
-                indicator.style.background = 'rgba(255, 152, 0, 0.9)';
-                indicator.style.color = 'white';
-            } else if (status.isSyncing) {
-                indicator.innerHTML = '🔄 Syncing...';
-                indicator.style.background = 'rgba(33, 150, 243, 0.9)';
-                indicator.style.color = 'white';
-            } else if (status.queueLength > 0) {
-                indicator.innerHTML = `⚠️ ${status.queueLength} pending`;
-                indicator.style.background = 'rgba(255, 193, 7, 0.9)';
-                indicator.style.color = 'black';
-            } else {
-                indicator.innerHTML = '✅ Synced';
-                indicator.style.background = 'rgba(76, 175, 80, 0.9)';
-                indicator.style.color = 'white';
-            }
-        }
-
-        setInterval(updateGlobalSyncStatus, 5000);
-        updateGlobalSyncStatus();
+        setInterval(updateGlobalSyncStatus, 2000); // Check every 2s
     }
 
-    // ========== NAVBAR SCROLL EFFECT ==========
+    function updateGlobalSyncStatus() {
+        if (!window.ArithmoProgress) return;
+
+        const status = window.ArithmoProgress.getSyncStatus();
+        const indicator = document.getElementById('global-sync-status');
+        if (!indicator) return;
+
+        indicator.style.opacity = '1';
+
+        if (!status.isOnline) {
+            indicator.innerHTML = '📴 Offline Mode';
+            indicator.style.background = 'rgba(255, 152, 0, 0.9)'; // Orange
+            indicator.style.color = 'white';
+        } else if (!status.hasToken) {
+            indicator.innerHTML = '⚠️ Not Logged In';
+            indicator.style.background = 'rgba(100, 100, 100, 0.9)'; // Grey
+            indicator.style.color = 'white';
+        } else {
+            indicator.innerHTML = '✅ Progress Saved';
+            indicator.style.background = 'rgba(76, 175, 80, 0.9)'; // Green
+            indicator.style.color = 'white';
+
+            // Fade out if everything is good to not distract
+            setTimeout(() => { indicator.style.opacity = '0.5'; }, 1000);
+        }
+    }
+
+    // ========== NAVBAR SCROLL ==========
     function setupNavbarScroll() {
         const navbar = document.getElementById("navbar");
-
         if (navbar) {
             window.addEventListener("scroll", () => {
-                if (window.scrollY > 2) {
-                    navbar.classList.add("nav-scrolled");
-                } else {
-                    navbar.classList.remove("nav-scrolled");
-                }
+                if (window.scrollY > 2) navbar.classList.add("nav-scrolled");
+                else navbar.classList.remove("nav-scrolled");
             });
-            console.log('✅ SCRIPT.JS: Navbar scroll effect setup');
         }
     }
 
-    // ========== MAIN INITIALIZATION ==========
     document.addEventListener("DOMContentLoaded", function () {
-        console.log('📜 SCRIPT.JS: DOM loaded');
-
-        // Setup navbar scroll effect
         setupNavbarScroll();
-
-        // Setup sync indicator (only for roadmap page)
         setupGlobalSyncIndicator();
     });
 

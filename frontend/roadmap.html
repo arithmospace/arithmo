@@ -22,9 +22,6 @@
     <!-- Toast Notification System -->
     <script src="assets/toast-notifications.js"></script>
 
-    <!-- Migration Helper -->
-  <script src="assets/migration-helper.js"></script>
-
     <!-- Balls Background CSS -->
     <link rel="stylesheet" href="assets/moving-balls-bg.css" />
     <link rel="stylesheet" href="assets/common_style.css" />
@@ -701,19 +698,10 @@
 
         /* ---------- GET REAL BACKEND PROGRESS ---------- */
         async function getUserProgress() {
-            try {
-                if (!window.ArithmoProgress) {
-                    console.log('⏳ Progress manager not loaded yet');
-                    return null;
-                }
-
-                const progress = await window.ArithmoProgress.getProgress();
-                console.log('📊 User progress loaded:', progress);
-                return progress;
-            } catch (error) {
-                console.error('❌ Error getting progress:', error);
-                return null;
-            }
+            if (!window.ArithmoProgress) return null;
+            // CHANGED: Wait for ready signal
+            await window.ArithmoProgress.ready();
+            return window.ArithmoProgress.getProgress();
         }
 
         /* ---------- DETERMINE CURRENT LEVEL FROM BACKEND DATA ---------- */
@@ -971,10 +959,7 @@
                 attempts++;
 
                 if (window.ArithmoProgress) {
-                    clearInterval(checkInterval);
-                    console.log('✅ Progress Manager loaded');
-
-                    // Render with backend data
+                    await window.ArithmoProgress.ready();
                     await renderRoadmap();
 
                     // Setup click handlers

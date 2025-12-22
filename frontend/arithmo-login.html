@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Arithmo - YOU</title>
+    <title>Arithmo - Login</title>
+
     <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
     <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
@@ -12,21 +13,14 @@
     <meta name="apple-mobile-web-app-title" content="Arithmo" />
     <link rel="manifest" href="assets/favicon/site.webmanifest" />
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
 
-    <!-- Toast Notification System -->
     <script src="assets/toast-notifications.js"></script>
-
-    <!-- Migration Helper -->
-    <script src="assets/migration-helper.js"></script>
-
-    <!-- Balls Background CSS -->
+    
     <link rel="stylesheet" href="assets/moving-balls-bg.css" />
     <link rel="stylesheet" href="assets/common_style.css" />
     <link rel="stylesheet" href="assets/style.css">
@@ -36,21 +30,9 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
-                        "primary": "#ea2a33",
-                        "background-light": "#f8f6f6",
-                        "background-dark": "#211111",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"],
-                        "brand": ["Bungee", "cursive"],
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
+                    colors: { "primary": "#ea2a33", "background-light": "#f8f6f6", "background-dark": "#211111" },
+                    fontFamily: { "display": ["Lexend", "sans-serif"], "brand": ["Bungee", "cursive"] },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
                 },
             },
         }
@@ -61,19 +43,11 @@
 
     <div class="flex flex-col min-h-screen w-full px-4 sm:px-6 lg:px-8">
 
-        <!-- NAV BAR -->
-        <div class="nav_container" id="nav_container_id">
+        <div class="nav_container" id="nav_container_id"></div>
 
-            <!-- JAVA SCRIPT WILL AUTOMATICALLY ADD THE CONTENT OF NAVBAR HERE -->
-
-        </div>
-
-
-        <!-- MAIN SECTION (EMPTY FOR FUTURE PAGES) -->
         <main class="flex flex-1 items-center justify-center">
-            <!-- ===== Auth modal styled like Contact page (paste inside <body>) ===== -->
+
             <style>
-                /* keep the modal centered on screen */
                 .modal-center-contact {
                     position: fixed;
                     inset: 0;
@@ -91,7 +65,6 @@
                     }
                 }
 
-                /* small transition helpers for panels */
                 .panel {
                     transition: opacity .22s ease, transform .28s cubic-bezier(.2, .9, .3, 1);
                     will-change: transform, opacity;
@@ -112,7 +85,6 @@
                     pointer-events: auto;
                 }
 
-                /* ensure inputs look consistent with rest of site */
                 .contact-auth-input {
                     border-radius: 12px;
                     padding: .6rem .75rem;
@@ -121,12 +93,10 @@
                 }
             </style>
 
-            <div class="modal-center-contact" role="dialog" aria-modal="true" aria-label="Auth modal (contact-style)">
-                <!-- Use the exact Contact-page glass classes for visual match -->
+            <div class="modal-center-contact" role="dialog" aria-modal="true">
                 <div
                     class="bg-white/20 dark:bg-black/30 border border-white/30 shadow-2xl rounded-2xl p-5 sm:p-8 w-full max-w-[92vw] sm:max-w-[460px]">
 
-                    <!-- Header -->
                     <div class="text-center mb-4">
                         <h1 class="font-brand text-2xl font-bold text-zinc-900 dark:text-white">arithmo</h1>
                     </div>
@@ -134,17 +104,15 @@
                     <div class="status-msg hidden p-3 mb-4 rounded-lg text-sm font-medium text-center" id="status-box">
                     </div>
 
-                    <!-- Panels container -->
                     <div id="auth-panels-contact">
 
-                        <!-- LOGIN PANEL -->
                         <div id="panel-login-contact" class="panel panel-visible">
                             <h2 class="text-2xl font-bold text-primary text-center mb-2">Login</h2>
                             <p class="text-sm text-zinc-700 dark:text-zinc-300 text-center mb-4">Sign in with your
-                                username (no email)</p>
+                                username</p>
 
                             <form id="login-form-contact" class="space-y-3"
-                                onsubmit="event.preventDefault(); handleLoginContact();">
+                                onsubmit="event.preventDefault(); handleLogin(event);">
                                 <div>
                                     <label class="block text-xs text-zinc-700 dark:text-zinc-300">Username</label>
                                     <input id="login-username-contact"
@@ -178,14 +146,13 @@
                             </form>
                         </div>
 
-                        <!-- SIGNUP PANEL -->
                         <div id="panel-signup-contact" class="panel panel-hidden">
                             <h2 class="text-2xl font-bold text-primary text-center mb-2">Create Account</h2>
                             <p class="text-sm text-zinc-700 dark:text-zinc-300 text-center mb-4">Username-only signup
                             </p>
 
                             <form id="signup-form-contact" class="space-y-3"
-                                onsubmit="event.preventDefault(); handleSignupContact();">
+                                onsubmit="event.preventDefault(); handleSignup(event);">
                                 <div>
                                     <label class="block text-xs text-zinc-700 dark:text-zinc-300">Username</label>
                                     <input id="su-username-contact"
@@ -214,23 +181,19 @@
                                         account</button>
                                 </div>
 
-                                <p class="text-xs text-zinc-600 dark:text-zinc-400 text-center mt-2"> <!--demo txt-->
-                                </p>
-
                                 <p class="text-center text-sm text-zinc-700 dark:text-zinc-300 mt-4">Already have an
                                     account? <button id="signup-back-contact"
                                         class="text-primary font-semibold">Login</button></p>
                             </form>
                         </div>
 
-                        <!-- FORGOT PANEL -->
                         <div id="panel-forgot-contact" class="panel panel-hidden">
                             <h2 class="text-2xl font-bold text-primary text-center mb-2">Reset Password</h2>
                             <p class="text-sm text-zinc-700 dark:text-zinc-300 text-center mb-4">Recover using your
-                                username and recovery code</p>
+                                username</p>
 
                             <form id="recover-form-contact" class="space-y-3"
-                                onsubmit="event.preventDefault(); handleRecoverStep1Contact();">
+                                onsubmit="event.preventDefault(); handleRecoverLookup(event);">
                                 <div>
                                     <label class="block text-xs text-zinc-700 dark:text-zinc-300">Username</label>
                                     <input id="rec-username-contact"
@@ -256,7 +219,8 @@
                                     </div>
 
                                     <button id="rec-continue-contact" type="button"
-                                        class="w-full rounded-full bg-primary text-white py-3 font-semibold">Continue</button>
+                                        class="w-full rounded-full bg-primary text-white py-3 font-semibold">Reset
+                                        Password</button>
                                 </div>
 
                                 <div class="flex items-center justify-between">
@@ -265,36 +229,37 @@
                                     <button type="submit"
                                         class="rounded-full bg-zinc-100 text-zinc-800 px-4 py-2 font-medium">Lookup</button>
                                 </div>
-
-                                <p id="rec-msg-contact"
-                                    class="text-center text-xs text-zinc-700 dark:text-zinc-300 mt-2"></p>
                             </form>
                         </div>
 
-                    </div> <!-- end panels -->
+                    </div>
                 </div>
             </div>
 
             <script>
                 // ========== CONFIGURATION ==========
+                // This must match your backend URL exactly
                 const API_URL = 'https://arithmobackend.onrender.com/api';
                 const $ = id => document.getElementById(id);
 
-                // Function to refresh navbar after login/signup
+                // ========== NAVBAR REFRESH ==========
                 function refreshNavbarAfterAuth() {
-                    // Check if refreshNavbar function exists
-                    if (typeof window.refreshNavbar === 'function') {
+                    // Try to use the smooth update function first
+                    if (window.updateNavbar) {
+                        window.updateNavbar();
+                    }
+                    // Fallback to legacy function
+                    else if (window.refreshNavbar) {
                         window.refreshNavbar();
-                    } else {
-                        // If not, reload the page to get fresh navbar
-                        console.log('refreshNavbar not found, reloading page...');
+                    }
+                    // Final fallback: reload page
+                    else {
                         location.reload();
                     }
                 }
 
-                // ========== PANEL SWITCHING (FIXED!) ==========
+                // ========== PANEL SWITCHING ==========
                 function showPanel(panelId) {
-                    // Hide all panels
                     ['panel-login-contact', 'panel-signup-contact', 'panel-forgot-contact'].forEach(id => {
                         const panel = $(id);
                         if (panel) {
@@ -303,7 +268,6 @@
                         }
                     });
 
-                    // Show selected panel
                     const targetPanel = $(panelId);
                     if (targetPanel) {
                         targetPanel.classList.remove('panel-hidden');
@@ -317,7 +281,6 @@
                     }
                 }
 
-                // ========== STATUS MESSAGES ==========
                 function showMessage(text, isError = false) {
                     const box = $('status-box');
                     if (!box) return;
@@ -326,108 +289,23 @@
                     box.classList.remove('hidden');
 
                     if (isError) {
-                        box.className = 'bg-red-500/20 text-red-300 border border-red-500/30 p-3 mb-4 rounded-lg text-sm font-medium text-center';
+                        box.className = 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30 p-3 mb-4 rounded-lg text-sm font-medium text-center';
                     } else {
-                        box.className = 'bg-green-500/20 text-green-300 border border-green-500/30 p-3 mb-4 rounded-lg text-sm font-medium text-center';
+                        box.className = 'bg-green-500/20 text-green-600 dark:text-green-300 border border-green-500/30 p-3 mb-4 rounded-lg text-sm font-medium text-center';
                     }
 
                     setTimeout(() => box.classList.add('hidden'), 5000);
                 }
 
-                // ========== AUTH FUNCTIONS ==========
-                async function handleSignup(e) {
-                    e.preventDefault();
-
-                    const username = $('su-username-contact').value.trim();
-                    const password = $('su-password-contact').value;
-                    const confirmPassword = $('su-password-confirm-contact').value;
-
-                    // Validation
-                    if (password !== confirmPassword) {
-                        showMessage('Passwords do not match', true);
-                        return;
-                    }
-
-                    if (username.length < 3) {
-                        showMessage('Username must be at least 3 characters', true);
-                        return;
-                    }
-
-                    if (password.length < 6) {
-                        showMessage('Password must be at least 6 characters', true);
-                        return;
-                    }
-
-                    // Show loading
-                    const btn = e.target.querySelector('button[type="submit"]');
-                    const originalText = btn.textContent;
-                    btn.textContent = 'Creating...';
-                    btn.disabled = true;
-
-                    try {
-                        const response = await fetch(`${API_URL}/signup`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ username, password })
-                        });
-
-                        const data = await response.json();
-
-                        if (data.success) {
-                            // Store JWT token
-                            localStorage.setItem('arithmo_jwt', data.token);
-                            localStorage.setItem('arithmo_user', JSON.stringify({
-                                username: data.username,
-                                userId: data.userId
-                            }));
-
-                            // Refresh navbar IMMEDIATELY
-                            refreshNavbarAfterAuth();
-
-                            // Show recovery code
-                            $('panel-signup-contact').innerHTML = `
-                                <div class="text-center p-4">
-                                    <h2 class="text-2xl font-bold text-primary mb-4">✅ Account Created!</h2>
-                                    <p class="text-zinc-700 dark:text-zinc-300 mb-4">Save your recovery code:</p>
-                                    <div class="bg-yellow-100 dark:bg-yellow-900/30 border-2 border-yellow-300 dark:border-yellow-700 rounded-xl p-4 mb-6">
-                                        <div class="text-2xl font-mono font-bold text-center">
-                                            ${data.recoveryCode}
-                                        </div>
-                                    </div>
-                                    <p class="text-sm text-red-600 dark:text-red-400 mb-4">
-                                        ⚠️ Save this code! You'll need it if you forget your password.
-                                    </p>
-                                    <button onclick="window.location.href='index.html'" 
-                                            class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90">
-                                        Go to Home
-                                    </button>
-                                </div>
-                            `;
-                        } else {
-                            showMessage('Signup failed: ' + data.error, true);
-                        }
-                    } catch (error) {
-                        showMessage('Cannot connect to server', true);
-                        console.error('Signup error:', error);
-                    } finally {
-                        btn.textContent = originalText;
-                        btn.disabled = false;
-                    }
-                }
-
+                // ========== HANDLERS ==========
                 async function handleLogin(e) {
                     e.preventDefault();
-
                     const username = $('login-username-contact').value.trim();
                     const password = $('login-password-contact').value;
-
-                    if (!username || !password) {
-                        showMessage('Please fill in all fields', true);
-                        return;
-                    }
-
-                    // Show loading
                     const btn = e.target.querySelector('button[type="submit"]');
+
+                    if (!username || !password) return showMessage('Please fill all fields', true);
+
                     const originalText = btn.textContent;
                     btn.textContent = 'Logging in...';
                     btn.disabled = true;
@@ -442,24 +320,20 @@
                         const data = await response.json();
 
                         if (data.success) {
-                            // Store JWT token
                             localStorage.setItem('arithmo_jwt', data.token);
                             localStorage.setItem('arithmo_user', JSON.stringify({
                                 username: data.username,
                                 userId: data.userId
                             }));
 
-                            showMessage(`Welcome ${username}!`, false);
-
-                            // Refresh navbar IMMEDIATELY
+                            showMessage(`Welcome back, ${username}!`);
                             refreshNavbarAfterAuth();
 
-                            // Redirect to Home
                             setTimeout(() => {
                                 window.location.href = 'index.html';
                             }, 1000);
                         } else {
-                            showMessage('Login failed: ' + data.error, true);
+                            showMessage(data.error || 'Login failed', true);
                             $('login-password-contact').value = '';
                         }
                     } catch (error) {
@@ -471,17 +345,76 @@
                     }
                 }
 
-                // ========== PASSWORD RECOVERY ==========
+                async function handleSignup(e) {
+                    e.preventDefault();
+                    const username = $('su-username-contact').value.trim();
+                    const password = $('su-password-contact').value;
+                    const confirmPassword = $('su-password-confirm-contact').value;
+                    const btn = e.target.querySelector('button[type="submit"]');
+
+                    if (password !== confirmPassword) return showMessage('Passwords do not match', true);
+                    if (username.length < 3) return showMessage('Username too short (min 3)', true);
+                    if (password.length < 6) return showMessage('Password too short (min 6)', true);
+
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Creating...';
+                    btn.disabled = true;
+
+                    try {
+                        const response = await fetch(`${API_URL}/signup`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username, password })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            localStorage.setItem('arithmo_jwt', data.token);
+                            localStorage.setItem('arithmo_user', JSON.stringify({
+                                username: data.username,
+                                userId: data.userId
+                            }));
+
+                            refreshNavbarAfterAuth();
+
+                            // Show Success & Recovery Code
+                            $('panel-signup-contact').innerHTML = `
+                                <div class="text-center p-4">
+                                    <h2 class="text-2xl font-bold text-primary mb-4">✅ Account Created!</h2>
+                                    <p class="text-zinc-700 dark:text-zinc-300 mb-4">Save your recovery code:</p>
+                                    <div class="bg-yellow-100 dark:bg-yellow-900/30 border-2 border-yellow-300 dark:border-yellow-700 rounded-xl p-4 mb-6">
+                                        <div class="text-2xl font-mono font-bold text-center select-all">
+                                            ${data.recoveryCode}
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-red-600 dark:text-red-400 mb-4">
+                                        ⚠️ Save this code! You'll need it if you forget your password.
+                                    </p>
+                                    <button onclick="window.location.href='index.html'" 
+                                            class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/90">
+                                        Go to Home
+                                    </button>
+                                </div>
+                            `;
+                        } else {
+                            showMessage(data.error || 'Signup failed', true);
+                        }
+                    } catch (error) {
+                        showMessage('Cannot connect to server', true);
+                    } finally {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }
+                }
+
                 async function handleRecoverLookup(e) {
                     e.preventDefault();
-
                     const username = $('rec-username-contact').value.trim();
-                    if (!username) {
-                        showMessage('Please enter username', true);
-                        return;
-                    }
-
                     const btn = e.target.querySelector('button[type="submit"]');
+
+                    if (!username) return showMessage('Enter username', true);
+
                     const originalText = btn.textContent;
                     btn.textContent = 'Checking...';
                     btn.disabled = true;
@@ -492,19 +425,18 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ username })
                         });
-
                         const data = await response.json();
 
                         if (data.success) {
                             $('recover-area-contact').classList.remove('hidden');
                             $('rec-code-div-contact').classList.remove('hidden');
                             $('rec-new-div-contact').classList.remove('hidden');
-                            showMessage('User found. Enter recovery code and new password.', false);
+                            showMessage('User found. Enter recovery code.', false);
                         } else {
                             showMessage(data.error || 'User not found', true);
                         }
                     } catch (error) {
-                        showMessage('Server connection failed', true);
+                        showMessage('Connection failed', true);
                     } finally {
                         btn.textContent = originalText;
                         btn.disabled = false;
@@ -515,18 +447,11 @@
                     const username = $('rec-username-contact').value.trim();
                     const recoveryCode = $('rec-code-contact').value.trim();
                     const newPassword = $('rec-new-password-contact').value;
-
-                    if (!recoveryCode) {
-                        showMessage('Please enter recovery code', true);
-                        return;
-                    }
-
-                    if (!newPassword || newPassword.length < 6) {
-                        showMessage('Password must be at least 6 characters', true);
-                        return;
-                    }
-
                     const btn = $('rec-continue-contact');
+
+                    if (!recoveryCode) return showMessage('Enter recovery code', true);
+                    if (!newPassword || newPassword.length < 6) return showMessage('Password min 6 chars', true);
+
                     const originalText = btn.textContent;
                     btn.textContent = 'Resetting...';
                     btn.disabled = true;
@@ -537,84 +462,49 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ username, recoveryCode, newPassword })
                         });
-
                         const data = await response.json();
 
                         if (data.success) {
-                            showMessage('Password reset successful! Please login.', false);
-
-                            // Clear and reset form
+                            showMessage('Password reset successful! Please login.');
+                            // Reset UI
                             $('rec-username-contact').value = '';
                             $('rec-code-contact').value = '';
                             $('rec-new-password-contact').value = '';
                             $('recover-area-contact').classList.add('hidden');
-
-                            // Switch to login
                             setTimeout(() => showPanel('panel-login-contact'), 2000);
                         } else {
-                            showMessage('Reset failed: ' + data.error, true);
+                            showMessage(data.error || 'Reset failed', true);
                         }
                     } catch (error) {
-                        showMessage('Server connection failed', true);
+                        showMessage('Connection failed', true);
                     } finally {
                         btn.textContent = originalText;
                         btn.disabled = false;
                     }
                 }
 
-                // ========== INITIALIZE EVERYTHING ==========
+                // ========== INITIALIZE ==========
                 document.addEventListener('DOMContentLoaded', () => {
-                    console.log('Initializing Arithmo Login...');
-
-                    // 1. Setup panel switching (CRITICAL FIX)
+                    // Click Listeners
                     $('link-signup-contact').onclick = () => showPanel('panel-signup-contact');
                     $('signup-back-contact').onclick = () => showPanel('panel-login-contact');
-                    $('link-forgot-contact').onclick = () => showPanel('panel-forgot-contact');
+                    $('link-forgot-contact').onclick = () => {
+                        showPanel('panel-forgot-contact');
+                        $('recover-area-contact').classList.add('hidden'); // Hide extra fields initially
+                    };
                     $('forgot-back-contact').onclick = () => showPanel('panel-login-contact');
 
-                    // 2. Setup form submissions
-                    $('signup-form-contact').onsubmit = handleSignup;
-                    $('login-form-contact').onsubmit = handleLogin;
-                    $('recover-form-contact').onsubmit = handleRecoverLookup;
+                    // Reset Button Listener (Separate because it's not a form submit)
                     $('rec-continue-contact').onclick = handlePasswordReset;
 
-                    // 3. Reset recovery form when switching to forgot panel
-                    $('link-forgot-contact').addEventListener('click', () => {
-                        $('recover-area-contact').classList.add('hidden');
-                        $('rec-username-contact').value = '';
-                    });
+                    // Auto-focus
+                    setTimeout(() => $('login-username-contact')?.focus(), 500);
 
-                    // 4. Auto-focus on username
-                    setTimeout(() => {
-                        if ($('login-username-contact')) {
-                            $('login-username-contact').focus();
-                        }
-                    }, 500);
-
-                    // 5. Check if already logged in
+                    // Check existing session
                     const token = localStorage.getItem('arithmo_jwt');
                     if (token) {
-                        console.log('User already has JWT token');
-                        // Optional: auto-redirect to Home
-                        // window.location.href = 'index.html';
-                    }
-
-                    // 6. Check if user is already logged in and update navbar
-                    const user = localStorage.getItem('arithmo_user');
-                    if (token && user) {
-                        console.log('User already logged in, refreshing navbar...');
-                        setTimeout(() => {
-                            refreshNavbarAfterAuth();
-                        }, 500);
-                    }
-
-                    console.log('Initialization complete!');
-                });
-
-                // ========== ESC KEY SUPPORT ==========
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        showPanel('panel-login-contact');
+                        console.log('Session active');
+                        refreshNavbarAfterAuth();
                     }
                 });
             </script>
@@ -625,105 +515,23 @@
 
     <footer class="arithmo-footer glass">
         <div class="footer-inner">
-
             <div class="footer-brand">
                 <h3>ARITHMO</h3>
                 <p class="footer-tagline">Precision meets play.</p>
             </div>
-
             <div class="footer-contact">
-                <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">
-                    📺 YouTube
-                </a>
-                <a href="mailto:arithmospace@gmail.com">
-                    ✉️ arithmospace@gmail.com
-                </a>
+                <a href="https://youtube.com/@arithmospace?si=Js5q6riVoFcEyjd3" target="_blank" rel="noopener">📺
+                    YouTube</a>
+                <a href="mailto:arithmospace@gmail.com">✉️ arithmospace@gmail.com</a>
             </div>
-
         </div>
-
-        <div class="footer-bottom">
-            © 2025 Arithmo. All rights reserved.
-        </div>
+        <div class="footer-bottom">© 2025 Arithmo. All rights reserved.</div>
     </footer>
 
-    <script>
-        // Add this at the bottom of your body to verify setup
-        window.addEventListener('load', () => {
-            console.log('🔐 AUTH SYSTEM CHECK:');
-            console.log('1. API URL:', 'https://arithmobackend.onrender.com/api');
-
-            // Test backend connection
-            fetch('https://arithmobackend.onrender.com/api/health')
-                .then(res => res.json())
-                .then(data => {
-                    console.log('2. Backend Health:', data);
-                    if (data.jwtEnabled) {
-                        console.log('✅ JWT is ENABLED on backend!');
-                    }
-                })
-                .catch(err => console.error('❌ Backend unreachable:', err));
-
-            // Check if already has token
-            const token = localStorage.getItem('arithmo_jwt');
-            if (token) {
-                console.log('3. Existing JWT Token:', token.substring(0, 20) + '...');
-                console.log('   Token length:', token.length, 'chars');
-
-                // Verify token structure
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    console.log('   Token payload:', payload);
-                    console.log('   Expires:', new Date(payload.exp * 1000).toLocaleString());
-                } catch (e) {
-                    console.log('   Invalid token format');
-                }
-            } else {
-                console.log('3. No existing token - ready for login/signup');
-            }
-        });
-    </script>
-
-    <!-- Balls Background JS -->
     <script src="assets/moving-balls-bg.js"></script>
+    <script src="assets/check-navbar.js"></script>
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
-
-    <!-- Navbar scroll effect -->
-    <script>
-        const navbar = document.getElementById("navbar");
-
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 2) {
-                navbar.classList.add("nav-scrolled");
-            } else {
-                navbar.classList.remove("nav-scrolled");
-            }
-        });
-
-        // Debug: Check navbar status every 2 seconds
-        setInterval(() => {
-            const userInitial = localStorage.getItem('arithmo_user')
-                ? JSON.parse(localStorage.getItem('arithmo_user')).username?.charAt(0).toUpperCase()
-                : null;
-            console.log('Navbar Debug - User Initial:', userInitial,
-                'Has JWT:', !!localStorage.getItem('arithmo_jwt'),
-                'Has User:', !!localStorage.getItem('arithmo_user'));
-
-            // Check if navbar shows correct initial
-            const userButton = document.querySelector('.small-screen-nav-bar-links-container a[href="arithmo-login.html"]');
-            if (userButton) {
-                console.log('Mobile nav shows:', userButton.textContent.trim());
-            }
-
-            const desktopButton = document.querySelector('nav a[href="arithmo-login.html"] button span');
-            if (desktopButton) {
-                console.log('Desktop nav shows:', desktopButton.textContent);
-            }
-        }, 2000);
-    </script>
-
-    <script src="assets/check-navbar.js"></script>
 
 </body>
 

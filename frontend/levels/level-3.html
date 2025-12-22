@@ -20,11 +20,8 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Toast Notification System -->
+  <<script src="../assets/level-guard.js"></script>
   <script src="../assets/toast-notifications.js"></script>
-
-  <!-- Migration Helper -->
-  <script src="../assets/migration-helper.js"></script>
 
   <script>
     tailwind.config = {
@@ -2384,30 +2381,6 @@
     // ==================== RENDER APP ====================
     const root = ReactDOM.createRoot(document.getElementById('taking-away-root'));
     root.render(<TakingAwayLevel />);
-  </script>
-
-  <script>
-    const TOTAL_LEVELS = 5;
-
-    const match = window.location.pathname.match(/level-(\d+)/);
-    const LEVEL_NUMBER = match ? Number(match[1]) : null;
-
-    if (!LEVEL_NUMBER || LEVEL_NUMBER < 1 || LEVEL_NUMBER > TOTAL_LEVELS) {
-      window.location.href = "../roadmap.html";
-    }
-
-    const storedLevel = Number(localStorage.getItem("arithmoLevel")) || 1;
-
-    if (storedLevel !== LEVEL_NUMBER) {
-      window.location.href = "../roadmap.html";
-    }
-
-    function completeLevel() {
-      if (storedLevel < TOTAL_LEVELS) {
-        localStorage.setItem("arithmoLevel", storedLevel + 1);
-      }
-      window.location.href = "../roadmap.html";
-    }
   </script>
 
   <script src="../assets/script.js"></script>
