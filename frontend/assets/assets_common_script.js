@@ -18,6 +18,21 @@ function getUserInitial() {
   return null;
 }
 
+// ========== AUTO-MIGRATION ON PAGE LOAD ==========
+document.addEventListener('DOMContentLoaded', async function () {
+  // Wait for progress manager to load
+  if (window.ArithmoProgress && window.ArithmoMigration) {
+    const token = localStorage.getItem('arithmo_jwt');
+    const migrated = localStorage.getItem('arithmo_migrated');
+
+    // Only migrate once per user
+    if (token && !migrated) {
+      console.log('🔄 Checking for progress to migrate...');
+      await window.ArithmoMigration.autoMigrate();
+    }
+  }
+});
+
 // Generate the nav HTML dynamically
 function generateNavHTML() {
   const userInitial = getUserInitial();
