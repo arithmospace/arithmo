@@ -64,7 +64,6 @@
                                     id="profile-name">
                                     Loading...
                                 </h1>
-                                <p class="text-zinc-500 font-medium text-lg" id="profile-email">please wait...</p>
                             </div>
 
                             <div class="flex flex-wrap justify-center md:justify-start gap-3">
@@ -201,7 +200,7 @@
 
                 if (data.success && data.user) {
                     document.getElementById('profile-name').innerText = data.user.username || "Explorer";
-                    document.getElementById('profile-email').innerText = data.user.email || "No Email";
+                    // REMOVED EMAIL SETTER
 
                     // Safe Date Formatting
                     if (data.user.joinedDate) {
@@ -220,7 +219,6 @@
                         document.getElementById('member-since').innerText = "Unknown";
                     }
                 } else {
-                    // Token invalid or session expired
                     handleLogout();
                     return;
                 }
@@ -231,7 +229,6 @@
             } catch (error) {
                 console.error("Profile Load Error:", error);
                 document.getElementById('profile-name').innerText = "Network Error";
-                document.getElementById('profile-email').innerText = "Please refresh page";
             }
         });
 
@@ -250,7 +247,6 @@
 
         function setupGuestMode() {
             document.getElementById('profile-name').innerText = "Guest Explorer";
-            document.getElementById('profile-email').innerText = "Not logged in";
             document.getElementById('member-since').innerText = "Today (Guest Mode)";
 
             const localData = JSON.parse(localStorage.getItem('arithmo_progress') || '{}');
@@ -261,7 +257,6 @@
             }
         }
 
-        // Reset Logic
         function showResetModal() {
             document.getElementById('reset-modal').classList.remove('hidden');
             document.getElementById('reset-modal').classList.add('flex');
@@ -276,14 +271,9 @@
             if (window.ArithmoProgress) {
                 const result = await window.ArithmoProgress.resetProgress();
                 if (result.success) {
-                    // Success!
                     closeResetModal();
-
-                    // Show success toast or alert
                     if (window.ArithmoToast) window.ArithmoToast.success("Progress Reset Successfully!");
                     else alert("Progress Reset Successfully!");
-
-                    // Refresh page to show zeros
                     setTimeout(() => window.location.reload(), 1000);
                 } else {
                     alert("Failed to reset progress. Please try again.");
