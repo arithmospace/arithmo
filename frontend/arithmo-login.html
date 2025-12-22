@@ -211,7 +211,7 @@
             </div>
 
             <script>
-                const API_URL = 'https://arithmobackend.onrender.com/api';
+                const API_URL = 'https://arithmobackend.onrender.com/api/auth';
                 const $ = id => document.getElementById(id);
 
                 function refreshNavbarAfterAuth() {
@@ -252,6 +252,7 @@
                     setTimeout(() => box.classList.add('hidden'), 5000);
                 }
 
+                // --- LOGIN HANDLER ---
                 async function handleLogin(e) {
                     e.preventDefault();
                     const username = $('login-username-contact').value.trim();
@@ -275,14 +276,15 @@
 
                         if (data.success) {
                             localStorage.setItem('arithmo_jwt', data.token);
-                            // CHANGED: Save createdAt
+
+                            // FIX: Correctly access the nested user object from backend
                             localStorage.setItem('arithmo_user', JSON.stringify({
-                                username: data.username,
-                                userId: data.userId,
-                                createdAt: data.createdAt
+                                username: data.user.username,  // Changed from data.username
+                                userId: data.user.id,          // Changed from data.userId
+                                joinedDate: data.user.joinedDate // Changed from data.createdAt
                             }));
 
-                            showMessage(`Welcome back, ${username}!`);
+                            showMessage(`Welcome back, ${data.user.username}!`);
                             refreshNavbarAfterAuth();
                             setTimeout(() => { window.location.href = 'index.html'; }, 1000);
                         } else {
@@ -290,6 +292,7 @@
                             $('login-password-contact').value = '';
                         }
                     } catch (error) {
+                        console.error(error);
                         showMessage('Cannot connect to server', true);
                     } finally {
                         btn.textContent = originalText;
@@ -297,6 +300,7 @@
                     }
                 }
 
+                // --- SIGNUP HANDLER ---
                 async function handleSignup(e) {
                     e.preventDefault();
                     const username = $('su-username-contact').value.trim();
@@ -323,11 +327,12 @@
 
                         if (data.success) {
                             localStorage.setItem('arithmo_jwt', data.token);
-                            // CHANGED: Save createdAt
+
+                            // FIX: Correctly access the nested user object
                             localStorage.setItem('arithmo_user', JSON.stringify({
-                                username: data.username,
-                                userId: data.userId,
-                                createdAt: data.createdAt
+                                username: data.user.username,
+                                userId: data.user.id,
+                                joinedDate: data.user.joinedDate
                             }));
 
                             refreshNavbarAfterAuth();
@@ -354,7 +359,7 @@
                     }
                 }
 
-                async function handleRecoverLookup(e) { /* (Keep existing logic) */
+                async function handleRecoverLookup(e) {
                     e.preventDefault();
                     const username = $('rec-username-contact').value.trim();
                     const btn = e.target.querySelector('button[type="submit"]');
@@ -366,6 +371,7 @@
                     btn.disabled = true;
 
                     try {
+                        // Note: Backend might need similar updates for recovery route if it changed
                         const response = await fetch(`${API_URL}/recover-lookup`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -389,7 +395,7 @@
                     }
                 }
 
-                async function handlePasswordReset() { /* (Keep existing logic) */
+                async function handlePasswordReset() {
                     const username = $('rec-username-contact').value.trim();
                     const recoveryCode = $('rec-code-contact').value.trim();
                     const newPassword = $('rec-new-password-contact').value;
