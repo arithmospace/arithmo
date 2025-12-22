@@ -8,10 +8,10 @@ const nodemailer = require('nodemailer');
 router.post('/send', async (req, res) => {
     const { name, email, message } = req.body;
 
-    // 1. Check if Env Vars are loaded
+    // 1. Check Env Vars
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("❌ CRITICAL: Missing EMAIL_USER or EMAIL_PASS in environment variables.");
-        return res.status(500).json({ success: false, error: 'Server configuration error: Missing email credentials.' });
+        console.error("❌ CRITICAL: Missing credentials in Render Environment.");
+        return res.status(500).json({ success: false, error: 'Server config error.' });
     }
 
     if (!name || !email || !message) {
@@ -19,27 +19,36 @@ router.post('/send', async (req, res) => {
     }
 
     try {
+        // 2. Configure Transporter (UPDATED FOR RENDER)
+        // We use specific host and port to avoid timeouts
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // Use SSL
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
-            }
+            },
+            // 3. Add Timeouts to fail faster if stuck
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000,
+            socketTimeout: 10000
         });
 
-        // Verify connection configuration
+        // 4. Verify Connection First
         await new Promise((resolve, reject) => {
             transporter.verify(function (error, success) {
                 if (error) {
-                    console.error("❌ Transporter Verification Failed:", error);
+                    console.error("❌ SMTP Connection Failed:", error);
                     reject(error);
                 } else {
-                    console.log("✅ Server is ready to take our messages");
+                    console.log("✅ SMTP Connected. Ready to send.");
                     resolve(success);
                 }
             });
         });
 
+        // 5. Define Email
         const mailOptions = {
             from: `"${name}" <${process.env.EMAIL_USER}>`,
             replyTo: email,
@@ -56,15 +65,14 @@ router.post('/send', async (req, res) => {
             `
         };
 
+        // 6. Send
         await transporter.sendMail(mailOptions);
         console.log(`✅ Email sent successfully from ${email}`);
         res.status(200).json({ success: true, message: 'Email sent successfully' });
 
     } catch (error) {
-        console.error('❌ Email Sending Error:', error);
-        // Send the specific error message back to frontend (for debugging only)
-        // In production, you might want to hide this, but for now it helps.
-        res.status(500).json({ success: false, error: `Failed to send: ${error.message}` });
+        console.error('❌ Final Send Error:', error);
+        res.status(500).json({ success: false, error: 'Connection failed. Please try again.' });
     }
 });
 
