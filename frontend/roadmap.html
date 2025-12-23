@@ -11,6 +11,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Arithmo" />
     <link rel="manifest" href="assets/favicon/site.webmanifest" />
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://kit.fontawesome.com/d59a7ad26f.js" crossorigin="anonymous"></script>
 
@@ -148,6 +149,7 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 3;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
         .level-node::after {
@@ -645,6 +647,8 @@
     <script src="assets/moving-balls-bg.js"></script>
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
+    <script src="assets/check-navbar.js"></script>
+    <script src="assets/progress-manager.js"></script>
 
     <script>
         /* ================== ENHANCED ROADMAP WITH REAL BACKEND DATA ================== */
@@ -733,6 +737,12 @@
 
             if (!progress) {
                 console.warn('⚠️ No progress loaded, showing default view');
+            }
+
+            // NEW: Show Guest Banner if not logged in
+            if (window.ArithmoProgress && !window.ArithmoProgress.isAuthenticated()) {
+                const banner = document.getElementById('guest-banner');
+                if (banner) banner.classList.remove('hidden');
             }
 
             // Determine current level
@@ -960,28 +970,6 @@
                     await window.ArithmoProgress.ready();
                     await renderRoadmap();
 
-                    // NEW: Show Guest Banner if not logged in
-                    if (!window.ArithmoProgress.isAuthenticated()) {
-                        const banner = document.getElementById('guest-banner');
-                        if (banner) banner.classList.remove('hidden');
-                    }
-
-                    // Setup click handlers
-                    document.querySelectorAll('.level-node').forEach(node => {
-                        node.addEventListener('click', async function (e) {
-                            const level = Number(this.dataset.level);
-
-                            if (this.classList.contains('locked')) {
-                                e.preventDefault();
-                                // Shake animation
-                                this.style.transform = 'scale(0.95)';
-                                setTimeout(() => { this.style.transform = ''; }, 200);
-                            } else {
-                                await openLevel(level);
-                            }
-                        });
-                    });
-
                     // Auto-refresh every 10 seconds
                     setInterval(renderRoadmap, 10000);
 
@@ -994,11 +982,6 @@
             }, 100);
         });
     </script>
-
-    <script src="assets/check-navbar.js"></script>
-
-    <script src="assets/progress-manager.js"></script>
-
 </body>
 
 </html>

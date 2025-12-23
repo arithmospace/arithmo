@@ -10,7 +10,7 @@ const app = express();
 // ========== MIDDLEWARE ==========
 app.use(express.json());
 
-// CORS
+// CORS Configuration
 app.use(cors({
     origin: '*',
     credentials: true,
@@ -55,7 +55,6 @@ mongoose.connect(MONGO_URI)
 // 1. Auth Routes
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
-// Makes: /api/auth/login, /api/auth/signup, /api/auth/recover-lookup, etc.
 
 // 2. Progress Routes
 const progressRoutes = require('./routes/progress');
@@ -64,7 +63,6 @@ app.use('/api/progress', authenticateToken, progressRoutes);
 // 3. Contact Routes
 const contactRoutes = require('./routes/contact');
 app.use('/api/contact', contactRoutes);
-// Makes: /api/contact/send
 
 // Health Check
 app.get('/api/health', (req, res) => {

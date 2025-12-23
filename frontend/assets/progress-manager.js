@@ -47,7 +47,8 @@
                     if (data.success) {
                         this.progress = data.progressData;
                         this.saveLocalProgress();
-                        console.log('✅ Progress synced');
+                        // ✅ FIX: REMOVED THE TOAST NOTIFICATION HERE
+                        console.log('✅ Progress synced silently');
                     }
                 }
             } catch (err) {
@@ -60,7 +61,6 @@
             this.updateLocalState(level, activity, rewards, isCompleted);
             const token = localStorage.getItem('arithmo_jwt');
 
-            // Guest Mode (Success Local)
             if (!token) {
                 return { success: true, savedLocally: true };
             }
@@ -89,16 +89,13 @@
             }
         }
 
-        // NEW: Reset Function
         async resetProgress() {
-            // 1. Clear Local
             this.progress = this.createDefault();
             this.saveLocalProgress();
 
             const token = localStorage.getItem('arithmo_jwt');
-            if (!token) return { success: true }; // Guest reset done
+            if (!token) return { success: true };
 
-            // 2. Clear Backend
             try {
                 const response = await fetch(`${this.API_BASE}/progress/reset`, {
                     method: 'POST',
@@ -115,17 +112,14 @@
         updateLocalState(level, activity, rewards, isCompleted) {
             if (!this.progress) this.progress = this.createDefault();
 
-            // Init totals if missing
             if (!this.progress.totals) this.progress.totals = { totalStars: 0, totalBadges: 0, totalTokens: 0 };
 
-            // Init level if missing
             if (!this.progress.levels[level]) {
                 this.progress.levels[level] = { completedActivities: [], rewards: { stars: 0, badges: 0, tokens: 0 } };
             }
 
             const lvl = this.progress.levels[level];
 
-            // Add rewards to Totals
             if (!lvl.completedActivities.includes(activity)) {
                 this.progress.totals.totalStars = (this.progress.totals.totalStars || 0) + (rewards.stars || 0);
                 this.progress.totals.totalBadges = (this.progress.totals.totalBadges || 0) + (rewards.badges || 0);

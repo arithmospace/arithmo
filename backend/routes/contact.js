@@ -3,14 +3,14 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 
 // @route   POST /api/contact/send
-// @desc    Send email via Gmail (Port 587)
+// @desc    Send email via Gmail (Robust Configuration)
 router.post('/send', async (req, res) => {
     const { name, email, message } = req.body;
 
     // 1. Check Credentials
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.error("❌ CRITICAL: Missing EMAIL credentials in Render Environment.");
-        return res.status(500).json({ success: false, error: 'Server config error.' });
+        return res.status(500).json({ success: false, error: 'Server config error: Missing credentials.' });
     }
 
     // 2. Validate Input
@@ -19,27 +19,23 @@ router.post('/send', async (req, res) => {
     }
 
     try {
-        // 3. Configure Transporter (Port 587 / STARTTLS)
-        // This is the most reliable setting for Render -> Gmail
+        // 3. Configure Transporter (The "Sure Shot" Fix)
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // Must be false for port 587 (STARTTLS)
+            service: 'gmail', // Use the built-in gmail service wrapper
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
             },
             tls: {
-                ciphers: 'SSLv3'
-            },
-            connectionTimeout: 20000, // 20 seconds
-            socketTimeout: 20000
+                // This bypasses the specific SSL error often seen on Render/Cloud
+                rejectUnauthorized: false
+            }
         });
 
         const mailOptions = {
-            from: `"${name}" <${process.env.EMAIL_USER}>`, // Sender shows as User's Name
-            replyTo: email, // Reply goes to the User's Email
-            to: process.env.EMAIL_USER, // Sent TO You
+            from: `"${name}" <${process.env.EMAIL_USER}>`,
+            replyTo: email,
+            to: process.env.EMAIL_USER,
             subject: `🚀 New Arithmo Contact: ${name}`,
             text: `Message from: ${name} (${email})\n\n${message}`,
             html: `
@@ -58,7 +54,8 @@ router.post('/send', async (req, res) => {
         res.status(200).json({ success: true, message: 'Email sent successfully' });
 
     } catch (error) {
-        console.error('❌ Email Error:', error);
+        console.error('❌ Email Sending Error:', error);
+        // We log the specific error to the console for you to see in Render Logs
         res.status(500).json({ success: false, error: 'Connection failed. Please try again.' });
     }
 });
