@@ -64,18 +64,20 @@
                             title="Online"></div>
                     </div>
 
-                    <h1 class="font-brand text-3xl text-zinc-800 dark:text-white mb-2" id="profile-name">
+                    <h1 class="font-brand text-3xl text-zinc-800 dark:text-white mb-1" id="profile-name">
                         Loading...
                     </h1>
 
-                    <div
-                        class="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-100 border border-zinc-200 rounded-full text-xs font-bold text-zinc-500">
-                        <i class="fa-regular fa-calendar"></i>
-                        <span id="member-since">Joined: ...</span>
+                    <div class="flex flex-col items-center gap-1">
+                        <div
+                            class="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-100 border border-zinc-200 rounded-full text-xs font-bold text-zinc-500">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span id="member-since">Joined: ...</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 mb-10">
+                <div class="grid grid-cols-3 gap-4 mb-8">
                     <div
                         class="bg-yellow-50/80 p-4 rounded-2xl border border-yellow-100/50 flex flex-col items-center hover:scale-105 transition-transform">
                         <div class="text-2xl mb-1">⭐</div>
@@ -96,6 +98,35 @@
                         <span class="font-brand text-2xl text-zinc-800" id="stat-tokens">0</span>
                         <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wide">Tokens</span>
                     </div>
+                </div>
+
+                <div class="mb-6 text-left">
+                    <h3 class="font-bold text-zinc-700 mb-3 px-1 text-sm uppercase tracking-wider">Level Progress</h3>
+                    <div class="space-y-3" id="level-progress-container">
+                        <div class="animate-pulse flex space-x-4">
+                            <div class="flex-1 space-y-2 py-1">
+                                <div class="h-2 bg-zinc-200 rounded"></div>
+                                <div class="h-2 bg-zinc-200 rounded w-5/6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 text-center">
+                    <span id="last-played" class="text-xs text-zinc-400 font-medium">Last Active: ...</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <button onclick="showRecoveryModal()"
+                        class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold py-3 rounded-xl border border-indigo-100 transition-colors text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-key"></i>
+                        Reveal Key
+                    </button>
+                    <button onclick="showPasswordModal()"
+                        class="w-full bg-orange-50 hover:bg-orange-100 text-orange-600 font-bold py-3 rounded-xl border border-orange-100 transition-colors text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock"></i>
+                        Change Pass
+                    </button>
                 </div>
 
                 <div class="space-y-3">
@@ -167,13 +198,99 @@
         </div>
     </div>
 
+    <div id="recovery-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-indigo-900/40 backdrop-blur-md p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border-2 border-indigo-100 transform scale-95 transition-transform duration-300 text-center"
+            id="recovery-modal-content">
+            <div
+                class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-indigo-500">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <h3 class="font-brand text-xl text-indigo-900 mb-2">Recovery Key</h3>
+
+            <div id="recovery-step-verify" class="mb-4">
+                <p class="text-zinc-500 text-sm mb-4">
+                    For your security, please enter your password to reveal the recovery key.
+                </p>
+                <input type="password" id="recovery-verify-pass" placeholder="Enter Password"
+                    class="w-full px-4 py-2 rounded-xl border border-zinc-200 focus:border-indigo-500 focus:ring-0 mb-4">
+
+                <div class="flex gap-3">
+                    <button onclick="closeRecoveryModal()"
+                        class="flex-1 px-4 py-3 rounded-xl font-bold text-zinc-600 bg-zinc-100 hover:bg-zinc-200 transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="verifyAndRevealKey()"
+                        class="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                        Reveal
+                    </button>
+                </div>
+            </div>
+
+            <div id="recovery-step-show" class="hidden">
+                <p class="text-zinc-500 text-sm mb-4">
+                    Write this down! You need it to reset your password if you forget it.
+                </p>
+                <div class="bg-zinc-100 p-4 rounded-xl mb-6 border border-zinc-200 relative group">
+                    <code class="text-2xl font-bold text-zinc-800 tracking-widest font-mono"
+                        id="recovery-code-display">LOADING</code>
+                </div>
+                <button onclick="closeRecoveryModal()"
+                    class="w-full px-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                    Done
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="password-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-orange-900/40 backdrop-blur-md p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl border-2 border-orange-100 transform scale-95 transition-transform duration-300 text-center"
+            id="password-modal-content">
+            <div
+                class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-orange-500">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-brand text-xl text-orange-900 mb-4">Change Password</h3>
+
+            <div class="space-y-3 mb-6 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-zinc-500 mb-1 ml-1">Current Password</label>
+                    <input type="password" id="current-pass"
+                        class="w-full px-4 py-2 rounded-xl border border-zinc-200 focus:border-orange-500 focus:ring-0">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-zinc-500 mb-1 ml-1">New Password</label>
+                    <input type="password" id="new-pass"
+                        class="w-full px-4 py-2 rounded-xl border border-zinc-200 focus:border-orange-500 focus:ring-0">
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button onclick="closePasswordModal()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold text-zinc-600 bg-zinc-100 hover:bg-zinc-200 transition-colors">
+                    Cancel
+                </button>
+                <button onclick="confirmChangePassword()"
+                    class="flex-1 px-4 py-3 rounded-xl font-bold bg-orange-500 text-white hover:bg-orange-600 shadow-lg shadow-orange-500/30 transition-all">
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/moving-balls-bg.js"></script>
     <script src="assets/check-navbar.js"></script>
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
     <script src="assets/progress-manager.js"></script>
+    <script src="assets/toast-notifications.js"></script>
 
     <script>
+        // Store user data globally for modals
+        let currentUserData = null;
+
         // Load Profile Data
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('arithmo_jwt');
@@ -192,6 +309,7 @@
                 const data = await response.json();
 
                 if (data.success && data.user) {
+                    currentUserData = data.user;
                     document.getElementById('profile-name').innerText = data.user.username || "Explorer";
 
                     if (data.user.joinedDate) {
@@ -214,8 +332,8 @@
                     return;
                 }
 
-                // 2. Load Stats
-                loadStats();
+                // 2. Load Stats & Progress Bars
+                loadStatsAndProgress();
 
             } catch (error) {
                 console.error("Profile Load Error:", error);
@@ -223,15 +341,63 @@
             }
         });
 
-        async function loadStats() {
+        async function loadStatsAndProgress() {
             if (window.ArithmoProgress) {
                 await window.ArithmoProgress.ready();
                 const progress = window.ArithmoProgress.getProgress();
 
+                // 1. Update Top Stats
                 if (progress && progress.totals) {
                     animateValue("stat-stars", 0, progress.totals.totalStars || 0, 1500);
                     animateValue("stat-badges", 0, progress.totals.totalBadges || 0, 1500);
                     animateValue("stat-tokens", 0, progress.totals.totalTokens || 0, 1500);
+                }
+
+                // 2. Update Last Played
+                if (progress && progress.lastUpdated) {
+                    const lastDate = new Date(progress.lastUpdated);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - lastDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    let timeText = "Just now";
+                    if (diffTime < 60000) timeText = "Just now";
+                    else if (diffTime < 3600000) timeText = Math.floor(diffTime / 60000) + "m ago";
+                    else if (diffTime < 86400000) timeText = Math.floor(diffTime / 3600000) + "h ago";
+                    else if (diffDays === 1) timeText = "Yesterday";
+                    else timeText = diffDays + " days ago";
+
+                    document.getElementById('last-played').innerText = `Last Active: ${timeText}`;
+                }
+
+                // 3. Generate Level Progress Bars
+                const container = document.getElementById('level-progress-container');
+                container.innerHTML = ''; // Clear skeleton
+
+                // Iterate levels 1 to 5
+                for (let i = 1; i <= 5; i++) {
+                    const levelData = progress.levels && progress.levels[i];
+                    const completedCount = levelData && levelData.completedActivities ? levelData.completedActivities.length : 0;
+                    const percentage = (completedCount / 10) * 100;
+                    const displayPercent = Math.min(100, Math.round(percentage));
+
+                    // Color logic based on completion
+                    let barColor = 'bg-zinc-300';
+                    if (displayPercent > 0) barColor = 'bg-primary';
+                    if (displayPercent === 100) barColor = 'bg-green-500';
+
+                    const html = `
+                        <div class="group">
+                            <div class="flex justify-between text-xs font-bold text-zinc-500 mb-1 px-1">
+                                <span>Level ${i}</span>
+                                <span>${displayPercent}%</span>
+                            </div>
+                            <div class="h-3 w-full bg-zinc-100 rounded-full overflow-hidden border border-zinc-200">
+                                <div class="h-full ${barColor} rounded-full transition-all duration-1000 ease-out" style="width: ${displayPercent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
                 }
             }
         }
@@ -239,6 +405,10 @@
         function setupGuestMode() {
             document.getElementById('profile-name').innerText = "Guest Explorer";
             document.getElementById('member-since').innerText = "Joined: Today";
+            document.getElementById('last-played').innerText = "Local Mode";
+
+            // Hide secure buttons for guest
+            document.querySelector('.grid.grid-cols-2').style.display = 'none';
 
             const localData = JSON.parse(localStorage.getItem('arithmo_progress') || '{}');
             if (localData.totals) {
@@ -248,57 +418,130 @@
             }
         }
 
+        // --- HELPER: SHOW/HIDE MODAL ---
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + '-content');
+            if (show) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // --- RECOVERY MODAL LOGIC (UPDATED) ---
+        function showRecoveryModal() {
+            // Reset to step 1
+            document.getElementById('recovery-step-verify').classList.remove('hidden');
+            document.getElementById('recovery-step-show').classList.add('hidden');
+            document.getElementById('recovery-verify-pass').value = '';
+
+            toggleModal('recovery-modal', true);
+        }
+
+        async function verifyAndRevealKey() {
+            const pass = document.getElementById('recovery-verify-pass').value;
+            if (!pass) {
+                if (window.ArithmoToast) window.ArithmoToast.error("Enter your password");
+                else alert("Enter your password");
+                return;
+            }
+
+            const token = localStorage.getItem('arithmo_jwt');
+            try {
+                const response = await fetch('https://arithmobackend.onrender.com/api/auth/reveal-recovery-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ password: pass })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.recoveryCode) {
+                    // Show Step 2
+                    document.getElementById('recovery-code-display').innerText = data.recoveryCode;
+                    document.getElementById('recovery-step-verify').classList.add('hidden');
+                    document.getElementById('recovery-step-show').classList.remove('hidden');
+                } else {
+                    if (window.ArithmoToast) window.ArithmoToast.error(data.error || "Incorrect Password");
+                    else alert(data.error || "Incorrect Password");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Network Error");
+            }
+        }
+
+        function closeRecoveryModal() { toggleModal('recovery-modal', false); }
+
+        // --- CHANGE PASSWORD LOGIC ---
+        function showPasswordModal() {
+            document.getElementById('current-pass').value = '';
+            document.getElementById('new-pass').value = '';
+            toggleModal('password-modal', true);
+        }
+        function closePasswordModal() { toggleModal('password-modal', false); }
+
+        async function confirmChangePassword() {
+            const currentPass = document.getElementById('current-pass').value;
+            const newPass = document.getElementById('new-pass').value;
+
+            if (!currentPass || !newPass) {
+                if (window.ArithmoToast) window.ArithmoToast.error("Please fill all fields");
+                else alert("Please fill all fields");
+                return;
+            }
+
+            const token = localStorage.getItem('arithmo_jwt');
+            try {
+                const response = await fetch('https://arithmobackend.onrender.com/api/auth/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ currentPassword: currentPass, newPassword: newPass })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    if (window.ArithmoToast) window.ArithmoToast.success("Password Updated!");
+                    else alert("Password Updated!");
+                    closePasswordModal();
+                } else {
+                    if (window.ArithmoToast) window.ArithmoToast.error(data.error || "Failed");
+                    else alert(data.error || "Failed");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Network Error");
+            }
+        }
+
         // --- LOGOUT MODAL LOGIC ---
-        function showLogoutModal() {
-            const modal = document.getElementById('logout-modal');
-            const content = document.getElementById('logout-modal-content');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeLogoutModal() {
-            const modal = document.getElementById('logout-modal');
-            const content = document.getElementById('logout-modal-content');
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
+        function showLogoutModal() { toggleModal('logout-modal', true); }
+        function closeLogoutModal() { toggleModal('logout-modal', false); }
         function confirmLogout() {
             localStorage.removeItem('arithmo_jwt');
             window.location.href = 'index.html';
         }
 
         // --- RESET MODAL LOGIC ---
-        function showResetModal() {
-            const modal = document.getElementById('reset-modal');
-            const content = document.getElementById('reset-modal-content');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeResetModal() {
-            const modal = document.getElementById('reset-modal');
-            const content = document.getElementById('reset-modal-content');
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
+        function showResetModal() { toggleModal('reset-modal', true); }
+        function closeResetModal() { toggleModal('reset-modal', false); }
         async function confirmReset() {
             if (window.ArithmoProgress) {
                 const result = await window.ArithmoProgress.resetProgress();
