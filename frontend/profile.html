@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="mb-8 text-center">
-                    <span id="last-played" class="text-xs text-zinc-400 font-medium">Last Active: ...</span>
+                    <span id="last-played" class="text-xs text-zinc-400 font-medium">Last Active: Checking...</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mb-3">
@@ -180,10 +180,13 @@
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <h3 class="font-brand text-xl text-red-600 mb-2">Reset Everything?</h3>
-            <p class="text-zinc-500 text-sm mb-6 leading-relaxed">
+            <p class="text-zinc-500 text-sm mb-4 leading-relaxed">
                 This will <strong>permanently delete</strong> all your stars, badges, and level progress. You cannot
                 undo this!
             </p>
+
+            <input type="password" id="reset-verify-pass" placeholder="Confirm Password"
+                class="w-full px-4 py-2 rounded-xl border border-zinc-200 focus:border-red-500 focus:ring-0 mb-6 text-center">
 
             <div class="flex gap-3">
                 <button onclick="closeResetModal()"
@@ -354,8 +357,11 @@
                 }
 
                 // 2. Update Last Played
-                if (progress && progress.lastUpdated) {
-                    const lastDate = new Date(progress.lastUpdated);
+                // FIXED: Now checks 'lastSync' (from progressData) first
+                const lastActivityDate = progress.lastSync || progress.lastUpdated || new Date();
+
+                if (lastActivityDate) {
+                    const lastDate = new Date(lastActivityDate);
                     const now = new Date();
                     const diffTime = Math.abs(now - lastDate);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -368,6 +374,8 @@
                     else timeText = diffDays + " days ago";
 
                     document.getElementById('last-played').innerText = `Last Active: ${timeText}`;
+                } else {
+                    document.getElementById('last-played').innerText = "Last Active: Now";
                 }
 
                 // 3. Generate Level Progress Bars
@@ -439,7 +447,7 @@
             }
         }
 
-        // --- RECOVERY MODAL LOGIC (UPDATED) ---
+        // --- RECOVERY MODAL LOGIC ---
         function showRecoveryModal() {
             // Reset to step 1
             document.getElementById('recovery-step-verify').classList.remove('hidden');
@@ -540,9 +548,51 @@
         }
 
         // --- RESET MODAL LOGIC ---
-        function showResetModal() { toggleModal('reset-modal', true); }
+        function showResetModal() {
+            document.getElementById('reset-verify-pass').value = ''; // Clear previous input
+            toggleModal('reset-modal', true);
+        }
         function closeResetModal() { toggleModal('reset-modal', false); }
+
         async function confirmReset() {
+            const pass = document.getElementById('reset-verify-pass').value;
+
+            // Check if guest (no password needed) or user (password required)
+            const token = localStorage.getItem('arithmo_jwt');
+
+            if (token) {
+                // LOGGED IN USER: Verify Password First
+                if (!pass) {
+                    if (window.ArithmoToast) window.ArithmoToast.error("Please enter password to confirm");
+                    else alert("Please enter password to confirm");
+                    return;
+                }
+
+                try {
+                    const response = await fetch('https://arithmobackend.onrender.com/api/auth/verify-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ password: pass })
+                    });
+
+                    const data = await response.json();
+                    if (!data.success) {
+                        if (window.ArithmoToast) window.ArithmoToast.error("Incorrect Password");
+                        else alert("Incorrect Password");
+                        return; // STOP HERE
+                    }
+                    // If success, continue to reset below...
+                } catch (e) {
+                    console.error(e);
+                    alert("Network Error verifying password");
+                    return;
+                }
+            }
+
+            // PROCEED WITH RESET (Guests skip verification, Users verified above)
             if (window.ArithmoProgress) {
                 const result = await window.ArithmoProgress.resetProgress();
                 if (result.success) {

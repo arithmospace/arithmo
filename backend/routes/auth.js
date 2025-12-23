@@ -169,4 +169,28 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+// @route   POST /api/auth/verify-password
+// @desc    Verify password (helper for sensitive actions)
+router.post('/verify-password', async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) return res.status(401).json({ success: false, error: 'No token provided' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const { password } = req.body;
+
+        const user = await User.findById(decoded.userId);
+        if (!user) return res.status(404).json({ success: false, error: 'User not found' });
+
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) return res.status(400).json({ success: false, error: 'Incorrect password' });
+
+        res.json({ success: true });
+
+    } catch (err) {
+        console.error('Verify Password Error:', err);
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
 module.exports = router;

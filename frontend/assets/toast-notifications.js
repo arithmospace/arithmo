@@ -18,9 +18,9 @@
             this.container.id = 'arithmo-toast-container';
             this.container.style.cssText = `
                 position: fixed;
-                top: 20px;
+                top: 100px; /* MOVED DOWN to avoid navbar overlap */
                 right: 20px;
-                z-index: 10000;
+                z-index: 2147483647; /* MAX Z-INDEX to ensure it's always on top */
                 display: flex;
                 flex-direction: column;
                 gap: 10px;

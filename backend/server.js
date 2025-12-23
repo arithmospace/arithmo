@@ -60,10 +60,6 @@ app.use('/api/auth', authRoutes);
 const progressRoutes = require('./routes/progress');
 app.use('/api/progress', authenticateToken, progressRoutes);
 
-// 3. Contact Routes
-const contactRoutes = require('./routes/contact');
-app.use('/api/contact', contactRoutes);
-
 // Health Check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Backend is running' });
@@ -71,6 +67,12 @@ app.get('/api/health', (req, res) => {
 
 // ========== START SERVER ==========
 const PORT = process.env.PORT || 10000;
+
+// Simple route to check if server is alive
+app.get('/', (req, res) => {
+    res.send('Arithmo Backend is Running!');
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
