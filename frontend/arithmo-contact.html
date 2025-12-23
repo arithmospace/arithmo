@@ -102,25 +102,31 @@
                     </div>
 
                     <div class="md:col-span-3 p-6 sm:p-10 md:p-12 bg-white/50">
-                        <form id="contactForm" onsubmit="handleContact(event)" class="space-y-5">
+                        <form action="https://formsubmit.co/arithmospace@gmail.com" method="POST" class="space-y-5">
+                            
+                            <input type="hidden" name="_next" value="https://arithmo.space/thanks.html">
+
+                            <input type="hidden" name="_captcha" value="false">
+
+                            <input type="hidden" name="_subject" value="New Submission from Arithmo Contact Form">
 
                             <div>
                                 <label class="block text-sm font-bold text-zinc-700 mb-2">Your Name</label>
-                                <input type="text" id="name" required
+                                <input type="text" id="name" name="Name" required
                                     class="w-full px-5 py-3 rounded-xl border-2 border-zinc-200 bg-white/80 focus:border-primary focus:ring-0 transition-all outline-none"
                                     placeholder="Math Explorer">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-bold text-zinc-700 mb-2">Email Address</label>
-                                <input type="email" id="email" required
+                                <input type="email" id="email" name="Email" required
                                     class="w-full px-5 py-3 rounded-xl border-2 border-zinc-200 bg-white/80 focus:border-primary focus:ring-0 transition-all outline-none"
                                     placeholder="explorer@example.com">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-bold text-zinc-700 mb-2">Message</label>
-                                <textarea id="message" rows="4" required
+                                <textarea id="message" name="Message" rows="4" required
                                     class="w-full px-5 py-3 rounded-xl border-2 border-zinc-200 bg-white/80 focus:border-primary focus:ring-0 transition-all outline-none resize-none"
                                     placeholder="Tell us what you think..."></textarea>
                             </div>
@@ -159,79 +165,6 @@
     <script src="assets/assets_common_script.js"></script>
     <script src="assets/script.js"></script>
 
-    <script>
-        async function handleContact(e) {
-            e.preventDefault();
-
-            const btn = document.getElementById('sendBtn');
-            const originalContent = btn.innerHTML;
-
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-
-            if (!name || !email || !message) {
-                if (window.ArithmoToast) window.ArithmoToast.error("Please fill all fields!");
-                else alert("Please fill all fields!");
-                return;
-            }
-
-            // Loading UI
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
-
-            try {
-                // IMPORTANT: Ensure this matches your backend URL
-                const response = await fetch('https://arithmobackend.onrender.com/api/contact/send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // Success UI
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Sent!';
-                    btn.classList.remove('bg-primary');
-                    btn.classList.add('bg-green-500');
-
-                    if (window.ArithmoToast) window.ArithmoToast.success("Email sent successfully!");
-                    else alert("Email sent successfully!");
-
-                    document.getElementById('contactForm').reset();
-
-                    setTimeout(() => {
-                        btn.innerHTML = originalContent;
-                        btn.disabled = false;
-                        btn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-green-500');
-                        btn.classList.add('bg-primary');
-                    }, 3000);
-                } else {
-                    throw new Error(result.error || "Failed to send");
-                }
-            } catch (error) {
-                console.error(error);
-
-                // Error UI
-                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error';
-                btn.classList.remove('bg-primary');
-                btn.classList.add('bg-zinc-700');
-
-                // If error persists, it is likely the backend server logs contain the specific SMTP error
-                if (window.ArithmoToast) window.ArithmoToast.error("Could not send. Try again later.");
-                else alert("Could not send. Check internet or server.");
-
-                setTimeout(() => {
-                    btn.innerHTML = originalContent;
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-zinc-700');
-                    btn.classList.add('bg-primary');
-                }, 3000);
-            }
-        }
-    </script>
 </body>
 
 </html>

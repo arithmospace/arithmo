@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs'); // Needed for manual hashing in reset
+const bcrypt = require('bcryptjs'); // Kept for consistency, though hashing is handled in User model
 const User = require('../models/User');
 
 // @route   POST /api/auth/signup
@@ -21,7 +21,7 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Username already taken' });
         }
 
-        // 3. Generate Recovery Code
+        // 3. Generate Recovery Code (Static - generated once at signup)
         const recoveryCode = Math.random().toString(36).substring(2, 10).toUpperCase();
 
         // 4. Create User (Saving the recovery code now)
@@ -167,13 +167,11 @@ router.post('/reset-password', async (req, res) => {
         }
 
         // Update Password
-        // Note: The pre-save hook in User.js handles hashing, 
-        // BUT simply setting it might not trigger "isModified" correctly in some Mongoose versions
-        // or logic. It's safer to rely on the schema hook, which we have.
+        // Note: The pre-save hook in User.js handles hashing.
         user.password = newPassword;
 
-        // Rotate the code so it cannot be used again
-        user.recoveryCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+        // NOTE: Recovery code update logic has been completely removed here.
+        // The user.recoveryCode will NOT change.
 
         await user.save();
 

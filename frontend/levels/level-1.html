@@ -826,9 +826,19 @@
       // Load progress on mount
       useEffect(() => {
         const loadProgress = async () => {
+          // 1. Wait for the Progress Manager Object to exist
+          let attempts = 0;
+          while (!window.ArithmoProgress && attempts < 50) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+          }
+
           if (window.ArithmoProgress) {
             try {
-              const progress = await window.ArithmoProgress.getProgress();
+              // 2. CRITICAL: Wait for data to be fully fetched/initialized
+              await window.ArithmoProgress.ready();
+
+              const progress = window.ArithmoProgress.getProgress();
               const currentLevel = getCurrentLevel();
               const levelProgress = progress?.levels?.[currentLevel];
 
@@ -860,12 +870,11 @@
               }
             } catch (error) {
               console.error('Failed to load progress:', error);
-            } finally {
-              setProgressLoaded(true);
             }
-          } else {
-            setProgressLoaded(true);
           }
+
+          // 3. Finally, show the UI
+          setProgressLoaded(true);
         };
 
         loadProgress();
@@ -922,7 +931,6 @@
 
       return (
         <div>
-          <SyncStatus />
           <ProgressRestoreNotification restoredCount={restoredCount} />
           <ProgressBar
             current={completedActivities.length}
