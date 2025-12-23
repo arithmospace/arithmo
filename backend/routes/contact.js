@@ -7,34 +7,39 @@ const nodemailer = require('nodemailer');
 router.post('/send', async (req, res) => {
     const { name, email, message } = req.body;
 
+    // 1. Check Credentials
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("❌ CRITICAL: Missing credentials in Render Environment.");
+        console.error("❌ CRITICAL: Missing EMAIL credentials in Render Environment.");
         return res.status(500).json({ success: false, error: 'Server config error.' });
     }
 
+    // 2. Validate Input
+    if (!name || !email || !message) {
+        return res.status(400).json({ success: false, error: 'Please fill all fields' });
+    }
+
     try {
-        // 1. Configure Transporter (Switched to Port 587)
+        // 3. Configure Transporter (Port 587 / STARTTLS)
+        // This is the most reliable setting for Render -> Gmail
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 587,              // <--- CHANGED from 465
-            secure: false,          // <--- CHANGED to false (required for 587)
+            port: 587,
+            secure: false, // Must be false for port 587 (STARTTLS)
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
             },
-            // Increase timeouts to prevent "ETIMEDOUT"
-            connectionTimeout: 20000, // 20 seconds
-            socketTimeout: 20000,
             tls: {
-                ciphers: 'SSLv3'    // Helps compatibility
-            }
+                ciphers: 'SSLv3'
+            },
+            connectionTimeout: 20000, // 20 seconds
+            socketTimeout: 20000
         });
 
-        // 2. Define Email
         const mailOptions = {
-            from: `"${name}" <${process.env.EMAIL_USER}>`,
-            replyTo: email,
-            to: process.env.EMAIL_USER,
+            from: `"${name}" <${process.env.EMAIL_USER}>`, // Sender shows as User's Name
+            replyTo: email, // Reply goes to the User's Email
+            to: process.env.EMAIL_USER, // Sent TO You
             subject: `🚀 New Arithmo Contact: ${name}`,
             text: `Message from: ${name} (${email})\n\n${message}`,
             html: `
@@ -47,7 +52,7 @@ router.post('/send', async (req, res) => {
             `
         };
 
-        // 3. Send
+        // 4. Send
         await transporter.sendMail(mailOptions);
         console.log(`✅ Email sent successfully from ${email}`);
         res.status(200).json({ success: true, message: 'Email sent successfully' });

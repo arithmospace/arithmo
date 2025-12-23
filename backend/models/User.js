@@ -9,11 +9,14 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         minlength: 3
     },
-    // REMOVED EMAIL FIELD
     password: {
         type: String,
         required: true,
         minlength: 6
+    },
+    recoveryCode: {
+        type: String, // <--- We need this to store the code
+        default: ''
     }
 }, {
     timestamps: true
@@ -32,7 +35,7 @@ UserSchema.pre('save', async function (next) {
     }
 });
 
-// Compare password method
+// Helper to compare passwords
 UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
